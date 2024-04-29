@@ -14,6 +14,7 @@ import {
 } from '@/types/action';
 import assignBadge from '@/utils/assignBadge';
 import connectToDb from '@/db';
+import envConfig from '@/config';
 
 export const createUser = async (payload: IUser) => {
   try {
@@ -58,7 +59,7 @@ export const getAllUsers = async (params: GetAllUsersParams) => {
 
     // const users = await User.find(query).skip(skip).limit(pageSize).sort(sortOptions);
 
-    const users = await fetch("http://127.0.0.1:3001/api/users").then((result) => result.json())
+    const users = await fetch(`${envConfig.HOST}/api/users`).then((result) => result.json())
 
     // const totalUsers = await User.countDocuments(query);
     const isNext = users.length > skip + users.length;
@@ -71,7 +72,7 @@ export const getAllUsers = async (params: GetAllUsersParams) => {
 
 export const getUserById = async (clerkId: string) => {
   try {
-    const user = await fetch(`http://127.0.0.1:3001/api/users/${clerkId}`).then((result) => result.json())
+    const user = await fetch(`${envConfig.HOST}/api/users/${clerkId}`).then((result) => result.json())
     
     return user;
   } catch (err) {

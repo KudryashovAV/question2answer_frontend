@@ -7,6 +7,7 @@ import Interaction from '@/db/models/interaction.model';
 import Question from '@/db/models/question.model';
 import Tag from '@/db/models/tag.model';
 import User from '@/db/models/user.model';
+import envConfig from '@/config';
 import {
   DeleteQuestionParams,
   EditQuestionParams,
@@ -79,7 +80,7 @@ export const getAllQuestions = async (params: GetAllQuestionsParams) => {
     //   .limit(pageSize)
     //   .sort(sortOptions);
 
-    const questions = await fetch("http://127.0.0.1:3001/api/questions").then((result) => result.json())
+    const questions = await fetch(`${envConfig.HOST}/api/questions`).then((result) => result.json())
     // return questions;
 
     // const questions = [] as any
@@ -109,7 +110,7 @@ export const getQuestionById = async (id: string) => {
     //   });
     // return question;
 
-    const question = await fetch(`http://127.0.0.1:3001/api/questions/${id}`).then((result) => result.json())
+    const question = await fetch(`${envConfig.HOST}/api/questions/${id}`).then((result) => result.json())
     return question
   } catch (error) {
     console.log(error);
@@ -213,7 +214,7 @@ export const getTopQuestions = async () => {
     // const topQuestions = await Question.find({}).sort({ views: -1, upvotes: -1 }).limit(5);
     // return topQuestions;
 
-    const questions = await fetch("http://127.0.0.1:3001/api/questions").then((result) => result.json())
+    const questions = await fetch(`${envConfig.HOST}/api/questions`).then((result) => result.json())
     
     return questions;
   } catch (error) {

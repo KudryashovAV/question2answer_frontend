@@ -5,6 +5,7 @@ import Interaction from '@/db/models/interaction.model';
 import Question from '@/db/models/question.model';
 import User from '@/db/models/user.model';
 import md5 from 'md5';
+import envConfig from '@/config';
 
 import {
   AnswerVoteParams,
@@ -23,7 +24,7 @@ export const createAnswer = async (params: CreateAnswerParams) => {
     const date = nowDate.getFullYear()+'/'+(("0" + (nowDate.getMonth() + 1)).slice(-2))+'/'+nowDate.getDate(); 
 
 
-    const answer = await fetch(`http://127.0.0.1:3001/api/answers`, { method: "POST", body: JSON.stringify(params), headers: { "X-CSRF-Token": md5(date) } }).then((result) => result.json())
+    const answer = await fetch(`${envConfig.HOST}/api/answers`, { method: "POST", body: JSON.stringify(params), headers: { "X-CSRF-Token": md5(date) } }).then((result) => result.json())
 
     if(answer.status != "success") {
       throw "Record was not created!";
@@ -92,7 +93,7 @@ export const getAllAnswersForQuestion = async (params: GetAllAnswersParams) => {
     const { questionId, page = 1, pageSize = 10 } = params;
     const skip = (page - 1) * pageSize;
     
-    const answers = await fetch(`http://127.0.0.1:3001/api/answers?question_id=${questionId}`).then((result) => result.json())
+    const answers = await fetch(`${envConfig.HOST}/api/answers?question_id=${questionId}`).then((result) => result.json())
 
     // const totalAnswers = await Answer.countDocuments({ question: questionId });
     const isNext = answers.length > skip + answers.length;

@@ -48,7 +48,7 @@ export default async function TagsPage({ searchParams }: SearchParamsProps) {
             //   key={tag.id}
             //   className="rounded-lg bg-gray-100 dark:bg-dark-200"
             // >
-              <article className="flex w-full flex-col items-center gap-3 p-5">
+              <article key={tag.id} className="flex w-full flex-col items-center gap-3 p-5">
                 <div>
                   <p
                     className={cn(

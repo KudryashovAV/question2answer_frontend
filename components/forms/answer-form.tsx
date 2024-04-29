@@ -28,7 +28,6 @@ interface Props {
 
 export default function AnswerForm({ questionId, userId, questionTitleContent }: Props) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  console.log("userId", userId)
   // const [isSubmittingAI, setIsSubmittingAI] = useState(false);
   const editorRef = useRef(null);
   const pathname = usePathname();

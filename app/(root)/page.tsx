@@ -14,6 +14,7 @@ import { getAllQuestions } from '@/actions/question.action';
 import { auth } from '@clerk/nextjs';
 import { SearchParamsProps } from '@/types/props';
 import Pagination from '@/components/pagination';
+import { Key } from 'react';
 
 export const metadata: Metadata = {
   title: 'Dev Overflow | Home',
@@ -52,8 +53,8 @@ export default async function Home({ searchParams }: SearchParamsProps) {
       <HomeFilter />
       <div className="mt-10 flex flex-col gap-5">
         {questions.length > 0 ? (
-          questions.map((question) => (
-            <QuestionCard key={question._id} question={question} clerkId={userId!} />
+          questions.map((question: { id: Key | null | undefined; }) => (
+            <QuestionCard key={question.id} question={question} clerkId={userId!} />
           ))
         ) : (
           <NoResult

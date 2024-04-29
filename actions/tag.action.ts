@@ -9,6 +9,7 @@ import {
   GetQuestionsByTagIdParams,
   GetTopInteractedTagsParams,
 } from '@/types/action';
+import envConfig from '@/config';
 
 export const getAllTags = async (params: GetAllTagsParams) => {
   try {
@@ -38,7 +39,7 @@ export const getAllTags = async (params: GetAllTagsParams) => {
     }
 
     // const tags = await Tag.find(query).skip(skip).limit(pageSize).sort(sortOptions);
-    const tags = await fetch("http://127.0.0.1:3001/api/tags").then((result) => result.json())
+    const tags = await fetch(`${envConfig.HOST}/api/tags`).then((result) => result.json())
 
     // const totalTags = await Tag.countDocuments(query);
     const isNext = tags.length > skip + tags.length;
@@ -113,7 +114,7 @@ export const getPopularTags = async () => {
     //   { $limit: 5 },
     // ]);
     // return popularTags;
-    const tags = await fetch("http://127.0.0.1:3001/api/tags").then((result) => result.json())
+    const tags = await fetch(`${envConfig.HOST}/api/tags`).then((result) => result.json())
 
     return tags
   } catch (error) {
