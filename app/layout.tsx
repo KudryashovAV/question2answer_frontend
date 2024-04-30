@@ -19,14 +19,11 @@ export const metadata: Metadata = {
     'A community of developers helping each other. Get unstuck, share ideas, and learn together. Join us, it only takes a minute.',
   applicationName: 'Dev Overflow',
   creator: 'ZBM',
-  authors: [{ name: 'ZBM', url: 'https://www.linkedin.com/in/zbmzubayer' }],
+  authors: [{ name: 'ZBM', url: 'https://www.linkedin.com/in/kudryashov-a-v/' }],
   keywords: ['dev', 'overflow', 'stack overflow', 'dev overflow', 'developer', 'community'],
-  metadataBase: new URL('https://devoverflow.zbm.vercel.app'),
+  metadataBase: new URL('https://question2answer-frontend.vercel.app/'),
   icons: ['/assets/images/logo.png'],
 };
-
-// Connecting to DB
-connectToDb();
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

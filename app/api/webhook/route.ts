@@ -36,52 +36,65 @@ export async function POST(req: Request) {
   let evt: WebhookEvent;
 
   // Verify the payload with the headers
-  try {
-    evt = wh.verify(body, {
-      'svix-id': svix_id,
-      'svix-timestamp': svix_timestamp,
-      'svix-signature': svix_signature,
-    }) as WebhookEvent;
-  } catch (err) {
-    console.error('Error verifying webhook:', err);
-    return new Response('Error occured', {
-      status: 400,
-    });
-  }
+  // console.log("svix_id", svix_id)
+  // console.log("headerPayload", headerPayload)
+  // console.log("svix_timestamp", svix_timestamp)
+  // console.log("svix_signature", svix_signature)
+  // console.log("body", JSON.parse(body).type)
+
+  // try {
+  //   evt = wh.verify(body, {
+  //     'svix-id': svix_id,
+  //     'svix-timestamp': svix_timestamp,
+  //     'svix-signature': svix_signature,
+  //   }) as WebhookEvent;
+  // } catch (err) {
+  //   console.error('Error verifying webhook:', err);
+  //   return new Response('Error occured', {
+  //     status: 400,
+  //   });
+  // }
+
+
 
   // Get the ID and type
   // const { id } = evt.data;
-  const eventType = evt.type;
+  // const eventType = evt.type;
+
+  const event = JSON.parse(body)
 
   // console.log(`Webhook with and ID of ${id} and type of ${eventType}`);
   // console.log('Webhook body:', body);
 
-  if (eventType === 'user.created') {
-    const { id, first_name, last_name, username, email_addresses, image_url } = evt.data;
+  if (event.type === 'user.created') {
+    const { id, first_name, last_name, username, email_addresses, image_url } = event.data;
     const payload = {
       clerkId: id,
       name: `${first_name} ${last_name}`,
       username: username!,
       email: email_addresses[0].email_address,
       picture: image_url,
+      type: "create",
     };
     const mongoUser = await createUser(payload);
     return NextResponse.json({ message: 'OK', user: mongoUser });
   }
-  if (eventType === 'user.updated') {
-    const { id, first_name, last_name, username, email_addresses, image_url } = evt.data;
+  if (event.type === 'user.updated') {
+    const { id, first_name, last_name, username, email_addresses, image_url } = event.data;
     const payload = {
       clerkId: id,
       name: `${first_name} ${last_name}`,
       username: username!,
       email: email_addresses[0].email_address,
       picture: image_url,
+      type: "update",
     };
-    const mongoUser = await updateUser(id, payload);
+    const mongoUser = await createUser(payload);
     return NextResponse.json({ message: 'OK', user: mongoUser });
   }
-  if (eventType === 'user.deleted') {
-    const { id } = evt.data;
+  if (event.type === 'user.deleted') {
+
+    const { id } = event.data;
     const mongoUser = await deleteUser(id!);
     return NextResponse.json({ message: 'OK', user: mongoUser });
   }

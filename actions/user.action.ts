@@ -15,11 +15,27 @@ import {
 import assignBadge from '@/utils/assignBadge';
 import connectToDb from '@/db';
 import envConfig from '@/config';
+import md5 from 'md5';
 
 export const createUser = async (payload: IUser) => {
   try {
-    await connectToDb();
-    const user = await User.create(payload);
+    const nowDate = new Date(); 
+    const date = nowDate.getFullYear()+'/'+(("0" + (nowDate.getMonth() + 1)).slice(-2))+'/'+nowDate.getDate(); 
+
+    console.log("payload", payload)
+    const user = await fetch(`${envConfig.HOST}/api/users`, {
+      method: "POST",
+      body: JSON.stringify(payload),
+      headers: {
+        "X-CSRF-Token": md5(date),
+        "Access-Control-Allow-Origin": "*"
+      }
+    }).then((result) => result.json())
+
+    if(user.status != "success") {
+      throw "Record was not created!";
+    }  
+
     return user;
   } catch (err) {
     console.log('Failed to create user', err);
