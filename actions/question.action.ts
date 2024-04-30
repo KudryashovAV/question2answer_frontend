@@ -14,30 +14,46 @@ import {
   GetAllQuestionsParams,
   QuestionVoteParams,
 } from '@/types/action';
+import md5 from 'md5';
+import { auth } from '@clerk/nextjs';
 
 export const createQuestion = async (payload: any) => {
   const { tags, ...rest } = payload;
   try {
-    const question = await Question.create(rest);
-    let tagDocuments = [];
+    const nowDate = new Date(); 
+    const date = nowDate.getFullYear()+'/'+(("0" + (nowDate.getMonth() + 1)).slice(-2))+'/'+nowDate.getDate();
+    const csrfToken = md5(date)
+    const { userId } = auth();
+
+    const question = await fetch(`${envConfig.HOST}/api/questions`, {
+      method: "POST",
+      body: JSON.stringify({ user_id: userId, ...rest }),
+      headers: {
+        "X-CSRF-Token": csrfToken,
+        "Access-Control-Allow-Origin": "*"
+      }
+    }).then((result) => result.json())
+
     for (const tagName of tags) {
-      const existingTag = await Tag.findOneAndUpdate(
-        { name: { $regex: new RegExp(`^${tagName}$`, 'i') } },
-        { $setOnInsert: { name: tagName }, $push: { questions: question._id } },
-        { upsert: true, new: true },
-      );
-      tagDocuments.push(existingTag._id);
+      const tag = await fetch(`${envConfig.HOST}/api/tags`, {
+        method: "POST",
+        body: JSON.stringify({ name: tagName }),
+        headers: {
+          "X-CSRF-Token": csrfToken,
+          "Access-Control-Allow-Origin": "*"
+        }
+      }).then((result) => result.json())
+
+      await fetch(`${envConfig.HOST}/api/question_tags`, {
+        method: "POST",
+        body: JSON.stringify({ questionId: question.id, tagId: tag.id }),
+        headers: {
+          "X-CSRF-Token": csrfToken,
+          "Access-Control-Allow-Origin": "*"
+        }
+      }).then((result) => result.json())
     }
-    await Question.findByIdAndUpdate(question._id, { $push: { tags: { $each: tagDocuments } } });
-    // Create an interaction for the user's ask question action
-    await Interaction.create({
-      user: payload.author,
-      action: 'ask_question',
-      question: question._id,
-      tags: tagDocuments,
-    });
-    // Increment reputation by 5 points
-    await User.findByIdAndUpdate(payload.author, { $inc: { reputation: 5 } });
+    
     revalidatePath('/');
   } catch (err) {
     console.log('Failed to create question', err);

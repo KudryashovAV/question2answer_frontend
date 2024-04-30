@@ -163,7 +163,6 @@ export default function QuestionForm({ userId, type, questionDetails }: Props) {
                       'link',
                       'image',
                       'charmap',
-                      'print',
                       'preview',
                       'anchor',
                       'searchreplace',
@@ -227,7 +226,7 @@ export default function QuestionForm({ userId, type, questionDetails }: Props) {
               <FormDescription>
                 Type & then press
                 <kbd className="font-semibold text-light-500"> Enter ↵ </kbd>
-                to add a tag. Add upto 3 tags to describe what your question is about. You need to
+                to add a tag. Add tags to describe what your question is about. You need to
                 press enter to add a tag.
               </FormDescription>
               <FormMessage className="text-red-500" />
