@@ -21,67 +21,67 @@ export async function generateMetadata(
   const id = params.id;
 
   // fetch data
-  const userInfo = await getUserInfo(id);
-  const { user } = userInfo;
+  const userInfo: any = await getUserInfo(id);
 
   // optionally access and extend (rather than replace) parent metadata
   const previousImages = (await parent).openGraph?.images || [];
 
   return {
-    title: `Dev Overflow | ${user?.username}`,
-    description: user.name,
+    title: `Dev Overflow | ${userInfo?.username}`,
+    description: userInfo.name,
     openGraph: {
-      images: [user.picture, ...previousImages],
+      images: [userInfo.picture, ...previousImages],
     },
   };
 }
 
 export default async function Profile({ params, searchParams }: ParamsSearchProps) {
   const { userId: clerkId } = auth();
-  const userInfo = await getUserInfo(params?.id!);
-  const { user, totalQuestions, totalAnswers, badgeCounts } = userInfo;
+  const userInfo: any = await getUserInfo(params?.id!);
 
   return (
     <>
       <div className="flex flex-col gap-5 md:flex-row md:justify-between">
         <div>
           <Image
-            src={user.picture}
-            alt={user.name}
+            src={userInfo.picture}
+            alt={userInfo.name}
             width={150}
             height={150}
             className="rounded-lg"
           />
           <div className="mt-3">
-            <h2 className="h2-bold">{user.name}</h2>
-            <p className="font-medium text-slate-600 dark:text-slate-400">@{user.username}</p>
+            <h2 className="h2-bold">{userInfo.name}</h2>
+            <p className="font-medium text-slate-600 dark:text-slate-400">@{userInfo.username}</p>
           </div>
 
           <div className="mt-5 flex items-center gap-5">
-            {user.location && (
+            {userInfo.location && (
               <div>
-                <a href={user?.portfolio} className="flex items-center">
+                <a href={userInfo?.portfolio} className="flex items-center">
                   <LinkIcon className="mr-2 h-4 w-4 text-gray-500" />
                   <span className="text-accent-blue">Portfolio</span>
                 </a>
               </div>
             )}
-            {user.location && (
+            {userInfo.location && (
               <div className="flex items-center">
                 <MapPinIcon className="mr-2 h-4 w-4 text-gray-500" />
-                {user?.location}
+                {userInfo?.location}
               </div>
             )}
             <div className="flex items-center">
               <CalendarDaysIcon className="mr-2 h-4 w-4 text-gray-500" /> Joined{' '}
-              {getJoinedDate(user.createdAt)}
+              {getJoinedDate(new Date(userInfo.created_at))}
             </div>
           </div>
-          {user.bio && <p className="paragraph-regular text-dark400_light800 mt-8">{user?.bio}</p>}
+          {userInfo.bio && (
+            <p className="paragraph-regular text-dark400_light800 mt-8">{userInfo?.bio}</p>
+          )}
         </div>
         <div>
           <SignedIn>
-            {clerkId === user.clerkId && (
+            {clerkId === userInfo.clerkId && (
               <Link
                 href="/profile/edit"
                 className={cn(
@@ -95,11 +95,11 @@ export default async function Profile({ params, searchParams }: ParamsSearchProp
           </SignedIn>
         </div>
       </div>
-      <Stats
-        totalQuestions={totalQuestions}
-        totalAnswers={totalAnswers}
-        reputation={user.reputation}
-        badges={badgeCounts}
+      {/* <Stats
+        totalQuestions={userInfo.questions_count}
+        totalAnswers={userInfo.answers_count}
+        reputation={0}
+        badges={0}
       />
       <div>
         <Tabs defaultValue="top-posts" className="mt-10">
@@ -118,13 +118,13 @@ export default async function Profile({ params, searchParams }: ParamsSearchProp
             </TabsTrigger>
           </TabsList>
           <TabsContent value="top-posts">
-            <QuestionsTab userId={user._id} searchParams={searchParams} />
+            <QuestionsTab userId={userInfo.id} searchParams={searchParams} />
           </TabsContent>
           <TabsContent value="answers">
-            <AnswerTabs userId={user._id} searchParams={searchParams} />
+            <AnswerTabs userId={userInfo.id} searchParams={searchParams} />
           </TabsContent>
         </Tabs>
-      </div>
+      </div> */}
     </>
   );
 }

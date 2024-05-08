@@ -16,25 +16,31 @@ import assignBadge from '@/utils/assignBadge';
 import connectToDb from '@/db';
 import envConfig from '@/config';
 import md5 from 'md5';
+import { MAX_PAGE_RESULT } from '@/utils/constants';
 
 export const createUser = async (payload: IUser) => {
   try {
-    const nowDate = new Date(); 
-    const date = nowDate.getFullYear()+'/'+(("0" + (nowDate.getMonth() + 1)).slice(-2))+'/'+nowDate.getDate(); 
+    const nowDate = new Date();
+    const date =
+      nowDate.getFullYear() +
+      '/' +
+      ('0' + (nowDate.getMonth() + 1)).slice(-2) +
+      '/' +
+      nowDate.getDate();
 
-    console.log("payload", payload)
+    console.log('payload', payload);
     const user = await fetch(`${envConfig.HOST}/api/users`, {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify(payload),
       headers: {
-        "X-CSRF-Token": md5(date),
-        "Access-Control-Allow-Origin": "*"
-      }
-    }).then((result) => result.json())
+        'X-CSRF-Token': md5(date),
+        'Access-Control-Allow-Origin': '*',
+      },
+    }).then((result) => result.json());
 
-    if(user.status != "success") {
-      throw "Record was not created!";
-    }  
+    if (user.status != 'success') {
+      throw 'Record was not created!';
+    }
 
     return user;
   } catch (err) {
@@ -45,40 +51,13 @@ export const createUser = async (payload: IUser) => {
 
 export const getAllUsers = async (params: GetAllUsersParams) => {
   try {
-    const { searchQuery, filter, page = 1, pageSize = 20 } = params;
-    const query: FilterQuery<typeof User> = {};
-    const skip = (page - 1) * pageSize;
+    const { searchQuery, page = 1 } = params;
 
-    if (searchQuery) {
-      query.$or = [
-        { name: { $regex: new RegExp(searchQuery, 'i') } },
-        { username: { $regex: new RegExp(searchQuery, 'i') } },
-      ];
-    }
+    const users = await fetch(`${envConfig.HOST}/api/users?query=${searchQuery}&page=${page}`).then(
+      (result) => result.json(),
+    );
 
-    let sortOptions = {};
-    switch (filter) {
-      case 'new_users':
-        sortOptions = { createdAt: -1 };
-        break;
-      case 'old_users':
-        sortOptions = { createdAt: 1 };
-        break;
-      case 'top_contributors':
-        sortOptions = { reputation: -1 };
-        break;
-      default:
-        break;
-    }
-
-
-
-    // const users = await User.find(query).skip(skip).limit(pageSize).sort(sortOptions);
-
-    const users = await fetch(`${envConfig.HOST}/api/users`).then((result) => result.json())
-
-    // const totalUsers = await User.countDocuments(query);
-    const isNext = users.length > skip + users.length;
+    const isNext = users.length > MAX_PAGE_RESULT;
     return { users, isNext };
   } catch (err) {
     console.log('Failed to get all users', err);
@@ -88,8 +67,10 @@ export const getAllUsers = async (params: GetAllUsersParams) => {
 
 export const getUserById = async (clerkId: string) => {
   try {
-    const user = await fetch(`${envConfig.HOST}/api/users/${clerkId}`).then((result) => result.json())
-    
+    const user = await fetch(`${envConfig.HOST}/api/users/${clerkId}`).then((result) =>
+      result.json(),
+    );
+
     return user;
   } catch (err) {
     console.log('Failed to get user by id', err);
@@ -204,35 +185,15 @@ export const getSavedQuestions = async (params: GetSavedQuestionsParams) => {
   }
 };
 
-export const getUserInfo = async (username: string) => {
+export const getUserInfo = async (id: string) => {
   try {
-    const user = await User.findOne({ username });
-    if (!user) throw new Error('User not found');
-    const totalQuestions = await Question.countDocuments({ author: user._id });
-    const totalAnswers = await Answer.countDocuments({ author: user._id });
-    const [questionUpvotes] = await Question.aggregate([
-      { $match: { author: user._id } },
-      { $project: { _id: 0, upvotes: { $size: '$upvotes' } } },
-      { $group: { _id: null, totalUpvotes: { $sum: '$upvotes' } } },
-    ]);
-    const [answerUpvotes] = await Answer.aggregate([
-      { $match: { author: user._id } },
-      { $project: { _id: 0, upvotes: { $size: '$upvotes' } } },
-      { $group: { _id: null, totalUpvotes: { $sum: '$upvotes' } } },
-    ]);
-    const [questionViews] = await Question.aggregate([
-      { $match: { author: user._id } },
-      { $group: { _id: null, totalViews: { $sum: '$views' } } },
-    ]);
-    // get user badges depending on certain criteria
-    const badgeCounts = assignBadge({
-      totalQuestions,
-      totalAnswers,
-      questionUpvotes: questionUpvotes?.totalUpvotes || 0,
-      answerUpvotes: answerUpvotes?.totalUpvotes || 0,
-      totalViews: questionViews?.totalViews || 0,
-    });
-    return { user, totalQuestions, totalAnswers, badgeCounts };
+    const userInfo = await fetch(`${envConfig.HOST}/api/user_info?id=${id}`).then((result) =>
+      result.json(),
+    );
+  
+    if (!userInfo) throw new Error('User not found');
+
+    return { userInfo };
   } catch (err) {
     console.log('Failed to get user info', err);
     throw err;
