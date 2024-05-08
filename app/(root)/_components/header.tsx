@@ -9,7 +9,7 @@ export default function Header() {
   return (
     <header className="flex-between background-light900_dark200 sticky top-0 z-50 h-20 w-full gap-5 px-6 shadow-light-300 dark:shadow-none sm:px-12">
       <Logo />
-      <GlobalSearch />
+      {/* <GlobalSearch /> */}
       <div className="flex-between gap-5">
         <MobileGlobalSearch />
         <SignedIn>

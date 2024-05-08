@@ -10,39 +10,22 @@ import {
   GetTopInteractedTagsParams,
 } from '@/types/action';
 import envConfig from '@/config';
+import { MAX_PAGE_RESULT } from '@/utils/constants';
 
 export const getAllTags = async (params: GetAllTagsParams) => {
   try {
-    const { searchQuery, filter, page = 1, pageSize = 20 } = params;
+    const { searchQuery, page = 1 } = params;
     const query: FilterQuery<typeof Tag> = {};
     if (searchQuery) {
       query.$or = [{ name: { $regex: new RegExp(searchQuery, 'i') } }];
     }
-    const skip = (page - 1) * pageSize;
 
-    let sortOptions = {};
-    switch (filter) {
-      case 'popular':
-        sortOptions = { questions: -1 };
-        break;
-      case 'recent':
-        sortOptions = { createdAt: -1 };
-        break;
-      case 'old':
-        sortOptions = { createdAt: 1 };
-        break;
-      case 'name':
-        sortOptions = { name: 1 };
-        break;
-      default:
-        break;
-    }
-
-    // const tags = await Tag.find(query).skip(skip).limit(pageSize).sort(sortOptions);
-    const tags = await fetch(`${envConfig.HOST}/api/tags`).then((result) => result.json())
+    const tags = await fetch(`${envConfig.HOST}/api/tags?query=${searchQuery}&page=${page}`).then(
+      (result) => result.json(),
+    );
 
     // const totalTags = await Tag.countDocuments(query);
-    const isNext = tags.length > skip + tags.length;
+    const isNext = tags.length > MAX_PAGE_RESULT;
     return { tags, isNext };
   } catch (error) {
     console.log(error);
@@ -72,33 +55,13 @@ export const getTopInteractedTags = async (params: GetTopInteractedTagsParams) =
 
 export const getQuestionsByTagId = async (params: GetQuestionsByTagIdParams) => {
   try {
-    const { tagId, searchQuery, page = 1, pageSize = 10 } = params;
-    const tagFilter: FilterQuery<ITag> = { _id: tagId };
-    const skip = (page - 1) * pageSize;
+    const { tagId } = params;
 
-    const tag = await Tag.findOne(tagFilter).populate({
-      path: 'questions',
-      model: Question,
-      match: searchQuery ? { title: { $regex: searchQuery, $options: 'i' } } : {},
-      options: {
-        sort: { createdAt: -1 },
-        skip,
-        limit: pageSize,
-      },
-      populate: [
-        { path: 'tags', model: Tag, select: '_id name' },
-        { path: 'author', model: User, select: '_id clerkId name username picture' },
-      ],
-    });
-    if (!tag) throw new Error('Tag not found');
-    const questions = tag.questions;
-    // Tags questions without pagination & sorting for checking next page
-    const tag2 = await Tag.findOne(tagFilter).populate({
-      path: 'questions',
-      model: Question,
-      match: searchQuery ? { title: { $regex: searchQuery, $options: 'i' } } : {},
-    });
-    const isNext = tag2.questions.length > skip + questions.length;
+    const { tag, questions } = await fetch(`${envConfig.HOST}/api/tags/${tagId}`).then((result) =>
+      result.json(),
+    );
+
+    const isNext = questions.length > MAX_PAGE_RESULT;
     return { tagName: tag.name, questions, isNext };
   } catch (error) {
     console.log(error);
@@ -108,15 +71,9 @@ export const getQuestionsByTagId = async (params: GetQuestionsByTagIdParams) => 
 
 export const getPopularTags = async () => {
   try {
-    // const popularTags = await Tag.aggregate([
-    //   { $project: { name: 1, numberOfQuestions: { $size: '$questions' } } },
-    //   { $sort: { numberOfQuestions: -1 } },
-    //   { $limit: 5 },
-    // ]);
-    // return popularTags;
-    const tags = await fetch(`${envConfig.HOST}/api/tags`).then((result) => result.json())
+    const tags = await fetch(`${envConfig.HOST}/api/tags`).then((result) => result.json());
 
-    return tags
+    return tags.slice(0, 5);
   } catch (error) {
     console.log(error);
     throw error;

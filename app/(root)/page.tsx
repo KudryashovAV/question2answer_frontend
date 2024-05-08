@@ -50,7 +50,7 @@ export default async function Home({ searchParams }: SearchParamsProps) {
         />
         <Filter filters={HomePageFilters} containerClass="sm:min-w-[170px] md:hidden" />
       </div>
-      <HomeFilter />
+      {/* <HomeFilter /> */}
       <div className="mt-10 flex flex-col gap-5">
         {questions.length > 0 ? (
           questions.map((question: { id: Key | null | undefined; }) => (

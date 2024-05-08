@@ -33,6 +33,7 @@ export default async function TagDetailsPage({ params, searchParams }: ParamsSea
     searchQuery: searchParams.q,
     page: Number(searchParams.page) || 1,
   });
+
   const { tagName, questions, isNext } = tag;
 
   return (
@@ -49,7 +50,7 @@ export default async function TagDetailsPage({ params, searchParams }: ParamsSea
       </div>
       <div className="mt-10 flex flex-col gap-5">
         {questions.length > 0 ? (
-          questions.map((question: any) => <QuestionCard key={question._id} question={question} />)
+          questions.map((question: any) => <QuestionCard key={question.id} question={question} />)
         ) : (
           <NoResult
             title={tagQuestionNoResult.title}

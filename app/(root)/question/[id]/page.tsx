@@ -23,7 +23,6 @@ export async function generateMetadata(
   // fetch data
   const question = await getQuestionById(id);
 
-
   // optionally access and extend (rather than replace) parent metadata
   // const previousImages = (await parent).openGraph?.images || [];
 
@@ -38,8 +37,8 @@ export async function generateMetadata(
 
 export default async function QuestionDetailPage({ params, searchParams }: ParamsSearchProps) {
   const question = await getQuestionById(params.id);
-  
-  const { title, content, views, created_at } = question;
+  console.log('111question', question);
+  const { title, content, answers_count, created_at } = question;
   const { userId } = auth();
 
   const mongoUser = await getUserById(userId!);
@@ -78,15 +77,6 @@ export default async function QuestionDetailPage({ params, searchParams }: Param
             <Clock className="h-4 w-4" />
             asked {getTimeStamp(new Date(created_at))} ago
           </div>
-          <div className="flex items-center gap-1">
-            <MessageCircle className="h-4 w-4" />
-            {/* {getFormatNumber(answers.length)} {answers.length > 1 ? 'Answers' : 'Answer'} */}
-            Answer
-          </div>
-          <div className="flex items-center gap-1">
-            <Eye className="h-4 w-4" />
-            {getFormatNumber(views)} {views > 1 ? 'Views' : 'View'}
-          </div>
         </div>
       </div>
       <ParseHTML content={content} />
@@ -99,7 +89,7 @@ export default async function QuestionDetailPage({ params, searchParams }: Param
         questionId={questionId}
         userId={mongoUserId}
         // totalAnswers={question.answers.length}
-        totalAnswers={5}
+        totalAnswers={answers_count}
         page={searchParams?.page}
         filter={searchParams?.filter}
       />

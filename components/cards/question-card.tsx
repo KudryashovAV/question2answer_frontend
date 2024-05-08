@@ -14,16 +14,15 @@ interface Props {
 }
 
 export default function QuestionCard({ question, clerkId }: Props) {
-  // const { id, title, tags, views, upvotes, author, answers, createdAt } = question;
-  const { id, title, views, createdat } = question;
+  const { id, title, tags, created_at, answers_count } = question;
+
   // const showActionButtons = clerkId && clerkId === author.clerkId;
-  
 
   return (
     <div className="card-wrapper rounded-lg p-9 sm:px-11">
       <div className="flex flex-col">
         <p className="subtle-regular text-dark400_light700 lg:hidden">
-          {getTimeStamp(new Date(createdat))} ago
+          {getTimeStamp(new Date(created_at))} ago
         </p>
         <div className="flex items-center justify-between">
           <Link href={`/question/${question.id}`}>
@@ -35,11 +34,11 @@ export default function QuestionCard({ question, clerkId }: Props) {
         </div>
       </div>
       <div className="mt-2 flex flex-wrap gap-3">
-        {/* {tags.map((tag: any) => (
-          <Link href={`/tags/${tag._id}`} key={tag._id} className={cn(tagVariants({ size: 'sm' }))}>
+        {tags.map((tag: any) => (
+          <Link href={`/tags/${tag.id}`} key={tag.id} className={cn(tagVariants({ size: 'sm' }))}>
             {tag.name}
           </Link>
-        ))} */}
+        ))}
       </div>
       <div>
         <hr className="mt-2" />
@@ -56,23 +55,22 @@ export default function QuestionCard({ question, clerkId }: Props) {
               <p className="text-[13px] hover:underline">{author.name}</p>
             </Link> */}
             <p className="subtle-regular text-dark400_light700 hidden lg:flex">
-              - asked {getTimeStamp(new Date(createdat))} ago
+              - asked {getTimeStamp(new Date(created_at))} ago
             </p>
           </div>
           <div className="flex items-center gap-4 max-md:justify-end max-sm:justify-between">
             <div className="flex items-center gap-1">
-              <ThumbsUp className="h-3.5 w-3.5 stroke-blue-500" />
+              {/* <ThumbsUp className="h-3.5 w-3.5 stroke-blue-500" /> */}
               {/* {getFormatNumber(upvotes.length)} {upvotes.length > 1 ? 'Votes' : 'Vote'} */}
-              Vote
+              {/* Vote */}
             </div>
             <div className="flex items-center gap-1">
               <MessageCircle className="h-3.5 w-3.5 stroke-foreground" />
-              {/* {getFormatNumber(answers.length)} {answers.length > 1 ? 'Answers' : 'Answer'} */}
-              Answer
+              {getFormatNumber(answers_count)} {answers_count > 1 ? 'Answers' : 'Answer'}
             </div>
             <div className="flex items-center gap-1">
-              <Eye className="h-3.5 w-3.5 stroke-slate-500" />
-              {getFormatNumber(views)} {views > 1 ? 'Views' : 'View'}
+              {/* <Eye className="h-3.5 w-3.5 stroke-slate-500" /> */}
+              {/* {getFormatNumber(views)} {views > 1 ? 'Views' : 'View'} */}
             </div>
           </div>
         </div>

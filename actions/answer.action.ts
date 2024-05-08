@@ -20,14 +20,22 @@ export const createAnswer = async (params: CreateAnswerParams) => {
     const { path } = params;
     // const answer = await Answer.create({ content, question, author });
 
-    const nowDate = new Date(); 
-    const date = nowDate.getFullYear()+'/'+(("0" + (nowDate.getMonth() + 1)).slice(-2))+'/'+nowDate.getDate(); 
+    const nowDate = new Date();
+    const date =
+      nowDate.getFullYear() +
+      '/' +
+      ('0' + (nowDate.getMonth() + 1)).slice(-2) +
+      '/' +
+      nowDate.getDate();
 
+    const answer = await fetch(`${envConfig.HOST}/api/answers`, {
+      method: 'POST',
+      body: JSON.stringify(params),
+      headers: { 'X-CSRF-Token': md5(date) },
+    }).then((result) => result.json());
 
-    const answer = await fetch(`${envConfig.HOST}/api/answers`, { method: "POST", body: JSON.stringify(params), headers: { "X-CSRF-Token": md5(date) } }).then((result) => result.json())
-
-    if(answer.status != "success") {
-      throw "Record was not created!";
+    if (answer.status != 'success') {
+      throw 'Record was not created!';
     }
     // // Add the answer to the question's answers array
     // const answeredQuestion = await Question.findByIdAndUpdate(question, {
@@ -87,13 +95,16 @@ export const getAllAnswers = async (params: GetAllAnswersParams) => {
   }
 };
 
-
 export const getAllAnswersForQuestion = async (params: GetAllAnswersParams) => {
   try {
     const { questionId, page = 1, pageSize = 10 } = params;
     const skip = (page - 1) * pageSize;
-    
-    const answers = await fetch(`${envConfig.HOST}/api/answers?question_id=${questionId}`).then((result) => result.json())
+
+    const answers = await fetch(`${envConfig.HOST}/api/answers?question_id=${questionId}`).then(
+      (result) => result.json(),
+    );
+
+    console.log('answers', answers);
 
     // const totalAnswers = await Answer.countDocuments({ question: questionId });
     const isNext = answers.length > skip + answers.length;

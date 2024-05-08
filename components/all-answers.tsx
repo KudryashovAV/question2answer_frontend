@@ -8,7 +8,14 @@ import ParseHTML from './parse-html';
 import Votes from './votes';
 import Pagination from './pagination';
 import { StaticImport } from 'next/dist/shared/lib/get-img-props';
-import { Key, ReactElement, JSXElementConstructor, ReactNode, ReactPortal, PromiseLikeOfReactNode } from 'react';
+import {
+  Key,
+  ReactElement,
+  JSXElementConstructor,
+  ReactNode,
+  ReactPortal,
+  PromiseLikeOfReactNode,
+} from 'react';
 
 interface Props {
   questionId: string;
@@ -32,30 +39,40 @@ export default async function AllAnswers({
     <div className="mt-11">
       <div className="flex items-center justify-between">
         <h3 className="primary-text-gradient">{totalAnswers} Answers</h3>
-        <Filter filters={AnswerFilters} />
+        {/* <Filter filters={AnswerFilters} /> */}
       </div>
+      <hr className="h-0.5 border-t-0 bg-neutral-100 dark:bg-white/20" />
       <div>
-        {answers.map((answer: { id: Key | null | undefined; author_id: number | string; created_at: Date | string; upvotes: string | string[]; downvotes: string | string[]; content: string; }) => (
-          <article key={answer.id} className="light-border border-b py-10">
-            <div className="mb-5 flex items-center justify-between">
-              <div className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
-                <Link href={`/profile/${answer.author_id}`} className="flex gap-2">
-                  {/* <Image
+        {answers.map(
+          (answer: {
+            id: Key | null | undefined;
+            user_id: number | string;
+            created_at: Date | string;
+            user_name: string;
+            content: string;
+          }) => (
+            <article key={answer.id} className="light-border border-b py-10">
+              <div className="mb-5 flex items-center justify-between">
+                <div className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
+                  <Link href={`/profile/${answer.user_id}`} className="flex gap-2">
+                    {/* <Image
                     src={answer.author.picture}
                     alt="Author picture"
                     width={22}
                     height={22}
                     className="h-6 w-6 rounded-full"
                   /> */}
-                  <div className="flex flex-col gap-1 sm:flex-row sm:items-end">
-                    <p className="body-semibold text-dark300_light700">{answer.author_id as string}</p>
-                    <p className="text-light400_light500 text-xs">
-                      <span className="max-sm:hidden"> - </span>answered{' '}
-                      {getTimeStamp(new Date(answer.created_at as string))} ago
-                    </p>
-                  </div>
-                </Link>
-                {/* <Votes
+                    <div className="flex flex-col gap-1 sm:flex-row sm:items-end">
+                      <p className="body-semibold text-dark300_light700">
+                        {answer.user_name as string}
+                      </p>
+                      <p className="text-light400_light500 text-xs">
+                        <span className="max-sm:hidden"> - </span>answered{' '}
+                        {getTimeStamp(new Date(answer.created_at as string))} ago
+                      </p>
+                    </div>
+                  </Link>
+                  {/* <Votes
                   type="Answer"
                   itemId={answer.id.toString()}
                   userId={userId}
@@ -64,11 +81,14 @@ export default async function AllAnswers({
                   downvotes={answer.downvotes.length}
                   hasDownvoted={answer.downvotes.includes(userId)}
                 /> */}
+                </div>
               </div>
-            </div>
-            <ParseHTML content={answer.content} />
-          </article>
-        ))}
+              <div className="text-light400_light500 text-xs">
+                <ParseHTML content={answer.content} />
+              </div>
+            </article>
+          ),
+        )}
       </div>
       <Pagination pageNumber={Number(page) || 1} isNext={isNext} />
     </div>

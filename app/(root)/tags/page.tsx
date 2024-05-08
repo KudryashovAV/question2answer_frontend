@@ -11,7 +11,14 @@ import NoResult from '@/components/no-result';
 import { tagVariants } from '@/components/tags-badge';
 import { cn } from '@/lib/utils';
 import Pagination from '@/components/pagination';
-import { Key, ReactElement, JSXElementConstructor, ReactNode, ReactPortal, PromiseLikeOfReactNode } from 'react';
+import {
+  Key,
+  ReactElement,
+  JSXElementConstructor,
+  ReactNode,
+  ReactPortal,
+  PromiseLikeOfReactNode,
+} from 'react';
 
 export const metadata: Metadata = {
   title: 'Dev Overflow | Tags',
@@ -38,37 +45,42 @@ export default async function TagsPage({ searchParams }: SearchParamsProps) {
           placeholder="Search for tags"
           className="flex-1"
         />
-        <Filter filters={TagFilters} />
+        {/* <Filter filters={TagFilters} /> */}
       </div>
       <section className="mt-12 grid grid-cols-2 gap-4 md:grid-cols-3 2xl:grid-cols-4">
         {tags.length > 0 ? (
-          tags.map((tag: { id: Key | null | undefined; name: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | PromiseLikeOfReactNode | null | undefined; questions: string | any[]; }) => (
-            // <Link
-            //   href={`tags/${tag.id}`}
-            //   key={tag.id}
-            //   className="rounded-lg bg-gray-100 dark:bg-dark-200"
-            // >
-              <article key={tag.id} className="flex w-full flex-col items-center gap-3 p-5">
-                <div>
-                  <p
-                    className={cn(
-                      tagVariants({ size: 'md' }),
-                      'background-light700_dark300 font-semibold shadow',
-                    )}
-                  >
-                    {tag.name}
+          tags.map(
+            (tag: {
+              questions_count: ReactNode;
+              id: Key | null | undefined;
+              name: string | undefined;
+            }) => (
+              <Link
+                href={`tags/${tag.id}`}
+                key={tag.id}
+                className="rounded-lg bg-gray-100 dark:bg-dark-200"
+              >
+                <article key={tag.id} className="flex w-full flex-col items-center gap-3 p-5">
+                  <div>
+                    <p
+                      className={cn(
+                        tagVariants({ size: 'md' }),
+                        'background-light700_dark300 font-semibold shadow',
+                      )}
+                    >
+                      {tag.name}
+                    </p>
+                  </div>
+                  <p className="text-dark400_light500 text-sm">
+                    <span className="primary-text-gradient mr-2 font-semibold">
+                      {tag.questions_count}+
+                    </span>
+                    Questions
                   </p>
-                </div>
-                <p className="text-dark400_light500 text-sm">
-                  <span className="primary-text-gradient mr-2 font-semibold">
-                    {/* {tag.questions.length}+ */}
-                    500
-                  </span>
-                  Questions
-                </p>
-              </article>
-            // </Link>
-          ))
+                </article>
+              </Link>
+            ),
+          )
         ) : (
           <NoResult
             title={tagNoResult.title}
