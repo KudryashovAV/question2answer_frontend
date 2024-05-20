@@ -1,96 +1,93 @@
-import { AnswerFilters } from '@/constants/filters';
-import Filter from './filter';
-import { getAllAnswersForQuestion } from '@/actions/answer.action';
-import Link from 'next/link';
-import Image from 'next/image';
-import getTimeStamp from '@/utils/getTimeStamp';
-import ParseHTML from './parse-html';
-import Votes from './votes';
-import Pagination from './pagination';
-import { StaticImport } from 'next/dist/shared/lib/get-img-props';
-import {
-  Key,
-  ReactElement,
-  JSXElementConstructor,
-  ReactNode,
-  ReactPortal,
-  PromiseLikeOfReactNode,
-} from 'react';
+"use client";
 
-interface Props {
-  questionId: string;
-  userId: string;
-  totalAnswers: number;
-  page?: number;
-  filter?: string;
+import Link from "next/link";
+import ParseHTML from "./parse-html";
+import Image from "next/image";
+import { Key, useEffect, useState } from "react";
+import AllComments from "./all-comments";
+import { IComments } from "@/types/props";
+import { i18n } from "@/app/(root)/i118n";
+import { getCookie } from "cookies-next";
+import { getTimeStamp } from "@/lib/utils";
+
+interface IAnswer {
+  id: string | Key | null | undefined;
+  user_id: number | string;
+  created_at: Date | string;
+  user_name: string;
+  user_picture: string | null;
+  comments: IComments[];
+  content: string;
 }
 
-export default async function AllAnswers({
-  questionId,
-  userId,
-  totalAnswers,
-  page,
-  filter,
-}: Props) {
-  const result = await getAllAnswersForQuestion({ questionId, page: page || 1, sortBy: filter });
-  const { answers, isNext } = result;
+interface Props {
+  answers: IAnswer[];
+  currentUserId: string | null;
+}
+
+export default function AllAnswers({ answers, currentUserId }: Props) {
+  const [lang, setLang] = useState("en");
+
+  let ago = i18n()[lang]["ago"];
+  let answered = i18n()[lang]["answered"];
+  let answersTitle = i18n()[lang]["answers"];
+
+  useEffect(() => {
+    setLang(getCookie("lang")?.toLocaleLowerCase() || "en");
+    ago = i18n()[lang]["ago"];
+    answered = i18n()[lang]["answered"];
+    answersTitle = i18n()[lang]["answers"];
+  }, []);
+
+  const capitalizeFirstLetter = (str: string) => {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  };
 
   return (
     <div className="mt-11">
       <div className="flex items-center justify-between">
-        <h3 className="primary-text-gradient">{totalAnswers} Answers</h3>
+        <h3 className="primary-text-gradient">
+          {answers.length} {capitalizeFirstLetter(answersTitle)}
+        </h3>
         {/* <Filter filters={AnswerFilters} /> */}
       </div>
       <hr className="h-0.5 border-t-0 bg-neutral-100 dark:bg-white/20" />
       <div>
-        {answers.map(
-          (answer: {
-            id: Key | null | undefined;
-            user_id: number | string;
-            created_at: Date | string;
-            user_name: string;
-            content: string;
-          }) => (
-            <article key={answer.id} className="light-border border-b py-10">
-              <div className="mb-5 flex items-center justify-between">
-                <div className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
-                  <Link href={`/profile/${answer.user_id}`} className="flex gap-2">
-                    {/* <Image
-                    src={answer.author.picture}
+        {answers.map((answer: IAnswer) => (
+          <article key={answer.id} className="light-border border-b py-10">
+            <div className="mb-5 flex items-center justify-between">
+              <div className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
+                <Link href={`/profile/${answer.user_id}`} className="flex gap-2">
+                  <Image
+                    src={answer.user_picture || "/assets/images/user_logo.jpeg"}
                     alt="Author picture"
                     width={22}
                     height={22}
                     className="h-6 w-6 rounded-full"
-                  /> */}
-                    <div className="flex flex-col gap-1 sm:flex-row sm:items-end">
-                      <p className="body-semibold text-dark300_light700">
-                        {answer.user_name as string}
-                      </p>
-                      <p className="text-light400_light500 text-xs">
-                        <span className="max-sm:hidden"> - </span>answered{' '}
-                        {getTimeStamp(new Date(answer.created_at as string))} ago
-                      </p>
-                    </div>
-                  </Link>
-                  {/* <Votes
-                  type="Answer"
-                  itemId={answer.id.toString()}
-                  userId={userId}
-                  upvotes={answer.upvotes.length}
-                  hasUpvoted={answer.upvotes.includes(userId)}
-                  downvotes={answer.downvotes.length}
-                  hasDownvoted={answer.downvotes.includes(userId)}
-                /> */}
-                </div>
+                  />
+                  <div className="flex flex-col gap-1 sm:flex-row sm:items-end">
+                    <p className="body-semibold text-dark300_light700">{answer.user_name}</p>
+                    <p className="text-light400_light500 text-xs">
+                      <span className="max-sm:hidden"> - </span>
+                      {answered} {getTimeStamp(new Date(answer.created_at))} {ago}
+                    </p>
+                  </div>
+                </Link>
               </div>
-              <div className="text-light400_light500 text-xs">
-                <ParseHTML content={answer.content} />
-              </div>
-            </article>
-          ),
-        )}
+            </div>
+            <div className="text-light400_light500 text-xs">
+              <ParseHTML content={answer.content} />
+            </div>
+            <AllComments
+              ownerId={answer.id}
+              ownerType="answer"
+              comments={answer.comments}
+              currentUserId={currentUserId}
+              defaultCommentsCount={0}
+            />
+          </article>
+        ))}
       </div>
-      <Pagination pageNumber={Number(page) || 1} isNext={isNext} />
     </div>
   );
 }

@@ -17,3 +17,11 @@ export type MetaDataProps = {
   params: { id: string };
   searchParams: { [key: string]: string | string[] | undefined };
 };
+
+export interface IComments {
+  id: string | Key | null | undefined;
+  content: string;
+  commented_to_id: string;
+  created_at: Date | string;
+  user_name: string;
+}

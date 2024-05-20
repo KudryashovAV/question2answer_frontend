@@ -1,7 +1,3 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
-## Getting Started
-
 First, run the development server:
 
 ```bash
@@ -14,23 +10,32 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3001](http://localhost:3001) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Clerk
 
-## Learn More
+For using authentication you have to add follow variables yo `.env` file:
 
-To learn more about Next.js, take a look at the following resources:
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_***************************************************
+CLERK_SECRET_KEY=sk_test_******************************************
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/
+NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/
+CLERK_WEBHOOK_SECRET=whsec_********************************
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Webhook functionality can't wotk with `localhost` you have to use `ngrok` service for generating normal URL.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+For installing `ngrok` you have to:
+1) run `brew install ngrok/ngrok/ngrok` in terminal for Mac;
+2) login on the https://ngrok.com/;
+3) run `ngrok config add-authtoken ************************************************` (copy token from your account);
+4) run `npm run dev` in another tad of terminal;
+5) run `ngrok http 3001` in terminal (since we run on the 30001 port);
+6) copy your URL. Something like this: https://de64-172-98-32-141.ngrok-free.app - NOT THIS!!! From your terminal.
+7) go to https://dashboard.clerk.com/apps/
+8) go to `Webhooks` section
+9) click `+ Add Edpoint` button
+10) follow instruction.

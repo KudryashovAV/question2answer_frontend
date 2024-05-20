@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   Select,
   SelectContent,
@@ -9,8 +9,8 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { setUrlParams } from '@/utils/queryString';
+} from "@/components/ui/select";
+import { setUrlParams } from "@/utils/queryString";
 
 interface FilterProps {
   filters: {
@@ -25,11 +25,11 @@ export default function Filter({ filters, containerClass, className }: FilterPro
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const filterParams = searchParams.get('filter');
+  const filterParams = searchParams.get("filter");
   const handleFilerClick = (filterValue: string) => {
     const newUrl = setUrlParams({
       params: searchParams.toString(),
-      key: 'filter',
+      key: "filter",
       value: filterValue,
     });
     router.push(newUrl, { scroll: false });

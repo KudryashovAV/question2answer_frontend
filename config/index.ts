@@ -4,7 +4,9 @@ const envConfig = {
   CLERK_WEBHOOK_SECRET: process.env.CLERK_WEBHOOK_SECRET,
   NEXT_PUBLIC_SERVER_URL: process.env.NEXT_PUBLIC_SERVER_URL,
   OPENAI_API_KEY: process.env.OPENAI_API_KEY,
-  HOST: process.env.HOST
+  HOST: process.env.HOST,
+  NEXT_PUBLIC_MAIN_DOMAIN_URL: process.env.NEXT_PUBLIC_MAIN_DOMAIN_URL,
+  NEXT_PUBLIC_RU_DOMAIN_URL: process.env.NEXT_PUBLIC_RU_DOMAIN_URL,
 };
 
 export default envConfig;

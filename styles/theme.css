@@ -48,6 +48,9 @@
   .text-dark500_light700 {
     @apply text-dark-500 dark:text-light-700 !important;
   }
+  .text-dark50_light50 {
+    @apply text-white dark:text-stone-950 !important;
+  }
   .text-dark500_light500 {
     @apply text-dark-500 dark:text-light-500;
   }

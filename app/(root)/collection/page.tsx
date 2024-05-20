@@ -1,24 +1,24 @@
-import { Metadata } from 'next';
-import { SearchIcon } from 'lucide-react';
-import { auth } from '@clerk/nextjs';
-import { SearchParamsProps } from '@/types/props';
-import { QuestionFilters } from '@/constants/filters';
-import { savedQuestionNoResult } from '@/constants/no-result';
-import { getSavedQuestions } from '@/actions/user.action';
-import LocalSearch from '@/components/local-search';
-import Filter from '@/components/filter';
-import NoResult from '@/components/no-result';
-import QuestionCard from '@/components/cards/question-card';
-import Pagination from '@/components/pagination';
+import { Metadata } from "next";
+import { SearchIcon } from "lucide-react";
+import { auth } from "@clerk/nextjs/server";
+import { SearchParamsProps } from "@/types/props";
+import { QuestionFilters } from "@/constants/filters";
+import { savedQuestionNoResult } from "@/constants/no-result";
+import { getSavedQuestions } from "@/actions/user.action";
+import LocalSearch from "@/components/local-search";
+import Filter from "@/components/filter";
+import NoResult from "@/components/no-result";
+import QuestionCard from "@/components/cards/question-card";
+import Pagination from "@/components/pagination";
 
 export const metadata: Metadata = {
-  title: 'Dev Overflow | Collections',
+  title: "Wanswers | Collections",
   description:
-    "Your collections of saved questions on Dev Overflow. You can save questions by clicking on the star icon on the question's page",
+    "Your collections of saved questions on Wanswers. You can save questions by clicking on the star icon on the question's page",
 };
 
 export default async function CollectionPage({ searchParams }: SearchParamsProps) {
-  const { userId } = auth();
+  const userId = auth().userId;
   const result = await getSavedQuestions({
     clerkId: userId!,
     searchQuery: searchParams.q,
@@ -26,6 +26,8 @@ export default async function CollectionPage({ searchParams }: SearchParamsProps
     page: Number(searchParams.page) || 1,
   });
   const { savedQuestions, isNext } = result;
+
+  console.log("currentUserClerkId", userId);
 
   return (
     <>
@@ -53,7 +55,7 @@ export default async function CollectionPage({ searchParams }: SearchParamsProps
             buttonLink={savedQuestionNoResult.buttonLink}
           />
         )}
-      </div>{' '}
+      </div>{" "}
       <Pagination pageNumber={Number(searchParams.page) || 1} isNext={isNext} />
     </>
   );

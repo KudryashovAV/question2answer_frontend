@@ -1,7 +1,7 @@
-import Link from 'next/link';
-import Image from 'next/image';
-import { cn } from '@/lib/utils';
-import { buttonVariants } from '@/components/ui/button';
+import Link from "next/link";
+import Image from "next/image";
+import { cn } from "@/lib/utils";
+import { buttonVariants } from "@/components/ui/button";
 
 interface Props {
   title: string;
@@ -31,7 +31,7 @@ export default function NoResult({ title, description, buttonText, buttonLink }:
       <p className="body-regular text-dark500_light700 my-4 max-w-md text-center">{description}</p>
       <Link
         href={buttonLink}
-        className={cn(buttonVariants(), 'mt-5 bg-orange-500 text-light-800 hover:bg-orange-400')}
+        className={cn(buttonVariants(), "mt-5 bg-orange-500 text-light-800 hover:bg-orange-400")}
       >
         {buttonText}
       </Link>

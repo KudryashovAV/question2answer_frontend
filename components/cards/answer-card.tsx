@@ -1,11 +1,11 @@
-import Link from 'next/link';
-import Image from 'next/image';
-import { Eye, MessageCircle, ThumbsUp, Trash } from 'lucide-react';
-import { tagVariants } from '../tags-badge';
-import getTimeStamp from '@/utils/getTimeStamp';
-import getFormatNumber from '@/utils/getFormatNumber';
-import { SignedIn } from '@clerk/nextjs';
-import EditDeleteAction from '../edit-delete-action';
+import Link from "next/link";
+import Image from "next/image";
+import { Eye, MessageCircle, ThumbsUp, Trash } from "lucide-react";
+import { tagVariants } from "../tags-badge";
+import getTimeStamp from "@/utils/getTimeStamp";
+import getFormatNumber from "@/utils/getFormatNumber";
+import { SignedIn } from "@clerk/nextjs";
+import EditDeleteAction from "../edit-delete-action";
 
 interface Props {
   answer: any;
@@ -50,7 +50,7 @@ export default function AnswerCard({ answer, clerkId }: Props) {
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-1">
               <ThumbsUp className="h-3.5 w-3.5 stroke-blue-500" />
-              {getFormatNumber(upvotes.length)} {upvotes.length > 1 ? 'Votes' : 'Vote'}
+              {getFormatNumber(upvotes.length)} {upvotes.length > 1 ? "Votes" : "Vote"}
             </div>
           </div>
         </div>

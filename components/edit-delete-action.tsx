@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { usePathname, useRouter } from 'next/navigation';
-import { FileEditIcon, TrashIcon } from 'lucide-react';
-import { deleteQuestion } from '@/actions/question.action';
-import { deleteAnswer } from '@/actions/answer.action';
-import { toast } from 'sonner';
+import { usePathname, useRouter } from "next/navigation";
+import { FileEditIcon, TrashIcon } from "lucide-react";
+import { deleteQuestion } from "@/actions/question.action";
+import { deleteAnswer } from "@/actions/answer.action";
+import { toast } from "sonner";
 
 interface Props {
-  type: 'Question' | 'Answer';
+  type: "Question" | "Answer";
   itemId: string;
 }
 
@@ -20,20 +20,20 @@ export default function EditDeleteAction({ type, itemId }: Props) {
   };
 
   const handleDelete = async () => {
-    if (type === 'Question') {
+    if (type === "Question") {
       // delete question
       await deleteQuestion({ questionId: itemId, path: pathname });
-      toast.warning('Question deleted successfully');
-    } else if (type === 'Answer') {
+      toast.warning("Question deleted successfully");
+    } else if (type === "Answer") {
       // delete answer
       await deleteAnswer({ answerId: itemId, path: pathname });
-      toast.warning('Answer deleted successfully');
+      toast.warning("Answer deleted successfully");
     }
   };
 
   return (
     <div className="flex items-center gap-3">
-      {type === 'Question' && (
+      {type === "Question" && (
         <FileEditIcon
           role="button"
           className="h-3.5 w-3.5 stroke-blue-400 transition-all hover:scale-110"

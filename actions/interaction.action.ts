@@ -1,8 +1,8 @@
-'use server';
+"use server";
 
-import Interaction from '@/db/models/interaction.model';
-import Question from '@/db/models/question.model';
-import { ViewQuestionParams } from '@/types/action';
+import Interaction from "@/db/models/interaction.model";
+import Question from "@/db/models/question.model";
+import { ViewQuestionParams } from "@/types/action";
 
 export const viewQuestion = async (params: ViewQuestionParams) => {
   try {
@@ -12,18 +12,18 @@ export const viewQuestion = async (params: ViewQuestionParams) => {
     if (userId) {
       const existingInteraction = await Interaction.findOne({
         user: userId,
-        action: 'view',
+        action: "view",
         question: questionId,
       });
       if (!existingInteraction) {
         await Interaction.create({
           user: userId,
-          action: 'view',
+          action: "view",
           question: questionId,
         });
       } else {
         await Interaction.findByIdAndUpdate(existingInteraction._id, { updatedAt: new Date() });
-        console.log('User has already viewed');
+        console.log("User has already viewed");
         return;
       }
     }

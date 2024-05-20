@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import { LaptopIcon, MoonIcon, SunIcon } from 'lucide-react';
-import { useTheme } from 'next-themes';
+import { LaptopIcon, MoonIcon, SunIcon } from "lucide-react";
+import { useTheme } from "next-themes";
 
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from "@/components/ui/dropdown-menu";
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
@@ -29,22 +29,22 @@ export function ThemeToggle() {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem
-          onClick={() => setTheme('light')}
-          className={`${theme === 'light' ? 'text-orange-500 focus:text-orange-500' : ''}`}
+          onClick={() => setTheme("light")}
+          className={`${theme === "light" ? "text-orange-500 focus:text-orange-500" : ""}`}
         >
           <SunIcon className="mr-2 h-4 w-4" />
           Light
         </DropdownMenuItem>
         <DropdownMenuItem
-          onClick={() => setTheme('dark')}
-          className={`${theme === 'dark' ? 'text-orange-500 focus:text-orange-500' : ''}`}
+          onClick={() => setTheme("dark")}
+          className={`${theme === "dark" ? "text-orange-500 focus:text-orange-500" : ""}`}
         >
           <MoonIcon className="mr-2 h-4 w-4" />
           Dark
         </DropdownMenuItem>
         <DropdownMenuItem
-          onClick={() => setTheme('system')}
-          className={`${theme === 'system' ? 'text-orange-500 focus:text-orange-500' : ''}`}
+          onClick={() => setTheme("system")}
+          className={`${theme === "system" ? "text-orange-500 focus:text-orange-500" : ""}`}
         >
           <LaptopIcon className="mr-2 h-4 w-4" />
           System

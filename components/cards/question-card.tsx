@@ -1,20 +1,28 @@
-import Link from 'next/link';
-import Image from 'next/image';
-import { Eye, MessageCircle, ThumbsUp } from 'lucide-react';
-import { SignedIn } from '@clerk/nextjs';
-import { tagVariants } from '../tags-badge';
-import getTimeStamp from '@/utils/getTimeStamp';
-import getFormatNumber from '@/utils/getFormatNumber';
-import { cn } from '@/lib/utils';
-import EditDeleteAction from '../edit-delete-action';
+import Link from "next/link";
+import Image from "next/image";
+import { Eye, MessageCircle, ThumbsUp } from "lucide-react";
+import { SignedIn } from "@clerk/nextjs";
+import { tagVariants } from "../tags-badge";
+import getTimeStamp from "@/utils/getTimeStamp";
+import getFormatNumber from "@/utils/getFormatNumber";
+import { cn } from "@/lib/utils";
+import EditDeleteAction from "../edit-delete-action";
+import { cookies } from "next/headers";
+import { i18n } from "@/app/(root)/i118n";
 
 interface Props {
   question: any;
   clerkId?: string | null;
 }
 
-export default function QuestionCard({ question, clerkId }: Props) {
+export default async function QuestionCard({ question, clerkId }: Props) {
   const { id, title, tags, created_at, answers_count } = question;
+
+  const getLang = async () => {
+    const cookieStore = cookies();
+    return cookieStore.get("lang")?.value.toLocaleLowerCase() || "en";
+  };
+  const lang = await getLang();
 
   // const showActionButtons = clerkId && clerkId === author.clerkId;
 
@@ -22,7 +30,7 @@ export default function QuestionCard({ question, clerkId }: Props) {
     <div className="card-wrapper rounded-lg p-9 sm:px-11">
       <div className="flex flex-col">
         <p className="subtle-regular text-dark400_light700 lg:hidden">
-          {getTimeStamp(new Date(created_at))} ago
+          {getTimeStamp(new Date(created_at))} {i18n()[lang]["ago"]}
         </p>
         <div className="flex items-center justify-between">
           <Link href={`/question/${question.id}`}>
@@ -35,7 +43,7 @@ export default function QuestionCard({ question, clerkId }: Props) {
       </div>
       <div className="mt-2 flex flex-wrap gap-3">
         {tags.map((tag: any) => (
-          <Link href={`/tags/${tag.id}`} key={tag.id} className={cn(tagVariants({ size: 'sm' }))}>
+          <Link href={`/tags/${tag.id}`} key={tag.id} className={cn(tagVariants({ size: "sm" }))}>
             {tag.name}
           </Link>
         ))}
@@ -55,7 +63,7 @@ export default function QuestionCard({ question, clerkId }: Props) {
               <p className="text-[13px] hover:underline">{author.name}</p>
             </Link> */}
             <p className="subtle-regular text-dark400_light700 hidden lg:flex">
-              - asked {getTimeStamp(new Date(created_at))} ago
+              - {i18n()[lang]["asked"]} {getTimeStamp(new Date(created_at))} {i18n()[lang]["ago"]}
             </p>
           </div>
           <div className="flex items-center gap-4 max-md:justify-end max-sm:justify-between">
@@ -66,7 +74,8 @@ export default function QuestionCard({ question, clerkId }: Props) {
             </div>
             <div className="flex items-center gap-1">
               <MessageCircle className="h-3.5 w-3.5 stroke-foreground" />
-              {getFormatNumber(answers_count)} {answers_count > 1 ? 'Answers' : 'Answer'}
+              {getFormatNumber(answers_count)}{" "}
+              {answers_count > 1 ? i18n()[lang]["answers"] : i18n()[lang]["answer"]}
             </div>
             <div className="flex items-center gap-1">
               {/* <Eye className="h-3.5 w-3.5 stroke-slate-500" /> */}

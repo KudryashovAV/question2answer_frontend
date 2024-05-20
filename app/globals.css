@@ -2,8 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('../styles/custom.css');
-@import url('../styles/theme.css');
+@import url("../styles/custom.css");
+@import url("../styles/theme.css");
 
 @layer base {
   :root {

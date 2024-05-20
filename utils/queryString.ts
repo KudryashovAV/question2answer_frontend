@@ -1,4 +1,4 @@
-import qs from 'query-string';
+import qs from "query-string";
 
 type SetUrlQueryParams = {
   params: string;

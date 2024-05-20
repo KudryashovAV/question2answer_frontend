@@ -1,4 +1,4 @@
-import { Skeleton } from '@/components/ui/skeleton';
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Loading() {
   const users = [1, 2, 3, 4, 5, 6, 7, 8, 9];

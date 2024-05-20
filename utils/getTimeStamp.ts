@@ -1,6 +1,14 @@
-import { time } from 'console';
+import { i18n } from "@/app/(root)/i118n";
+import { time } from "console";
+import { cookies } from "next/headers";
 
-export default function getTimeStamp(date: Date) {
+export default async function getTimeStamp(date: Date) {
+  const getLang = async () => {
+    const cookieStore = cookies();
+    return cookieStore.get("lang")?.value.toLocaleLowerCase() || "en";
+  };
+  const lang = await getLang();
+
   const now = new Date();
   const timeDifference = now.getTime() - date.getTime();
   const seconds = Math.floor(timeDifference / 1000);
@@ -12,27 +20,29 @@ export default function getTimeStamp(date: Date) {
   const week = day * 7;
   const month = day * 30;
   const year = day * 365;
-  let timeStamp = '';
+  let timeStamp = "";
 
   if (timeDifference < minute) {
-    timeStamp = `${seconds} second${seconds > 1 ? 's' : ''}`;
+    timeStamp = `${seconds} ${seconds > 1 ? i18n()[lang]["seconds"] : i18n()[lang]["second"]}`;
   } else if (timeDifference < hour) {
-    timeStamp = `${Math.floor(seconds / 60)} minute${Math.floor(seconds / 60) > 1 ? 's' : ''}`;
+    timeStamp = `${Math.floor(seconds / 60)} ${
+      Math.floor(seconds / 60) > 1 ? i18n()[lang]["minutes"] : i18n()[lang]["minute"]
+    }`;
   } else if (timeDifference < day) {
-    timeStamp = `${Math.floor(seconds / 60 / 60)} hour${
-      Math.floor(seconds / 60 / 60) > 1 ? 's' : ''
+    timeStamp = `${Math.floor(seconds / 60 / 60)} ${
+      Math.floor(seconds / 60 / 60) > 1 ? i18n()[lang]["hours"] : i18n()[lang]["hour"]
     }`;
   } else if (timeDifference < week) {
-    timeStamp = `${Math.floor(seconds / 60 / 60 / 24)} day${
-      Math.floor(seconds / 60 / 60 / 24) > 1 ? 's' : ''
+    timeStamp = `${Math.floor(seconds / 60 / 60 / 24)} ${
+      Math.floor(seconds / 60 / 60 / 24) > 1 ? i18n()[lang]["days"] : i18n()[lang]["day"]
     }`;
   } else if (timeDifference < month) {
-    timeStamp = `${Math.floor(seconds / 60 / 60 / 24 / 7)} week${
-      Math.floor(seconds / 60 / 60 / 24 / 7) > 1 ? 's' : ''
+    timeStamp = `${Math.floor(seconds / 60 / 60 / 24 / 7)} ${
+      Math.floor(seconds / 60 / 60 / 24 / 7) > 1 ? i18n()[lang]["weeks"] : i18n()[lang]["week"]
     }`;
   } else {
-    timeStamp = `${Math.floor(seconds / 60 / 60 / 24 / 30)} month${
-      Math.floor(seconds / 60 / 60 / 24 / 30) > 1 ? 's' : ''
+    timeStamp = `${Math.floor(seconds / 60 / 60 / 24 / 30)} ${
+      Math.floor(seconds / 60 / 60 / 24 / 30) > 1 ? i18n()[lang]["months"] : i18n()[lang]["month"]
     }`;
   }
   return timeStamp;
