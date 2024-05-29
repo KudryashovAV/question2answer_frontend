@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useRouter, useSearchParams } from 'next/navigation';
-import { setUrlParams } from '@/utils/queryString';
-import { Button } from '@/components/ui/button';
+import { useRouter, useSearchParams } from "next/navigation";
+import { setUrlParams } from "@/utils/queryString";
+import { Button } from "@/components/ui/button";
 
 interface PaginationProps {
   pageNumber: number;
@@ -14,10 +14,10 @@ export default function Pagination({ pageNumber, isNext }: PaginationProps) {
   const searchParams = useSearchParams();
 
   const handlePagination = (direction: string) => {
-    const nextPageNumber = direction === 'prev' ? pageNumber - 1 : pageNumber + 1;
+    const nextPageNumber = direction === "prev" ? pageNumber - 1 : pageNumber + 1;
     const newUrl = setUrlParams({
       params: searchParams.toString(),
-      key: 'page',
+      key: "page",
       value: nextPageNumber.toString(),
     });
     router.push(newUrl);
@@ -30,7 +30,7 @@ export default function Pagination({ pageNumber, isNext }: PaginationProps) {
       <Button
         size="sm"
         disabled={pageNumber === 1}
-        onClick={() => handlePagination('prev')}
+        onClick={() => handlePagination("prev")}
         className="dark:bg-light-700"
       >
         Prev
@@ -41,7 +41,7 @@ export default function Pagination({ pageNumber, isNext }: PaginationProps) {
       <Button
         size="sm"
         disabled={!isNext}
-        onClick={() => handlePagination('next')}
+        onClick={() => handlePagination("next")}
         className="dark:bg-light-700"
       >
         Next

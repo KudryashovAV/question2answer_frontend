@@ -1,12 +1,14 @@
-import { Metadata, ResolvingMetadata } from 'next';
-import { SearchIcon } from 'lucide-react';
-import { MetaDataProps, ParamsSearchProps } from '@/types/props';
-import { getQuestionsByTagId } from '@/actions/tag.action';
-import { tagQuestionNoResult } from '@/constants/no-result';
-import LocalSearch from '@/components/local-search';
-import NoResult from '@/components/no-result';
-import QuestionCard from '@/components/cards/question-card';
-import Pagination from '@/components/pagination';
+import { Metadata, ResolvingMetadata } from "next";
+import { SearchIcon } from "lucide-react";
+import { MetaDataProps, ParamsSearchProps } from "@/types/props";
+import { getQuestionsByTagId } from "@/actions/tag.action";
+import { tagQuestionNoResult } from "@/constants/no-result";
+import LocalSearch from "@/components/local-search";
+import NoResult from "@/components/no-result";
+import QuestionCard from "@/components/cards/question-card";
+import Pagination from "@/components/pagination";
+import { cookies } from "next/headers";
+import { i18n } from "../../i118n";
 
 export async function generateMetadata(
   { params }: MetaDataProps,
@@ -20,9 +22,9 @@ export async function generateMetadata(
   // optionally access and extend (rather than replace) parent metadata
   const previousImages = (await parent).openGraph?.images || [];
   return {
-    title: `Dev Overflow | Tag - ${tagName}`,
+    title: `Wanswers | Tag - ${tagName}`,
     openGraph: {
-      images: ['/some-specific-page-image.jpg', ...previousImages],
+      images: ["/some-specific-page-image.jpg", ...previousImages],
     },
   };
 }
@@ -35,16 +37,20 @@ export default async function TagDetailsPage({ params, searchParams }: ParamsSea
   });
 
   const { tagName, questions, isNext } = tag;
-
+  const getLang = async () => {
+    const cookieStore = cookies();
+    return cookieStore.get("lang")?.value.toLocaleLowerCase() || "en";
+  };
+  const lang = await getLang();
   return (
     <>
-      <h1 className="h1-bold uppercase">{tagName}</h1>
+      <h1 className="h1-bold text-dark300_light700 uppercase">{tagName}</h1>
       <div className="mt-11">
         <LocalSearch
           route={`/tags/${params.id}`}
           icon={<SearchIcon />}
           iconPosition="left"
-          placeholder="Search tag questions"
+          placeholder={i18n()[lang]["tagSearch"]}
           className="flex-1"
         />
       </div>
@@ -53,10 +59,10 @@ export default async function TagDetailsPage({ params, searchParams }: ParamsSea
           questions.map((question: any) => <QuestionCard key={question.id} question={question} />)
         ) : (
           <NoResult
-            title={tagQuestionNoResult.title}
-            description={tagQuestionNoResult.description}
-            buttonText={tagQuestionNoResult.buttonText}
-            buttonLink={tagQuestionNoResult.buttonLink}
+            title={i18n()[lang]["noResultTTitle"]}
+            description={i18n()[lang]["noResultQDescription"]}
+            buttonText={i18n()[lang]["askQuestion"]}
+            buttonLink="/ask-question"
           />
         )}
       </div>

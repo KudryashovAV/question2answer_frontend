@@ -1,5 +1,5 @@
-import { Schema } from 'mongoose';
-import { IUser } from '@/mongodb';
+import { Schema } from "mongoose";
+import { IUser } from "@/mongodb";
 
 export interface CreateAnswerParams {
   content: string;
@@ -45,7 +45,7 @@ export interface JobFilterParams {
 export interface GetAllQuestionsParams {
   page?: number;
   pageSize?: number;
-  searchQuery?: string;
+  searchQuery?: any;
   filter?: string;
 }
 export interface CreateQuestionParams {
@@ -73,6 +73,7 @@ export interface EditQuestionParams {
   questionId: string;
   title: string;
   content: string;
+  location: string;
   path: string;
 }
 export interface GetAllTagsParams {

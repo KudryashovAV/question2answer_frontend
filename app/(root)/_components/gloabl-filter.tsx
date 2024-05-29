@@ -1,23 +1,23 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { ArrowRight } from 'lucide-react';
-import { GlobalSearchFilters } from '@/constants/filters';
-import { setUrlParams } from '@/utils/queryString';
+import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { ArrowRight } from "lucide-react";
+import { GlobalSearchFilters } from "@/constants/filters";
+import { setUrlParams } from "@/utils/queryString";
 
 export default function GlobalFilter() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const typeParams = searchParams.get('type');
-  const [active, setActive] = useState(typeParams || '');
+  const typeParams = searchParams.get("type");
+  const [active, setActive] = useState(typeParams || "");
 
   const handleTypeClick = (type: string) => {
     if (active === type) {
-      setActive('');
+      setActive("");
       const newUrl = setUrlParams({
         params: searchParams.toString(),
-        key: 'type',
+        key: "type",
         value: null,
       });
       router.push(newUrl, { scroll: false });
@@ -25,7 +25,7 @@ export default function GlobalFilter() {
       setActive(type);
       const newUrl = setUrlParams({
         params: searchParams.toString(),
-        key: 'type',
+        key: "type",
         value: type.toLowerCase(),
       });
       router.push(newUrl, { scroll: false });
@@ -44,8 +44,8 @@ export default function GlobalFilter() {
             key={item.value}
             className={`small-medium light-border-2 rounded-full px-4 py-2 sm:px-5 ${
               active === item.value
-                ? 'bg-brand-500 text-light-800 dark:text-light-800 dark:hover:bg-orange-600'
-                : 'bg-light-700 text-dark-400 hover:text-brand-500 dark:bg-dark-500 dark:text-light-500 dark:hover:text-brand-500'
+                ? "bg-brand-500 text-light-800 dark:text-light-800 dark:hover:bg-orange-600"
+                : "bg-light-700 text-dark-400 hover:text-brand-500 dark:bg-dark-500 dark:text-light-500 dark:hover:text-brand-500"
             }`}
             onClick={() => handleTypeClick(item.value)}
           >

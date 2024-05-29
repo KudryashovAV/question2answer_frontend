@@ -1,17 +1,20 @@
-import Link from 'next/link';
-import Image from 'next/image';
-import { getTopInteractedTags } from '@/actions/tag.action';
-import { TagBadge } from '../tags-badge';
-import getFormatNumber from '@/utils/getFormatNumber';
-import { MessageCircle } from 'lucide-react';
-import { BadgeHelp } from 'lucide-react';
+import Link from "next/link";
+import Image from "next/image";
+import { getTopInteractedTags } from "@/actions/tag.action";
+import { TagBadge } from "../tags-badge";
+import getFormatNumber from "@/utils/getFormatNumber";
+import { MessageCircle } from "lucide-react";
+import { BadgeHelp } from "lucide-react";
 
-export default async function UserCard({ user }: any) {
+export default async function UserCard({ user, isItCurrentUser }: any) {
   // const interactedTags = await getTopInteractedTags({ userId: user.id });
+
+  const currentBg = isItCurrentUser ? "bg-dark-400" : "bg-dark-300";
+
   return (
     <Link
       href={`/profile/${user.id}`}
-      className="overflow-hidden rounded-2xl border bg-gray-100 shadow transition-all hover:shadow-md dark:bg-dark-300"
+      className={`overflow-hidden rounded-2xl border bg-gray-100 shadow transition-all hover:shadow-md dark:${currentBg}`}
     >
       <article className="shadow-light100_darknone item-center flex flex-col items-center justify-center p-8">
         {/* <Image
@@ -22,9 +25,14 @@ export default async function UserCard({ user }: any) {
           className="h-[80px] w-[80px] rounded-full"
         /> */}
         <div className="mt-4 text-center">
+          <h3 className="mb-5 line-clamp-1 text-xl font-bold md:text-sm" title={user.name}>
+            {isItCurrentUser ? "My profile" : ""}
+          </h3>
+
           <h3 className="line-clamp-1 text-xl font-bold md:text-2xl" title={user.name}>
             {user.name}
           </h3>
+
           <p className="mt-2 font-medium text-gray-500 dark:text-gray-400">@{user.user_name}</p>
           <div className="mt-5">
             {/* {interactedTags?.length ? (
@@ -41,11 +49,11 @@ export default async function UserCard({ user }: any) {
             <div className="flex items-center gap-4 max-md:justify-end max-sm:justify-between">
               <div className="flex items-center gap-1">
                 <BadgeHelp className="h-3.5 w-3.5 stroke-foreground" />
-                {getFormatNumber(user.questions_count || 0)}{' '}
+                {getFormatNumber(user.questions_count || 0)}{" "}
               </div>
               <div className="flex items-center gap-1">
                 <MessageCircle className="h-3.5 w-3.5 stroke-foreground" />
-                {getFormatNumber(user.answers_count || 0)}{' '}
+                {getFormatNumber(user.answers_count || 0)}{" "}
               </div>
             </div>
           </div>

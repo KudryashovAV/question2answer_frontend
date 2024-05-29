@@ -1,40 +1,40 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   CornerUpLeftIcon,
   FileQuestionIcon,
   SearchIcon,
   TagIcon,
   UserCircleIcon,
-} from 'lucide-react';
-import { ReloadIcon } from '@radix-ui/react-icons';
-import { globalSearch } from '@/actions/general.action';
-import { removeKeysUrlParams, setUrlParams } from '@/utils/queryString';
-import GlobalFilter from './gloabl-filter';
-import { Button } from '@/components/ui/button';
-import { CommandDialog, CommandInput } from '@/components/ui/command';
-import { ScrollArea } from '@/components/ui/scroll-area';
+} from "lucide-react";
+import { ReloadIcon } from "@radix-ui/react-icons";
+import { globalSearch } from "@/actions/general.action";
+import { removeKeysUrlParams, setUrlParams } from "@/utils/queryString";
+import GlobalFilter from "./gloabl-filter";
+import { Button } from "@/components/ui/button";
+import { CommandDialog, CommandInput } from "@/components/ui/command";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default function MobileGlobalSearch() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const query = searchParams.get('global');
-  const [search, setSearch] = useState(query || '');
+  const query = searchParams.get("global");
+  const [search, setSearch] = useState(query || "");
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [searchResult, setSearchResult] = useState<any>([]);
 
-  const global = searchParams.get('global');
-  const type = searchParams.get('type');
+  const global = searchParams.get("global");
+  const type = searchParams.get("type");
 
   useEffect(() => {
     setIsOpen(false);
-    setSearch('');
+    setSearch("");
   }, [pathname]);
 
   // Update url when search
@@ -43,7 +43,7 @@ export default function MobileGlobalSearch() {
       if (search) {
         const newUrl = setUrlParams({
           params: searchParams.toString(),
-          key: 'global',
+          key: "global",
           value: search,
         });
         router.push(newUrl, { scroll: false });
@@ -51,7 +51,7 @@ export default function MobileGlobalSearch() {
         if (query) {
           const newUrl = removeKeysUrlParams({
             params: searchParams.toString(),
-            keys: ['global', 'type'],
+            keys: ["global", "type"],
           });
           router.push(newUrl, { scroll: false });
         }
@@ -78,16 +78,16 @@ export default function MobileGlobalSearch() {
 
   const renderLink = (type: string, id: string) => {
     switch (type) {
-      case 'question':
+      case "question":
         return `/question/${id}`;
-      case 'answer':
+      case "answer":
         return `/question/${id}`;
-      case 'user':
+      case "user":
         return `/profile/${id}`;
-      case 'tag':
+      case "tag":
         return `/tags/${id}`;
       default:
-        return '/';
+        return "/";
     }
   };
 
@@ -127,10 +127,10 @@ export default function MobileGlobalSearch() {
                       href={renderLink(item.type, item.id)}
                       className="flex w-full gap-2 rounded-md px-5 py-2 hover:bg-light-700 dark:hover:bg-dark-400"
                     >
-                      {item.type === 'question' && <FileQuestionIcon className="mt-1.5 h-4 w-4" />}
-                      {item.type === 'answer' && <CornerUpLeftIcon className="mt-1.5 h-4 w-4" />}
-                      {item.type === 'user' && <UserCircleIcon className="mt-1.5 h-4 w-4" />}
-                      {item.type === 'tag' && <TagIcon className="mt-1.5 h-4 w-4" />}
+                      {item.type === "question" && <FileQuestionIcon className="mt-1.5 h-4 w-4" />}
+                      {item.type === "answer" && <CornerUpLeftIcon className="mt-1.5 h-4 w-4" />}
+                      {item.type === "user" && <UserCircleIcon className="mt-1.5 h-4 w-4" />}
+                      {item.type === "tag" && <TagIcon className="mt-1.5 h-4 w-4" />}
                       <div>
                         <p className="body-medium text-dark200_light800 line-clamp-1">
                           {item.title}

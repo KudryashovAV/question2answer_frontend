@@ -1,4 +1,4 @@
-import { Schema, model, models } from 'mongoose';
+import { Schema, model, models } from "mongoose";
 
 export interface IUser {
   clerkId: string;
@@ -26,11 +26,11 @@ const userSchema = new Schema<IUser>(
     location: { type: String },
     portfolio: { type: String },
     reputation: { type: Number, default: 0 },
-    savedQuestions: [{ type: Schema.Types.ObjectId, ref: 'Question' }],
+    savedQuestions: [{ type: Schema.Types.ObjectId, ref: "Question" }],
   },
   { timestamps: true },
 );
 
-const User = models.User || model<IUser>('User', userSchema);
+const User = models.User || model<IUser>("User", userSchema);
 
 export default User;

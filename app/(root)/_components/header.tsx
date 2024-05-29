@@ -1,10 +1,10 @@
-import { SignedIn, UserButton } from '@clerk/nextjs';
-import { ThemeToggle } from './theme-toggle';
-import MobileMenu from './MobileMenu';
-import Logo from './Logo';
-import GlobalSearch from './global-search';
-import MobileGlobalSearch from './mobile-global-search';
-import { LangSwitcher } from './lang-switcher';
+import { SignedIn, UserButton } from "@clerk/nextjs";
+import { ThemeToggle } from "./theme-toggle";
+import MobileMenu from "./MobileMenu";
+import Logo from "./Logo";
+import GlobalSearch from "./global-search";
+import MobileGlobalSearch from "./mobile-global-search";
+import { LangSwitcher } from "./lang-switcher";
 
 export default function Header() {
   return (
@@ -12,13 +12,13 @@ export default function Header() {
       <Logo />
       {/* <GlobalSearch /> */}
       <div className="flex-between gap-5">
-        <MobileGlobalSearch />
+        {/* <MobileGlobalSearch /> */}
         <SignedIn>
           <UserButton
             afterSignOutUrl="/"
             appearance={{
-              elements: { avatarBox: 'h-10 w-10' },
-              variables: { colorPrimary: '#ff7000' },
+              elements: { avatarBox: "h-10 w-10" },
+              variables: { colorPrimary: "#ff7000" },
             }}
           />
         </SignedIn>

@@ -1,8 +1,8 @@
-import { getTopQuestions } from '@/actions/question.action';
-import { getPopularTags } from '@/actions/tag.action';
-import { TagBadge } from '@/components/tags-badge';
-import { ChevronRight } from 'lucide-react';
-import Link from 'next/link';
+import { getTopQuestions } from "@/actions/question.action";
+import { getPopularTags } from "@/actions/tag.action";
+import { TagBadge } from "@/components/tags-badge";
+import { ChevronRight } from "lucide-react";
+import Link from "next/link";
 import {
   Key,
   ReactElement,
@@ -10,16 +10,24 @@ import {
   ReactNode,
   ReactPortal,
   PromiseLikeOfReactNode,
-} from 'react';
+} from "react";
+import { i18n } from "../i118n";
+import { cookies } from "next/headers";
 
 export default async function RightSidebar() {
   const topQuestions = await getTopQuestions();
   const popularTags = await getPopularTags();
 
+  const getLang = async () => {
+    const cookieStore = cookies();
+    return cookieStore.get("lang")?.value.toLocaleLowerCase() || "en";
+  };
+  const lang = await getLang();
+
   return (
-    <aside className="background-light900_dark200 light-border sticky right-0 top-20 flex h-[calc(100vh-5rem)] flex-col justify-between border-l p-5 shadow dark:shadow-none max-xl:hidden max-sm:hidden lg:w-[350px]">
+    <aside className="background-light900_dark200 sticky right-0 top-20 flex h-[calc(100vh-5rem)] flex-col justify-between border-l p-5 dark:shadow-none max-xl:hidden max-sm:hidden lg:w-[350px]">
       <div>
-        <h3 className="h3-bold">Top Questions</h3>
+        <h3 className="h3-bold">{i18n()[lang]["topQuestions"]}</h3>
         <div className="mt-5 space-y-7">
           {topQuestions.map(
             (question: { id: Key | null | undefined; title: string | undefined }) => (
@@ -36,7 +44,7 @@ export default async function RightSidebar() {
         </div>
       </div>
       <div>
-        <h3 className="h3-bold">Popular Tags</h3>
+        <h3 className="h3-bold">{i18n()[lang]["topTags"]}</h3>
         <div className="mt-5 space-y-3">
           {popularTags.map(
             (tag: {

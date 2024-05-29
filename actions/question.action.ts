@@ -1,22 +1,18 @@
-'use server';
+"use server";
 
-import { FilterQuery } from 'mongoose';
-import { revalidatePath } from 'next/cache';
-import { MAX_PAGE_RESULT } from '@/utils/constants';
-import Answer from '@/db/models/answer.model';
-import Interaction from '@/db/models/interaction.model';
-import Question from '@/db/models/question.model';
-import Tag from '@/db/models/tag.model';
-import User from '@/db/models/user.model';
-import envConfig from '@/config';
+import { FilterQuery } from "mongoose";
+import { revalidatePath } from "next/cache";
+import { MAX_PAGE_RESULT } from "@/utils/constants";
+import Question from "@/db/models/question.model";
+import envConfig from "@/config";
 import {
   DeleteQuestionParams,
   EditQuestionParams,
   GetAllQuestionsParams,
   QuestionVoteParams,
-} from '@/types/action';
-import md5 from 'md5';
-import { auth } from '@clerk/nextjs';
+} from "@/types/action";
+import md5 from "md5";
+import { auth } from "@clerk/nextjs/server";
 
 export const createQuestion = async (payload: any) => {
   const { tags, ...rest } = payload;
@@ -24,61 +20,61 @@ export const createQuestion = async (payload: any) => {
     const nowDate = new Date();
     const date =
       nowDate.getFullYear() +
-      '/' +
-      ('0' + (nowDate.getMonth() + 1)).slice(-2) +
-      '/' +
-      nowDate.getDate();
+      "/" +
+      ("0" + (nowDate.getMonth() + 1)).slice(-2) +
+      "/" +
+      ("0" + nowDate.getDate()).slice(-2);
     const csrfToken = md5(date);
-    const { userId } = auth();
+    const userId = auth().userId;
 
     const question = await fetch(`${envConfig.HOST}/api/questions`, {
-      method: 'POST',
+      cache: "no-store",
+      method: "POST",
       body: JSON.stringify({ user_id: userId, ...rest }),
       headers: {
-        'X-CSRF-Token': csrfToken,
-        'Access-Control-Allow-Origin': '*',
+        "X-CSRF-Token": csrfToken,
+        "Access-Control-Allow-Origin": "*",
       },
     }).then((result) => result.json());
 
     for (const tagName of tags) {
       const tag = await fetch(`${envConfig.HOST}/api/tags`, {
-        method: 'POST',
+        cache: "no-store",
+        method: "POST",
         body: JSON.stringify({ name: tagName }),
         headers: {
-          'X-CSRF-Token': csrfToken,
-          'Access-Control-Allow-Origin': '*',
+          "X-CSRF-Token": csrfToken,
+          "Access-Control-Allow-Origin": "*",
         },
       }).then((result) => result.json());
 
       await fetch(`${envConfig.HOST}/api/question_tags`, {
-        method: 'POST',
+        cache: "no-store",
+        method: "POST",
         body: JSON.stringify({ questionId: question.id, tagId: tag.id }),
         headers: {
-          'X-CSRF-Token': csrfToken,
-          'Access-Control-Allow-Origin': '*',
+          "X-CSRF-Token": csrfToken,
+          "Access-Control-Allow-Origin": "*",
         },
       }).then((result) => result.json());
     }
 
-    revalidatePath('/');
+    revalidatePath("/");
   } catch (err) {
-    console.log('Failed to create question', err);
+    console.log("Failed to create question", err);
     throw err;
   }
 };
 
 export const getAllQuestions = async (params: GetAllQuestionsParams) => {
-  console.log('params', params);
-
   try {
     const { searchQuery, filter, page = 1 } = params;
     const query: FilterQuery<typeof Question> = {};
 
-
     if (searchQuery) {
       query.$or = [
-        { title: { $regex: new RegExp(searchQuery, 'i') } },
-        { content: { $regex: new RegExp(searchQuery, 'i') } },
+        { title: { $regex: new RegExp(searchQuery, "i") } },
+        { content: { $regex: new RegExp(searchQuery, "i") } },
       ];
     }
     let sortOptions = {};
@@ -105,7 +101,8 @@ export const getAllQuestions = async (params: GetAllQuestionsParams) => {
     //   .sort(sortOptions);
 
     const questions = await fetch(
-      `${envConfig.HOST}/api/questions?query=${searchQuery}&page=${page}`,
+      `${envConfig.HOST}/api/questions?query=${searchQuery.q}&page=${page}&user_id=${searchQuery.user_id}&answers=${searchQuery.answers}`,
+      { cache: "no-store" },
     ).then((result) => result.json());
     // return questions;
 
@@ -115,7 +112,7 @@ export const getAllQuestions = async (params: GetAllQuestionsParams) => {
     const isNext = questions.length > MAX_PAGE_RESULT;
     return { questions, isNext };
   } catch (err) {
-    console.log('Failed to get all questions', err);
+    console.log("Failed to get all questions", err);
     throw err;
   }
 };
@@ -135,9 +132,9 @@ export const getQuestionById = async (id: string) => {
     //   });
     // return question;
 
-    const question = await fetch(`${envConfig.HOST}/api/questions/${id}`).then((result) =>
-      result.json(),
-    );
+    const question = await fetch(`${envConfig.HOST}/api/questions/${id}`, {
+      cache: "no-store",
+    }).then((result) => result.json());
     return question;
   } catch (error) {
     console.log(error);
@@ -241,9 +238,9 @@ export const getTopQuestions = async () => {
     // const topQuestions = await Question.find({}).sort({ views: -1, upvotes: -1 }).limit(5);
     // return topQuestions;
 
-    const questions = await fetch(`${envConfig.HOST}/api/questions`).then((result) =>
-      result.json(),
-    );
+    const questions = await fetch(`${envConfig.HOST}/api/questions?popular=true`, {
+      cache: "no-store",
+    }).then((result) => result.json());
 
     return questions;
   } catch (error) {

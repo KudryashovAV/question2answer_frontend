@@ -1,8 +1,8 @@
-import { BadgeCounts } from '@/utils/assignBadge';
-import getFormatNumber from '@/utils/getFormatNumber';
-import Image from 'next/image';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { HelpCircleIcon } from 'lucide-react';
+import { BadgeCounts } from "@/utils/assignBadge";
+import getFormatNumber from "@/utils/getFormatNumber";
+import Image from "next/image";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { HelpCircleIcon } from "lucide-react";
 
 interface StatsCardProps {
   imgUrl: string;

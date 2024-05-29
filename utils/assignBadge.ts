@@ -55,11 +55,11 @@ export default function assignBadge({
     BRONZE: 0,
   };
   const criteria = [
-    { type: 'QUESTION_COUNT' as TBadgeCriteria, count: totalQuestions },
-    { type: 'ANSWER_COUNT' as TBadgeCriteria, count: totalAnswers },
-    { type: 'QUESTION_UPVOTES' as TBadgeCriteria, count: questionUpvotes },
-    { type: 'ANSWER_UPVOTES' as TBadgeCriteria, count: answerUpvotes },
-    { type: 'TOTAL_VIEWS' as TBadgeCriteria, count: totalViews },
+    { type: "QUESTION_COUNT" as TBadgeCriteria, count: totalQuestions },
+    { type: "ANSWER_COUNT" as TBadgeCriteria, count: totalAnswers },
+    { type: "QUESTION_UPVOTES" as TBadgeCriteria, count: questionUpvotes },
+    { type: "ANSWER_UPVOTES" as TBadgeCriteria, count: answerUpvotes },
+    { type: "TOTAL_VIEWS" as TBadgeCriteria, count: totalViews },
   ];
 
   criteria.forEach((item) => {

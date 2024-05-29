@@ -1,19 +1,19 @@
-'use server';
+"use server";
 
-import Answer from '@/db/models/answer.model';
-import Interaction from '@/db/models/interaction.model';
-import Question from '@/db/models/question.model';
-import User from '@/db/models/user.model';
-import md5 from 'md5';
-import envConfig from '@/config';
+import Answer from "@/db/models/answer.model";
+import Interaction from "@/db/models/interaction.model";
+import Question from "@/db/models/question.model";
+import User from "@/db/models/user.model";
+import md5 from "md5";
+import envConfig from "@/config";
 
 import {
   AnswerVoteParams,
   CreateAnswerParams,
   DeleteAnswerParams,
   GetAllAnswersParams,
-} from '@/types/action';
-import { revalidatePath } from 'next/cache';
+} from "@/types/action";
+import { revalidatePath } from "next/cache";
 
 export const createAnswer = async (params: CreateAnswerParams) => {
   try {
@@ -23,19 +23,20 @@ export const createAnswer = async (params: CreateAnswerParams) => {
     const nowDate = new Date();
     const date =
       nowDate.getFullYear() +
-      '/' +
-      ('0' + (nowDate.getMonth() + 1)).slice(-2) +
-      '/' +
-      nowDate.getDate();
+      "/" +
+      ("0" + (nowDate.getMonth() + 1)).slice(-2) +
+      "/" +
+      ("0" + nowDate.getDate()).slice(-2);
 
     const answer = await fetch(`${envConfig.HOST}/api/answers`, {
-      method: 'POST',
+      cache: "no-store",
+      method: "POST",
       body: JSON.stringify(params),
-      headers: { 'X-CSRF-Token': md5(date) },
+      headers: { "X-CSRF-Token": md5(date) },
     }).then((result) => result.json());
 
-    if (answer.status != 'success') {
-      throw 'Record was not created!';
+    if (answer.status != "success") {
+      throw "Record was not created!";
     }
     // // Add the answer to the question's answers array
     // const answeredQuestion = await Question.findByIdAndUpdate(question, {
@@ -65,16 +66,16 @@ export const getAllAnswers = async (params: GetAllAnswersParams) => {
 
     let sortOptions = {};
     switch (sortBy) {
-      case 'highestUpvotes':
+      case "highestUpvotes":
         sortOptions = { upvotes: -1 };
         break;
-      case 'lowestUpvotes':
+      case "lowestUpvotes":
         sortOptions = { upvotes: 1 };
         break;
-      case 'recent':
+      case "recent":
         sortOptions = { createdAt: -1 };
         break;
-      case 'old':
+      case "old":
         sortOptions = { createdAt: 1 };
         break;
       default:
@@ -82,7 +83,7 @@ export const getAllAnswers = async (params: GetAllAnswersParams) => {
     }
 
     const answers = await Answer.find({ question: questionId })
-      .populate('author', '_id clerkId name username picture')
+      .populate("author", "_id clerkId name username picture")
       .sort(sortOptions)
       .skip(skip)
       .limit(pageSize);
@@ -100,11 +101,9 @@ export const getAllAnswersForQuestion = async (params: GetAllAnswersParams) => {
     const { questionId, page = 1, pageSize = 10 } = params;
     const skip = (page - 1) * pageSize;
 
-    const answers = await fetch(`${envConfig.HOST}/api/answers?question_id=${questionId}`).then(
-      (result) => result.json(),
-    );
-
-    console.log('answers', answers);
+    const answers = await fetch(`${envConfig.HOST}/api/answers?question_id=${questionId}`, {
+      cache: "no-store",
+    }).then((result) => result.json());
 
     // const totalAnswers = await Answer.countDocuments({ question: questionId });
     const isNext = answers.length > skip + answers.length;
@@ -127,7 +126,7 @@ export const upvoteAnswer = async (params: AnswerVoteParams) => {
       updateQuery = { $addToSet: { upvotes: userId } };
     }
     const answer = await Answer.findByIdAndUpdate(answerId, updateQuery, { new: true });
-    if (!answer) throw new Error('Answer not found');
+    if (!answer) throw new Error("Answer not found");
     // Increment user's reputation by +2/-2 for upvoting/revoking an answer
     await User.findByIdAndUpdate(userId, { $inc: { reputation: hasUpvoted ? -2 : 2 } });
     // Increment author's reputation by +10/-10 for receiving/revoking for an answer
@@ -152,7 +151,7 @@ export const downvoteAnswer = async (params: AnswerVoteParams) => {
       updateQuery = { $addToSet: { downvotes: userId } };
     }
     const answer = await Answer.findByIdAndUpdate(answerId, updateQuery, { new: true });
-    if (!answer) throw new Error('Answer not found');
+    if (!answer) throw new Error("Answer not found");
 
     // Same logic as upvoting
     await User.findByIdAndUpdate(userId, { $inc: { reputation: hasDownvoted ? -2 : 2 } });
@@ -172,7 +171,7 @@ export const deleteAnswer = async (params: DeleteAnswerParams) => {
   try {
     const { answerId, path } = params;
     const answer = await Answer.findByIdAndDelete({ _id: answerId });
-    if (!answer) throw new Error('Answer not found');
+    if (!answer) throw new Error("Answer not found");
     await Question.updateMany({ _id: answer.question }, { $pull: { answers: answerId } });
     await Interaction.deleteMany({ answer: answerId });
     revalidatePath(path);

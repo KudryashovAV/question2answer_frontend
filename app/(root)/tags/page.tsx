@@ -1,16 +1,16 @@
-import { Metadata } from 'next';
-import Link from 'next/link';
-import { SearchIcon } from 'lucide-react';
-import { SearchParamsProps } from '@/types/props';
-import { TagFilters } from '@/constants/filters';
-import { tagNoResult } from '@/constants/no-result';
-import { getAllTags } from '@/actions/tag.action';
-import LocalSearch from '@/components/local-search';
-import Filter from '@/components/filter';
-import NoResult from '@/components/no-result';
-import { tagVariants } from '@/components/tags-badge';
-import { cn } from '@/lib/utils';
-import Pagination from '@/components/pagination';
+import { Metadata } from "next";
+import Link from "next/link";
+import { SearchIcon } from "lucide-react";
+import { SearchParamsProps } from "@/types/props";
+import { TagFilters } from "@/constants/filters";
+import { tagNoResult } from "@/constants/no-result";
+import { getAllTags } from "@/actions/tag.action";
+import LocalSearch from "@/components/local-search";
+import Filter from "@/components/filter";
+import NoResult from "@/components/no-result";
+import { tagVariants } from "@/components/tags-badge";
+import { cn } from "@/lib/utils";
+import Pagination from "@/components/pagination";
 import {
   Key,
   ReactElement,
@@ -18,12 +18,14 @@ import {
   ReactNode,
   ReactPortal,
   PromiseLikeOfReactNode,
-} from 'react';
+} from "react";
+import { i18n } from "../i118n";
+import { cookies } from "next/headers";
 
 export const metadata: Metadata = {
-  title: 'Dev Overflow | Tags',
+  title: "Wanswers | Tags",
   description:
-    'Tags are a means of connecting experts with questions they will be able to answer by sorting questions into specific, well-defined categories.',
+    "Tags are a means of connecting experts with questions they will be able to answer by sorting questions into specific, well-defined categories.",
 };
 
 export default async function TagsPage({ searchParams }: SearchParamsProps) {
@@ -34,15 +36,21 @@ export default async function TagsPage({ searchParams }: SearchParamsProps) {
   });
   const { tags, isNext } = result;
 
+  const getLang = async () => {
+    const cookieStore = cookies();
+    return cookieStore.get("lang")?.value.toLocaleLowerCase() || "en";
+  };
+  const lang = await getLang();
+
   return (
     <>
-      <h1 className="h1-bold">All Tags</h1>
+      <h1 className="h1-bold">{i18n()[lang]["allTags"]}</h1>
       <div className="mt-11 flex justify-between gap-5 max-sm:flex-col sm:items-center">
         <LocalSearch
           route="/tags"
           icon={<SearchIcon />}
           iconPosition="left"
-          placeholder="Search for tags"
+          placeholder={i18n()[lang]["searchForTags"]}
           className="flex-1"
         />
         {/* <Filter filters={TagFilters} /> */}
@@ -64,8 +72,8 @@ export default async function TagsPage({ searchParams }: SearchParamsProps) {
                   <div>
                     <p
                       className={cn(
-                        tagVariants({ size: 'md' }),
-                        'background-light700_dark300 font-semibold shadow',
+                        tagVariants({ size: "md" }),
+                        "background-light700_dark300 font-semibold shadow",
                       )}
                     >
                       {tag.name}
@@ -75,7 +83,7 @@ export default async function TagsPage({ searchParams }: SearchParamsProps) {
                     <span className="primary-text-gradient mr-2 font-semibold">
                       {tag.questions_count}+
                     </span>
-                    Questions
+                    {i18n()[lang]["questions2"]}
                   </p>
                 </article>
               </Link>

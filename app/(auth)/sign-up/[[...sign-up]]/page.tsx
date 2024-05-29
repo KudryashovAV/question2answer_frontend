@@ -1,10 +1,9 @@
-import type { Metadata } from 'next';
-import { SignUp } from '@clerk/nextjs';
+import type { Metadata } from "next";
+import { SignUp } from "@clerk/nextjs";
 
 export const metadata: Metadata = {
-  title: 'Dev Overflow | Sign Up',
-  description:
-    'Create your Dev Overflow account today and start asking questions and answering them!',
+  title: "Wanswers | Sign Up",
+  description: "Create your Wanswers account today and start asking questions and answering them!",
 };
 
 export default function SignUpPage() {

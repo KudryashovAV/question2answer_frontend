@@ -1,18 +1,21 @@
-import { Metadata } from 'next';
-import Link from 'next/link';
-import { SearchIcon } from 'lucide-react';
-import Filter from '../../../components/filter';
-import { UserFilters } from '@/constants/filters';
-import { getAllUsers } from '@/actions/user.action';
-import LocalSearch from '@/components/local-search';
-import UserCard from '@/components/cards/user-card';
-import { SearchParamsProps } from '@/types/props';
-import Pagination from '@/components/pagination';
+import { Metadata } from "next";
+import Link from "next/link";
+import { SearchIcon } from "lucide-react";
+import Filter from "../../../components/filter";
+import { UserFilters } from "@/constants/filters";
+import { getAllUsers, getUserById } from "@/actions/user.action";
+import LocalSearch from "@/components/local-search";
+import UserCard from "@/components/cards/user-card";
+import { SearchParamsProps } from "@/types/props";
+import Pagination from "@/components/pagination";
+import { cookies } from "next/headers";
+import { i18n } from "../i118n";
+import { auth } from "@clerk/nextjs/server";
 
 export const metadata: Metadata = {
-  title: 'Dev Overflow | Community',
+  title: "Wanswers| Community",
   description:
-    'Dev Overflow is a community of developers, where you can ask questions and receive answers from other members of the community.',
+    "Wanswers is a community of developers, where you can ask questions and receive answers from other members of the community.",
 };
 
 export default async function CommunityPage({ searchParams }: SearchParamsProps) {
@@ -22,30 +25,40 @@ export default async function CommunityPage({ searchParams }: SearchParamsProps)
     page: Number(searchParams.page) || 1,
   });
 
+  const userId = auth().userId;
+  const currentUser = await getUserById(userId!);
 
   const { users, isNext } = result;
 
+  const getLang = async () => {
+    const cookieStore = cookies();
+    return cookieStore.get("lang")?.value.toLocaleLowerCase() || "en";
+  };
+  const lang = await getLang();
+
   return (
     <>
-      <h1 className="h1-bold">All Users</h1>
+      <h1 className="h1-bold">{i18n()[lang]["allUsers"]}</h1>
       <div className="mt-11 flex justify-between gap-5 max-sm:flex-col sm:items-center">
         <LocalSearch
           route="/community"
           icon={<SearchIcon />}
           iconPosition="left"
-          placeholder="Search for amazing minds"
+          placeholder={i18n()[lang]["searchForAmazingMinds"]}
           className="flex-1"
         />
         {/* <Filter filters={UserFilters} /> */}
       </div>
       <section className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 min-[1700px]:grid-cols-4 min-[2200px]:grid-cols-5">
         {users.length > 0 ? (
-          users.map((user: { id: any; }) => <UserCard key={user.id} user={user} />)
+          users.map((user: { id: any }) => (
+            <UserCard key={user.id} user={user} isItCurrentUser={currentUser?.id === user.id} />
+          ))
         ) : (
           <div className="paragraph-regular mx-auto max-w-4xl text-center">
-            <p className="text-2xl font-semibold">No users yet</p>
+            <p className="text-2xl font-semibold">{i18n()[lang]["noUsers"]}</p>
             <Link href="sign-up" className="font-bold text-accent-blue">
-              Join now to be the first!
+              {i18n()[lang]["joinUs"]}
             </Link>
           </div>
         )}
