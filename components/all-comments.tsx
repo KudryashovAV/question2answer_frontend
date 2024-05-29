@@ -53,47 +53,46 @@ export default function AllComments({
           <article key={comment.id} className="border-b border-gray-300 px-2 py-2 text-sm md:px-5">
             <ParseHTML className="inline text-sm" content={comment.content} />
             {" - "}
-            <a href="" className="text-blue-800">
+            <a href="" className="text-bold text-dark800_light400">
               {comment.user_name}
             </a>{" "}
-            <span className="text-gray-400">{getTimeStamp(new Date(comment.created_at))} ago</span>
+            <span className="text-dark200_light800">
+              {getTimeStamp(new Date(comment.created_at))} ago
+            </span>
           </article>
         ))}
       </div>
-      {currentUserId && (
-        <>
-          <button
-            className={`mt-5 text-blue-800${
-              currentComments.length <= defaultCommentsCount || showAllComments ? " hidden" : ""
-            }`}
-            onClick={() => SetShowAllComments(true)}
-          >
-            {`${show} ${currentComments.length - defaultCommentsCount} ${moreComments}`}
-          </button>
-          {(ownerType == "question" || showAllComments || currentComments.length == 0) && (
-            <span>
-              <div className={`${showFrom ? "hidden" : ""}`} onClick={allowComment}>
-                <button
-                  className={
-                    `${showFrom ? "hidden " : ""}` +
-                    "primary-gradient mt-5 h-10 rounded-md bg-primary px-4 py-2 text-sm font-medium text-white ring-offset-background transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
-                  }
-                >
-                  {addComment}
-                </button>
-              </div>
-              <div className={`${showFrom ? "" : "invisible h-0"}`}>
-                <CommentForm
-                  commentOwnerId={ownerId}
-                  commentOwnerType={ownerType}
-                  setShowForm={setShowForm}
-                  currentUserId={currentUserId}
-                />
-              </div>
-            </span>
-          )}
-        </>
-      )}
+      <button
+        className={`text-bold mt-5 text-dark800_light400${
+          currentComments.length <= defaultCommentsCount || showAllComments ? " hidden" : ""
+        }`}
+        onClick={() => SetShowAllComments(true)}
+      >
+        {`${show} ${currentComments.length - defaultCommentsCount} ${moreComments}`}
+      </button>
+      {currentUserId &&
+        (ownerType == "question" || showAllComments || currentComments.length == 0) && (
+          <span>
+            <div className={`${showFrom ? "hidden" : ""}`} onClick={allowComment}>
+              <button
+                className={
+                  `${showFrom ? "hidden " : ""}` +
+                  "primary-gradient text-dark200_light800 mt-5 h-10 rounded-md bg-primary px-4 py-2 text-sm font-medium ring-offset-background transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+                }
+              >
+                {addComment}
+              </button>
+            </div>
+            <div className={`${showFrom ? "" : "invisible h-0"}`}>
+              <CommentForm
+                commentOwnerId={ownerId}
+                commentOwnerType={ownerType}
+                setShowForm={setShowForm}
+                currentUserId={currentUserId}
+              />
+            </div>
+          </span>
+        )}
     </div>
   );
 }
