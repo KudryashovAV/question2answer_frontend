@@ -80,7 +80,7 @@ export const getAllQuestions = async (params: GetAllQuestionsParams) => {
     const defaultPage = searchQuery.q != "undefind" ? 1 : page;
 
     const { questions, total_pages, total_records } = await fetch(
-      `${envConfig.HOST}/api/questions?query=${searchQuery.q}&page=${defaultPage}&user_id=${searchQuery.user_id}&answers=${searchQuery.answers}`,
+      `${envConfig.HOST}/api/questions?query=${searchQuery.q}&page=${defaultPage}&user_id=${searchQuery.user_id}&answers=${searchQuery.answers}&comments=${searchQuery.comments}`,
       { cache: "no-store" },
     ).then((result) => result.json());
 
@@ -92,9 +92,9 @@ export const getAllQuestions = async (params: GetAllQuestionsParams) => {
   }
 };
 
-export const getQuestionById = async (id: string) => {
+export const getQuestionById = async (slug: string) => {
   try {
-    const question = await fetch(`${envConfig.HOST}/api/questions/${id}`, {
+    const question = await fetch(`${envConfig.HOST}/api/questions/${slug}`, {
       cache: "no-store",
     }).then((result) => result.json());
     return question;

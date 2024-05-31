@@ -5,7 +5,7 @@ import { Clock } from "lucide-react";
 import { auth } from "@clerk/nextjs/server";
 import { MetaDataProps, ParamsSearchProps } from "@/types/props";
 import { getQuestionById } from "@/actions/question.action";
-import { getUserById } from "@/actions/user.action";
+import { getUserByClerkId } from "@/actions/user.action";
 import getFormatNumber from "@/utils/getFormatNumber";
 import getTimeStamp from "@/utils/getTimeStamp";
 import AllAnswers from "@/components/all-answers";
@@ -21,9 +21,9 @@ export async function generateMetadata(
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
   // read route params
-  const id = params.id;
+  const slug = params.slug;
   // fetch data
-  const question = await getQuestionById(id);
+  const question = await getQuestionById(slug);
 
   // optionally access and extend (rather than replace) parent metadata
   // const previousImages = (await parent).openGraph?.images || [];
@@ -38,14 +38,14 @@ export async function generateMetadata(
 }
 
 export default async function QuestionDetailPage({ params, searchParams }: ParamsSearchProps) {
-  const question = await getQuestionById(params.id);
+  const question = await getQuestionById(params.slug);
   const { title, content, answers, created_at, tags, user_id, user_name, user_picture, comments } =
     question;
   const clerkId = auth().userId;
 
-  const mongoUser = await getUserById(clerkId!);
+  const currentUser = await getUserByClerkId(clerkId!);
   // warning: mongodb objectId can not be passed as props from server component to client component
-  const currentUserId = mongoUser?.id;
+  const currentUserId = currentUser?.id;
   const questionId = question?.id;
 
   console.log("currentUserClerkId", clerkId);
