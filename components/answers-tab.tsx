@@ -13,12 +13,12 @@ export default async function AnswerTabs({ userId, searchParams }: Props) {
 
   return (
     <>
-      <div className="space-y-5">
+      {/* <div className="space-y-5">
         {userAnswers.map((answer) => (
           <AnswerCard key={answer._id} answer={answer} clerkId={answer.author.clerkId} />
         ))}
       </div>
-      <Pagination pageNumber={Number(searchParams.page) || 1} isNext={isNext} />
+      <Pagination pageNumber={Number(searchParams.page) || 1} isNext={isNext} /> */}
     </>
   );
 }

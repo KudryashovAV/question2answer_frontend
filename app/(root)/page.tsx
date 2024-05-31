@@ -31,6 +31,7 @@ export default async function Home({ searchParams }: SearchParamsProps) {
     page: Number(searchParams.page) || 1,
   });
   const { questions, isNext, total_pages, total_records } = result;
+  console.log("current_user_id", userId);
 
   const getLang = async () => {
     const cookieStore = cookies();

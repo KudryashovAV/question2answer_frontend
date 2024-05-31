@@ -30,13 +30,12 @@ export async function generateMetadata(
 }
 
 export default async function TagDetailsPage({ params, searchParams }: ParamsSearchProps) {
-  const tag = await getQuestionsByTagId({
+  const { tagName, questions, isNext, total_pages, total_records } = await getQuestionsByTagId({
     tagId: params.id,
     searchQuery: searchParams.q,
     page: Number(searchParams.page) || 1,
   });
 
-  const { tagName, questions, isNext } = tag;
   const getLang = async () => {
     const cookieStore = cookies();
     return cookieStore.get("lang")?.value.toLocaleLowerCase() || "en";
@@ -66,7 +65,15 @@ export default async function TagDetailsPage({ params, searchParams }: ParamsSea
           />
         )}
       </div>
-      <Pagination pageNumber={Number(searchParams.page) || 1} isNext={isNext} />
+      {isNext && (
+        <Pagination
+          pageNumber={Number(searchParams.page) || 1}
+          isNext={isNext}
+          total_pages={total_pages}
+          total_records={total_records}
+          records_type={i18n()[lang]["questions"].toLowerCase()}
+        />
+      )}
     </>
   );
 }

@@ -20,7 +20,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { usePathname, useRouter } from "next/navigation";
-import { getUserById } from "@/actions/user.action";
+import { getUserByClerkId } from "@/actions/user.action";
 import { createQuestion, updateQuestion } from "@/actions/question.action";
 import { TagBadge } from "../tags-badge";
 import { useTheme } from "next-themes";
@@ -92,9 +92,9 @@ export default function QuestionForm({ userId, type, questionDetails }: Props) {
   async function onSubmit(values: FormValues) {
     setIsSubmitting(true);
     try {
-      const getMongoUser = await getUserById(userId!);
+      const currentUser = await getUserByClerkId(userId!);
       if (type === "Create") {
-        const payload = { ...values, author: getMongoUser._id, location: lang.toUpperCase() };
+        const payload = { ...values, author: currentUser._id, location: lang.toUpperCase() };
         await createQuestion(payload);
         toast.success(toastCreateQuestion);
         router.push("/");

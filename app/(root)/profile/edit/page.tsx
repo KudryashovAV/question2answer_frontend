@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { auth } from "@clerk/nextjs/server";
-import { getUserById } from "@/actions/user.action";
+import { getUserByClerkId } from "@/actions/user.action";
 import ProfileForm from "@/components/forms/profile-form";
 import { cookies } from "next/headers";
 import { i18n } from "../../i118n";
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default async function EditProfilePage() {
   const userId = auth().userId;
-  const mongoUser = await getUserById(userId!);
+  const currentUser = await getUserByClerkId(userId!);
 
   const getLang = async () => {
     const cookieStore = cookies();
@@ -23,7 +23,7 @@ export default async function EditProfilePage() {
     <>
       <h1 className="h1-bold text-dark100_light900">{i18n()[lang]["editProfile"]}</h1>
       <div className="mt-9">
-        <ProfileForm clerkId={userId!} user={JSON.stringify(mongoUser)} />
+        <ProfileForm clerkId={userId!} user={JSON.stringify(currentUser)} />
       </div>
     </>
   );

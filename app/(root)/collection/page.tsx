@@ -31,7 +31,7 @@ export default async function CollectionPage({ searchParams }: SearchParamsProps
 
   return (
     <>
-      <h1 className="h1-bold">Saved Questions</h1>
+      {/* <h1 className="h1-bold">Saved Questions</h1>
       <div className="mt-11 flex justify-between gap-5 max-sm:flex-col sm:items-center">
         <LocalSearch
           route="/collection"
@@ -56,7 +56,7 @@ export default async function CollectionPage({ searchParams }: SearchParamsProps
           />
         )}
       </div>{" "}
-      <Pagination pageNumber={Number(searchParams.page) || 1} isNext={isNext} />
+      <Pagination pageNumber={Number(searchParams.page) || 1} isNext={isNext} /> */}
     </>
   );
 }

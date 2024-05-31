@@ -43,6 +43,8 @@ export default async function Profile({ params, searchParams }: ParamsSearchProp
   const userId = auth().userId;
   const { userInfo } = await getUserInfo(params?.id!);
 
+  console.log("userInfo", userInfo);
+
   const getLang = async () => {
     const cookieStore = cookies();
     return cookieStore.get("lang")?.value.toLocaleLowerCase() || "en";
@@ -178,8 +180,8 @@ export default async function Profile({ params, searchParams }: ParamsSearchProp
             <div className="mt-10 flex flex-row justify-end space-x-1 hover:text-orange-500 md:flex md:flex-grow">
               {userInfo.questions.length > 1 && (
                 <Link href={`/?user_id=${userId}`}>
-                  {i18n()[lang]["moreQuestions"]}
-                  {" >>"}
+                  {i18n()[lang]["allQuestions"]}
+                  {` (${userInfo.questions.length}) >>`}
                 </Link>
               )}
             </div>
@@ -212,8 +214,42 @@ export default async function Profile({ params, searchParams }: ParamsSearchProp
             <div className="mt-10 flex flex-row justify-end space-x-1 hover:text-orange-500 md:flex md:flex-grow">
               {userInfo.answer_questions.length > 1 && (
                 <Link href={`/?user_id=${userId}&answers=true`}>
-                  {i18n()[lang]["moreQuestions"]}
-                  {" >>"}
+                  {i18n()[lang]["allQuestions"]}
+                  {` (${userInfo.answer_questions.length}) >>`}
+                </Link>
+              )}
+            </div>
+          </section>
+
+          <section
+            aria-labelledby="related-heading"
+            className="mt-10 border-t border-gray-200 px-4 py-16 sm:px-0"
+          >
+            <h2 id="related-heading" className="text-dark300_light700 text-xl font-bold">
+              {i18n()[lang]["leftComments"]}
+            </h2>
+
+            <div className="mt-10 flex flex-col gap-5">
+              {userInfo.comments_questions.length > 0 ? (
+                userInfo.comments_questions
+                  .slice(0, 2)
+                  .map((question: any) => (
+                    <QuestionCard key={question.id} question={question} clerkId={userId!} />
+                  ))
+              ) : (
+                <NoResult
+                  title={i18n()[lang]["noResultQTitle"]}
+                  description={i18n()[lang]["noResultQDescription"]}
+                  buttonText={i18n()[lang]["askQuestion"]}
+                  buttonLink="/ask-question"
+                />
+              )}
+            </div>
+            <div className="mt-10 flex flex-row justify-end space-x-1 hover:text-orange-500 md:flex md:flex-grow">
+              {userInfo.comments_questions.length > 1 && (
+                <Link href={`/?user_id=${userId}&comments=true`}>
+                  {i18n()[lang]["allQuestions"]}
+                  {` (${userInfo.comments_questions.length}) >>`}
                 </Link>
               )}
             </div>

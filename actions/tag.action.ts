@@ -57,14 +57,17 @@ export const getTopInteractedTags = async (params: GetTopInteractedTagsParams) =
 
 export const getQuestionsByTagId = async (params: GetQuestionsByTagIdParams) => {
   try {
-    const { tagId } = params;
+    const { tagId, page = 1 } = params;
 
-    const { tag, questions } = await fetch(`${envConfig.HOST}/api/tags/${tagId}`, {
-      cache: "no-store",
-    }).then((result) => result.json());
+    const { tag, questions, total_pages, total_records } = await fetch(
+      `${envConfig.HOST}/api/tags/${tagId}?page=${page}`,
+      {
+        cache: "no-store",
+      },
+    ).then((result) => result.json());
 
-    const isNext = questions.length > MAX_PAGE_RESULT;
-    return { tagName: tag.name, questions, isNext };
+    const isNext = total_records > MAX_PAGE_RESULT && page <= total_pages;
+    return { tagName: tag.name, questions, isNext, total_pages, total_records };
   } catch (error) {
     console.log(error);
     throw error;

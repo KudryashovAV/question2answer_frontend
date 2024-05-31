@@ -1,12 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Eye, MessageCircle, ThumbsUp } from "lucide-react";
-import { SignedIn } from "@clerk/nextjs";
+import { MessageCircle } from "lucide-react";
 import { tagVariants } from "../tags-badge";
 import getTimeStamp from "@/utils/getTimeStamp";
 import getFormatNumber from "@/utils/getFormatNumber";
 import { cn } from "@/lib/utils";
-import EditDeleteAction from "../edit-delete-action";
 import { cookies } from "next/headers";
 import { i18n } from "@/app/(root)/i118n";
 
@@ -16,13 +14,12 @@ interface Props {
 }
 
 export default async function QuestionCard({ question, clerkId }: Props) {
-  const { id, title, tags, created_at, answers_count } = question;
-
   const getLang = async () => {
     const cookieStore = cookies();
     return cookieStore.get("lang")?.value.toLocaleLowerCase() || "en";
   };
   const lang = await getLang();
+  const { user_id, slug, user_name, user_image, title, created_at, answers_count } = question;
 
   // const showActionButtons = clerkId && clerkId === author.clerkId;
 
@@ -33,7 +30,7 @@ export default async function QuestionCard({ question, clerkId }: Props) {
           {getTimeStamp(new Date(created_at))} {i18n()[lang]["ago"]}
         </p>
         <div className="flex items-center justify-between">
-          <Link href={`/question/${question.id}`}>
+          <Link href={`/question/${slug}`}>
             <h3 className="h3-semibold text-dark200_light900 line-clamp-1">{title}</h3>
           </Link>
           {/* <SignedIn>
@@ -42,7 +39,7 @@ export default async function QuestionCard({ question, clerkId }: Props) {
         </div>
       </div>
       <div className="mt-2 flex flex-wrap gap-3">
-        {tags.map((tag: any) => (
+        {question.tags.map((tag: any) => (
           <Link href={`/tags/${tag.id}`} key={tag.id} className={cn(tagVariants({ size: "sm" }))}>
             {tag.name}
           </Link>
@@ -52,16 +49,16 @@ export default async function QuestionCard({ question, clerkId }: Props) {
         <hr className="mt-2" />
         <div className="small-medium mt-2 flex justify-between gap-3 text-slate-400 max-md:flex-col">
           <div className="flex items-center gap-1">
-            {/* <Link href={author.username} className="flex items-center gap-2">
+            <Link href={`${user_id}`} className="flex items-center gap-2">
               <Image
-                src={author.picture}
-                alt={author.name}
+                src={user_image || "/assets/images/user_logo.jpeg"}
+                alt={user_name}
                 width={25}
                 height={25}
                 className="h-5 w-5 rounded-full"
               />
-              <p className="text-[13px] hover:underline">{author.name}</p>
-            </Link> */}
+              <p className="text-[13px] hover:underline">{user_name}</p>
+            </Link>
             <p className="subtle-regular text-dark400_light700 hidden lg:flex">
               - {i18n()[lang]["asked"]} {getTimeStamp(new Date(created_at))} {i18n()[lang]["ago"]}
             </p>
@@ -74,7 +71,7 @@ export default async function QuestionCard({ question, clerkId }: Props) {
             </div>
             <div className="flex items-center gap-1">
               <MessageCircle className="h-3.5 w-3.5 stroke-foreground" />
-              {getFormatNumber(answers_count)}{" "}
+              {getFormatNumber(question.answers_count)}{" "}
               {answers_count > 1 ? i18n()[lang]["answers"] : i18n()[lang]["answer"]}
             </div>
             <div className="flex items-center gap-1">

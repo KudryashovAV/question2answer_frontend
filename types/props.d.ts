@@ -1,5 +1,5 @@
 export type ParamsProps = {
-  params: { id: string };
+  params: { slug: string };
 };
 
 export type SearchParamsProps = {
@@ -14,7 +14,7 @@ export type SearchParamsProps = {
 export type ParamsSearchProps = ParamsProps & SearchParamsProps;
 
 export type MetaDataProps = {
-  params: { id: string };
+  params: { slug: string };
   searchParams: { [key: string]: string | string[] | undefined };
 };
 

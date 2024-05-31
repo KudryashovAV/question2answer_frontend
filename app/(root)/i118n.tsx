@@ -120,11 +120,13 @@ export function i18n(): any {
       editProfile: "Edit profile",
       askedQuestions: "This user has inquired about some questions:",
       givenAnswers: "This user provided a few answers for next questions:",
+      leftComments: "This user left comments for follow questions and answers to them:",
       noResultQTitle: "There is no question to show",
       noResultTTitle: "There is no tag question to show",
       noResultQDescription:
         "Be the first to break the silence. 🚀 Ask question and kickstart the discussion. Your query could be the next big thing that others learn from. Get involved! 💡",
       moreQuestions: "More questions",
+      allQuestions: "All questions",
       tagSearch: "Search tag questions",
       userSocialNetworks: "User Social Networks",
       name: "Name",
@@ -287,11 +289,14 @@ export function i18n(): any {
       editProfile: "Редактировать профайл",
       askedQuestions: "Этот пользователь задал несколько вопросов:",
       givenAnswers: "Этот пользователь предоставил несколько ответов на следующие вопросы:",
+      leftComments:
+        "Этот пользователь оставил комментарии к последующим вопросам и ответам на них:",
       noResultQTitle: "Нет никаких вопросов, которые нужно было бы показать",
       noResultTTitle: "Нет никаких тэгированных вопросов, которые нужно было бы показать",
       noResultQDescription:
         "Будьте первым, кто нарушит тишину. 🚀 Задавайте вопросы и начинайте обсуждение. Ваш запрос может стать следующим важным уроком для других. Участвуйте! 💡",
       moreQuestions: "Больше вопросов",
+      allQuestions: "Все вопросы",
       tagSearch: "Поиск по тэгированым вопросам",
       userSocialNetworks: "Социальные сети пользователя",
       name: "Имя",

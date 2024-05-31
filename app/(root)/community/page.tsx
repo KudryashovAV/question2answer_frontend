@@ -3,7 +3,7 @@ import Link from "next/link";
 import { SearchIcon } from "lucide-react";
 import Filter from "../../../components/filter";
 import { UserFilters } from "@/constants/filters";
-import { getAllUsers, getUserById } from "@/actions/user.action";
+import { getAllUsers, getUserByClerkId } from "@/actions/user.action";
 import LocalSearch from "@/components/local-search";
 import UserCard from "@/components/cards/user-card";
 import { SearchParamsProps } from "@/types/props";
@@ -26,9 +26,9 @@ export default async function CommunityPage({ searchParams }: SearchParamsProps)
   });
 
   const userId = auth().userId;
-  const currentUser = await getUserById(userId!);
+  const currentUser = await getUserByClerkId(userId!);
 
-  const { users, isNext } = result;
+  const { users, isNext, total_pages, total_records } = result;
 
   const getLang = async () => {
     const cookieStore = cookies();
@@ -63,7 +63,15 @@ export default async function CommunityPage({ searchParams }: SearchParamsProps)
           </div>
         )}
       </section>
-      <Pagination pageNumber={Number(searchParams.page) || 1} isNext={isNext} />
+      {isNext && (
+        <Pagination
+          pageNumber={Number(searchParams.page) || 1}
+          isNext={isNext}
+          total_pages={total_pages}
+          total_records={total_records}
+          records_type={i18n()[lang]["questions"].toLowerCase()}
+        />
+      )}
     </>
   );
 }

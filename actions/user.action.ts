@@ -53,19 +53,22 @@ export const getAllUsers = async (params: GetAllUsersParams) => {
   try {
     const { searchQuery, page = 1 } = params;
 
-    const users = await fetch(`${envConfig.HOST}/api/users?query=${searchQuery}&page=${page}`, {
-      cache: "no-store",
-    }).then((result) => result.json());
+    const { users, total_pages, total_records } = await fetch(
+      `${envConfig.HOST}/api/users?query=${searchQuery}&page=${page}`,
+      {
+        cache: "no-store",
+      },
+    ).then((result) => result.json());
 
-    const isNext = users.length > MAX_PAGE_RESULT;
-    return { users, isNext };
+    const isNext = total_records > MAX_PAGE_RESULT && page <= total_pages;
+    return { users, isNext, total_pages, total_records };
   } catch (err) {
     console.log("Failed to get all users", err);
     throw err;
   }
 };
 
-export const getUserById = async (clerkId: string) => {
+export const getUserByClerkId = async (clerkId: string) => {
   try {
     const user = await fetch(`${envConfig.HOST}/api/users/${clerkId}`, { cache: "no-store" }).then(
       (result) => result.json(),
