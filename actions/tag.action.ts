@@ -20,13 +20,15 @@ export const getAllTags = async (params: GetAllTagsParams) => {
       query.$or = [{ name: { $regex: new RegExp(searchQuery, "i") } }];
     }
 
-    const tags = await fetch(`${envConfig.HOST}/api/tags?query=${searchQuery}&page=${page}`, {
-      cache: "no-store",
-    }).then((result) => result.json());
+    const { tags, total_pages, total_records } = await fetch(
+      `${envConfig.HOST}/api/tags?query=${searchQuery}&page=${page}`,
+      {
+        cache: "no-store",
+      },
+    ).then((result) => result.json());
 
-    // const totalTags = await Tag.countDocuments(query);
-    const isNext = tags.length > MAX_PAGE_RESULT;
-    return { tags, isNext };
+    const isNext = total_records > MAX_PAGE_RESULT && page <= total_pages;
+    return { tags, isNext, total_pages, total_records };
   } catch (error) {
     console.log(error);
     throw error;
@@ -71,9 +73,10 @@ export const getQuestionsByTagId = async (params: GetQuestionsByTagIdParams) => 
 
 export const getPopularTags = async () => {
   try {
-    const tags = await fetch(`${envConfig.HOST}/api/tags?popular=true`, { cache: "no-store" }).then(
-      (result) => result.json(),
-    );
+    const { tags, total_pages, total_records } = await fetch(
+      `${envConfig.HOST}/api/tags?popular=true`,
+      { cache: "no-store" },
+    ).then((result) => result.json());
 
     return tags;
   } catch (error) {

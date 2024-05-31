@@ -2,9 +2,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { SearchIcon } from "lucide-react";
 import Filter from "../../components/filter";
-import HomeFilter from "./_components/home-filter";
 import { HomePageFilters } from "@/constants/filters";
-import { questionNoResult } from "@/constants/no-result";
 import LocalSearch from "@/components/local-search";
 import QuestionCard from "@/components/cards/question-card";
 import NoResult from "@/components/no-result";
@@ -32,7 +30,7 @@ export default async function Home({ searchParams }: SearchParamsProps) {
     filter: searchParams.filter,
     page: Number(searchParams.page) || 1,
   });
-  const { questions, isNext } = result;
+  const { questions, isNext, total_pages, total_records } = result;
 
   const getLang = async () => {
     const cookieStore = cookies();
@@ -73,7 +71,15 @@ export default async function Home({ searchParams }: SearchParamsProps) {
           />
         )}
       </div>
-      <Pagination pageNumber={Number(searchParams.page) || 1} isNext={isNext} />
+      {isNext && (
+        <Pagination
+          pageNumber={Number(searchParams.page) || 1}
+          isNext={isNext}
+          total_pages={total_pages}
+          total_records={total_records}
+          records_type={i18n()[lang]["questions"].toLowerCase()}
+        />
+      )}
     </>
   );
 }

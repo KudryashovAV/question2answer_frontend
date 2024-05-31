@@ -1,1 +1,1 @@
-export const MAX_PAGE_RESULT = 10;
+export const MAX_PAGE_RESULT = 12;

@@ -15,7 +15,7 @@ import { i18n } from "../i118n";
 import { cookies } from "next/headers";
 
 export default async function RightSidebar() {
-  const topQuestions = await getTopQuestions();
+  const { questions } = await getTopQuestions();
   const popularTags = await getPopularTags();
 
   const getLang = async () => {
@@ -29,18 +29,16 @@ export default async function RightSidebar() {
       <div>
         <h3 className="h3-bold">{i18n()[lang]["topQuestions"]}</h3>
         <div className="mt-5 space-y-7">
-          {topQuestions.map(
-            (question: { id: Key | null | undefined; title: string | undefined }) => (
-              <Link
-                key={question.id}
-                href={`/question/${question.id}`}
-                className="group flex items-center justify-between"
-              >
-                <span className="body-medium text-dark500_light700">{question.title}</span>
-                <ChevronRight className="h-4 w-4 text-gray-500 transition-all ease-in group-hover:translate-x-1.5" />
-              </Link>
-            ),
-          )}
+          {questions.map((question: { id: Key | null | undefined; title: string | undefined }) => (
+            <Link
+              key={question.id}
+              href={`/question/${question.id}`}
+              className="group flex items-center justify-between"
+            >
+              <span className="body-medium text-dark500_light700">{question.title}</span>
+              <ChevronRight className="h-4 w-4 text-gray-500 transition-all ease-in group-hover:translate-x-1.5" />
+            </Link>
+          ))}
         </div>
       </div>
       <div>

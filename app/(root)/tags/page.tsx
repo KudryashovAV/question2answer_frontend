@@ -2,23 +2,14 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { SearchIcon } from "lucide-react";
 import { SearchParamsProps } from "@/types/props";
-import { TagFilters } from "@/constants/filters";
 import { tagNoResult } from "@/constants/no-result";
 import { getAllTags } from "@/actions/tag.action";
 import LocalSearch from "@/components/local-search";
-import Filter from "@/components/filter";
 import NoResult from "@/components/no-result";
 import { tagVariants } from "@/components/tags-badge";
 import { cn } from "@/lib/utils";
 import Pagination from "@/components/pagination";
-import {
-  Key,
-  ReactElement,
-  JSXElementConstructor,
-  ReactNode,
-  ReactPortal,
-  PromiseLikeOfReactNode,
-} from "react";
+import { Key, ReactNode } from "react";
 import { i18n } from "../i118n";
 import { cookies } from "next/headers";
 
@@ -29,12 +20,11 @@ export const metadata: Metadata = {
 };
 
 export default async function TagsPage({ searchParams }: SearchParamsProps) {
-  const result = await getAllTags({
+  const { tags, isNext, total_pages, total_records } = await getAllTags({
     searchQuery: searchParams.q,
     filter: searchParams.filter,
     page: Number(searchParams.page) || 1,
   });
-  const { tags, isNext } = result;
 
   const getLang = async () => {
     const cookieStore = cookies();
@@ -58,11 +48,7 @@ export default async function TagsPage({ searchParams }: SearchParamsProps) {
       <section className="mt-12 grid grid-cols-2 gap-4 md:grid-cols-3 2xl:grid-cols-4">
         {tags.length > 0 ? (
           tags.map(
-            (tag: {
-              questions_count: ReactNode;
-              id: Key | null | undefined;
-              name: string | undefined;
-            }) => (
+            (tag: { count: ReactNode; id: Key | null | undefined; name: string | undefined }) => (
               <Link
                 href={`tags/${tag.id}`}
                 key={tag.id}
@@ -80,9 +66,7 @@ export default async function TagsPage({ searchParams }: SearchParamsProps) {
                     </p>
                   </div>
                   <p className="text-dark400_light500 text-sm">
-                    <span className="primary-text-gradient mr-2 font-semibold">
-                      {tag.questions_count}+
-                    </span>
+                    <span className="primary-text-gradient mr-2 font-semibold">{tag.count}+</span>
                     {i18n()[lang]["questions2"]}
                   </p>
                 </article>
@@ -98,7 +82,15 @@ export default async function TagsPage({ searchParams }: SearchParamsProps) {
           />
         )}
       </section>
-      <Pagination pageNumber={Number(searchParams.page) || 1} isNext={isNext} />
+      {isNext && (
+        <Pagination
+          pageNumber={Number(searchParams.page) || 1}
+          isNext={isNext}
+          total_pages={total_pages}
+          total_records={total_records}
+          records_type={i18n()[lang]["questions"].toLowerCase()}
+        />
+      )}
     </>
   );
 }
