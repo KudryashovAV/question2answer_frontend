@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Clock } from "lucide-react";
 import { auth } from "@clerk/nextjs/server";
-import { MetaDataProps, ParamsSearchProps } from "@/types/props";
+import { MetaDataSlugProps, ParamsSearchSlugProps } from "@/types/props";
 import { getQuestionById } from "@/actions/question.action";
 import { getUserByClerkId } from "@/actions/user.action";
 import getFormatNumber from "@/utils/getFormatNumber";
@@ -15,9 +15,10 @@ import { TagBadge } from "@/components/tags-badge";
 import AllComments from "@/components/all-comments";
 import { cookies } from "next/headers";
 import { i18n } from "../../i118n";
+import NoResult from "@/components/no-result";
 
 export async function generateMetadata(
-  { params }: MetaDataProps,
+  { params }: MetaDataSlugProps,
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
   // read route params
@@ -37,8 +38,25 @@ export async function generateMetadata(
   };
 }
 
-export default async function QuestionDetailPage({ params, searchParams }: ParamsSearchProps) {
+export default async function QuestionDetailPage({ params, searchParams }: ParamsSearchSlugProps) {
+  const getLang = async () => {
+    const cookieStore = cookies();
+    return cookieStore.get("lang")?.value.toLocaleLowerCase() || "en";
+  };
+  const lang = await getLang();
+
   const question = await getQuestionById(params.slug);
+
+  if (Object.keys(question).length == 0)
+    return (
+      <NoResult
+        title={i18n()[lang]["noResultForQPageTitle"]}
+        description={i18n()[lang]["noResultQDescription"]}
+        buttonText={i18n()[lang]["askQuestion"]}
+        buttonLink="/ask-question"
+      />
+    );
+
   const { title, content, answers, created_at, tags, user_id, user_name, user_picture, comments } =
     question;
   const clerkId = auth().userId;
@@ -49,12 +67,6 @@ export default async function QuestionDetailPage({ params, searchParams }: Param
   const questionId = question?.id;
 
   console.log("currentUserClerkId", clerkId);
-
-  const getLang = async () => {
-    const cookieStore = cookies();
-    return cookieStore.get("lang")?.value.toLocaleLowerCase() || "en";
-  };
-  const lang = await getLang();
 
   return (
     <>

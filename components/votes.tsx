@@ -3,7 +3,7 @@
 import { toast } from "sonner";
 import { downvoteAnswer, upvoteAnswer } from "@/actions/answer.action";
 import { viewQuestion } from "@/actions/interaction.action";
-import { downvoteQuestion, upvoteQuestion } from "@/actions/question.action";
+// import { downvoteQuestion, upvoteQuestion } from "@/actions/question.action";
 import { toggleSaveQuestion } from "@/actions/user.action";
 import getFormatNumber from "@/utils/getFormatNumber";
 import { Star, ThumbsDown, ThumbsUp } from "lucide-react";
@@ -45,57 +45,57 @@ export default function Votes({
     }
   };
 
-  const handleVote = async (voteType: string) => {
-    if (!userId) {
-      return toast.error("You must be logged in to vote");
-    }
+  // const handleVote = async (voteType: string) => {
+  //   if (!userId) {
+  //     return toast.error("You must be logged in to vote");
+  //   }
 
-    try {
-      if (type === "Question") {
-        if (voteType === "upvote") {
-          await upvoteQuestion({
-            questionId: itemId,
-            userId,
-            hasUpvoted,
-            hasDownvoted,
-            path: pathname,
-          });
-          hasUpvoted ? toast("Upvote removed") : toast.success("Upvoted successfully");
-        } else {
-          await downvoteQuestion({
-            questionId: itemId,
-            userId,
-            hasUpvoted,
-            hasDownvoted,
-            path: pathname,
-          });
-          hasDownvoted ? toast("Downvote removed") : toast("Downvoted successfully");
-        }
-      } else if (type === "Answer") {
-        if (voteType === "upvote") {
-          await upvoteAnswer({
-            answerId: itemId,
-            userId,
-            hasUpvoted,
-            hasDownvoted,
-            path: pathname,
-          });
-        } else {
-          await downvoteAnswer({
-            answerId: itemId,
-            userId,
-            hasUpvoted,
-            hasDownvoted,
-            path: pathname,
-          });
-        }
-      }
-      // TODO: toast
-    } catch (err) {
-      console.log(err);
-    } finally {
-    }
-  };
+  //   try {
+  //     if (type === "Question") {
+  //       if (voteType === "upvote") {
+  //         await upvoteQuestion({
+  //           questionId: itemId,
+  //           userId,
+  //           hasUpvoted,
+  //           hasDownvoted,
+  //           path: pathname,
+  //         });
+  //         hasUpvoted ? toast("Upvote removed") : toast.success("Upvoted successfully");
+  //       } else {
+  //         await downvoteQuestion({
+  //           questionId: itemId,
+  //           userId,
+  //           hasUpvoted,
+  //           hasDownvoted,
+  //           path: pathname,
+  //         });
+  //         hasDownvoted ? toast("Downvote removed") : toast("Downvoted successfully");
+  //       }
+  //     } else if (type === "Answer") {
+  //       if (voteType === "upvote") {
+  //         await upvoteAnswer({
+  //           answerId: itemId,
+  //           userId,
+  //           hasUpvoted,
+  //           hasDownvoted,
+  //           path: pathname,
+  //         });
+  //       } else {
+  //         await downvoteAnswer({
+  //           answerId: itemId,
+  //           userId,
+  //           hasUpvoted,
+  //           hasDownvoted,
+  //           path: pathname,
+  //         });
+  //       }
+  //     }
+  //     // TODO: toast
+  //   } catch (err) {
+  //     console.log(err);
+  //   } finally {
+  //   }
+  // };
 
   useEffect(() => {
     viewQuestion({ questionId: itemId, userId: userId ? userId : undefined });
@@ -103,7 +103,7 @@ export default function Votes({
 
   return (
     <div>
-      <div className="flex items-center gap-5">
+      {/* <div className="flex items-center gap-5">
         <div className="flex items-center gap-2">
           <ThumbsUp
             className={`h-4 w-4 cursor-pointer text-blue-500 transition-all hover:scale-110 ${
@@ -136,7 +136,7 @@ export default function Votes({
             />
           </div>
         )}
-      </div>
+      </div> */}
     </div>
   );
 }

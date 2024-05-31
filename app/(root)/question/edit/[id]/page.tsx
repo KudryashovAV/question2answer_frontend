@@ -15,10 +15,10 @@ export default async function EditQuestionPage({ params }: { params: { id: strin
 
   return (
     <>
-      <h1 className="h1-bold text-dark100_light900">Edit Question</h1>
+      {/* <h1 className="h1-bold text-dark100_light900">Edit Question</h1>
       <div className="mt-9">
         <QuestionForm type="Edit" userId={userId!} questionDetails={JSON.stringify(question)} />
-      </div>
+      </div> */}
     </>
   );
 }

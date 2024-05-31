@@ -122,6 +122,7 @@ export function i18n(): any {
       givenAnswers: "This user provided a few answers for next questions:",
       leftComments: "This user left comments for follow questions and answers to them:",
       noResultQTitle: "There is no question to show",
+      noResultForQPageTitle: "There is no question with with a similar title",
       noResultTTitle: "There is no tag question to show",
       noResultQDescription:
         "Be the first to break the silence. 🚀 Ask question and kickstart the discussion. Your query could be the next big thing that others learn from. Get involved! 💡",
@@ -292,6 +293,7 @@ export function i18n(): any {
       leftComments:
         "Этот пользователь оставил комментарии к последующим вопросам и ответам на них:",
       noResultQTitle: "Нет никаких вопросов, которые нужно было бы показать",
+      noResultForQPageTitle: "Не удалось найти ни одного вопроса с подобным описанием",
       noResultTTitle: "Нет никаких тэгированных вопросов, которые нужно было бы показать",
       noResultQDescription:
         "Будьте первым, кто нарушит тишину. 🚀 Задавайте вопросы и начинайте обсуждение. Ваш запрос может стать следующим важным уроком для других. Участвуйте! 💡",

@@ -97,6 +97,7 @@ export const getQuestionById = async (slug: string) => {
     const question = await fetch(`${envConfig.HOST}/api/questions/${slug}`, {
       cache: "no-store",
     }).then((result) => result.json());
+
     return question;
   } catch (error) {
     console.log(error);
