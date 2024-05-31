@@ -1,23 +1,45 @@
-import Link from "next/link";
-import { JSX, SVGProps } from "react";
-import { i18n } from "../i118n";
-import { cookies } from "next/headers";
+"use client";
 
-export default async function Footer() {
-  const getLang = async () => {
-    const cookieStore = cookies();
-    return cookieStore.get("lang")?.value.toLocaleLowerCase() || "en";
-  };
-  const lang = await getLang();
+import Link from "next/link";
+import { JSX, SVGProps, useEffect, useState } from "react";
+import { i18n } from "../i118n";
+import { getCookie } from "cookies-next";
+import { usePathname } from "next/navigation";
+
+export default function Footer() {
+  const [lang, setLang] = useState("en");
+
+  const pathname = usePathname();
+
+  let questions = i18n()[lang]["questions"];
+  let users = i18n()[lang]["users"];
+  let tags = i18n()[lang]["tags"];
+  let aboutUsPageTitle = i18n()[lang]["aboutUsPageTitle"];
+  let termsPageTitle = i18n()[lang]["termsPageTitle"];
+  let privacyPageTitle = i18n()[lang]["privacyPageTitle"];
+  let allRightsReserved = i18n()[lang]["allRightsReserved"];
+  let developedBy = i18n()[lang]["developedBy"];
+
+  useEffect(() => {
+    setLang(getCookie("lang")?.toLocaleLowerCase() || "en");
+    questions = i18n()[lang]["questions"];
+    users = i18n()[lang]["users"];
+    tags = i18n()[lang]["tags"];
+    aboutUsPageTitle = i18n()[lang]["aboutUsPageTitle"];
+    termsPageTitle = i18n()[lang]["termsPageTitle"];
+    privacyPageTitle = i18n()[lang]["privacyPageTitle"];
+    allRightsReserved = i18n()[lang]["allRightsReserved"];
+    developedBy = i18n()[lang]["developedBy"];
+  }, []);
 
   const navigation = {
     main: [
-      { name: i18n()[lang]["questions"], href: "/" },
-      { name: i18n()[lang]["users"], href: "/community" },
-      { name: i18n()[lang]["tags"], href: "/tags" },
-      { name: i18n()[lang]["aboutUsPageTitle"], href: "/about-us" },
-      { name: i18n()[lang]["termsPageTitle"], href: "/terms" },
-      { name: i18n()[lang]["privacyPageTitle"], href: "/privacy-policy" },
+      { name: questions, href: "/" },
+      { name: users, href: "/community" },
+      { name: tags, href: "/tags" },
+      { name: aboutUsPageTitle, href: "/about-us" },
+      { name: termsPageTitle, href: "/terms" },
+      { name: privacyPageTitle, href: "/privacy-policy" },
     ],
     social: [
       {
@@ -115,7 +137,12 @@ export default async function Footer() {
           ))}
         </div>
         <p className="text-dark100_light900 mt-10 text-center text-xs leading-5">
-          &copy; 2024 Wanswers. {i18n()[lang]["allRightsReserved"]}
+          &copy; 2024 Wanswers. {allRightsReserved}{" "}
+          {pathname.includes("about-us") && (
+            <span>
+              {developedBy} <Link href="https://cyfrania.com">Cyfrania</Link>
+            </span>
+          )}
         </p>
       </div>
     </footer>

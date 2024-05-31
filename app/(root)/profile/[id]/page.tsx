@@ -11,7 +11,6 @@ import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import QuestionCard from "@/components/cards/question-card";
 import NoResult from "@/components/no-result";
-import { questionNoResult } from "@/constants/no-result";
 import ParseHTML from "@/components/parse-html";
 import { cookies } from "next/headers";
 import { i18n } from "../../i118n";
@@ -42,8 +41,6 @@ export async function generateMetadata(
 export default async function Profile({ params, searchParams }: ParamsSearchProps) {
   const userId = auth().userId;
   const { userInfo } = await getUserInfo(params?.id!);
-
-  console.log("userInfo", userInfo);
 
   const getLang = async () => {
     const cookieStore = cookies();

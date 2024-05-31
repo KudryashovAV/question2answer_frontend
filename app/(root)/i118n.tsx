@@ -170,6 +170,7 @@ export function i18n(): any {
       moreComments: "more comments",
       next: "Next",
       prev: "Prev",
+      developedBy: "Developed by",
     },
     ru: {
       mainQuestiinHeader: "Все Вопросы",
@@ -290,8 +291,7 @@ export function i18n(): any {
       editProfile: "Редактировать профайл",
       askedQuestions: "Этот пользователь задал несколько вопросов:",
       givenAnswers: "Этот пользователь предоставил несколько ответов на следующие вопросы:",
-      leftComments:
-        "Этот пользователь оставил комментарии к последующим вопросам и ответам на них:",
+      leftComments: "Этот пользователь оставил комментарии к следующим вопросам и ответам на них:",
       noResultQTitle: "Нет никаких вопросов, которые нужно было бы показать",
       noResultForQPageTitle: "Не удалось найти ни одного вопроса с подобным описанием",
       noResultTTitle: "Нет никаких тэгированных вопросов, которые нужно было бы показать",
@@ -341,6 +341,7 @@ export function i18n(): any {
       moreComments: "комментариев",
       next: "Следующий",
       prev: "Предыдущий",
+      developedBy: "Разработано",
     },
   };
 }

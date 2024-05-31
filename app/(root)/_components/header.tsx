@@ -2,8 +2,6 @@ import { SignedIn, UserButton } from "@clerk/nextjs";
 import { ThemeToggle } from "./theme-toggle";
 import MobileMenu from "./MobileMenu";
 import Logo from "./Logo";
-import GlobalSearch from "./global-search";
-import MobileGlobalSearch from "./mobile-global-search";
 import { LangSwitcher } from "./lang-switcher";
 
 export default function Header() {
