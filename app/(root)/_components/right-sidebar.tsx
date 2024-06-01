@@ -18,6 +18,8 @@ export default async function RightSidebar() {
   const { questions } = await getTopQuestions();
   const popularTags = await getPopularTags();
 
+  console.log("popularTags", popularTags);
+
   const getLang = async () => {
     const cookieStore = cookies();
     return cookieStore.get("lang")?.value.toLocaleLowerCase() || "en";
@@ -45,19 +47,14 @@ export default async function RightSidebar() {
         <h3 className="h3-bold">{i18n()[lang]["topTags"]}</h3>
         <div className="mt-5 space-y-3">
           {popularTags.map(
-            (tag: {
-              questions_count: number;
-              id: Key | null | undefined;
-              name: string | undefined;
-            }) => (
+            (tag: { count: number; id: Key | null | undefined; name: string | undefined }) => (
               <div key={tag.id} className="flex items-center justify-between">
                 <Link href={`/tags/${tag.id}`}>
                   <TagBadge size="sm" className="bg-slate-100">
                     {tag.name}
                   </TagBadge>
                 </Link>
-                {/* <p className="text-xs font-medium text-gray-600">{tag.numberOfQuestions}</p> */}
-                <p className="text-xs font-medium text-gray-600">{tag.questions_count}</p>
+                <p className="dark50_light50 text-xs font-medium">{tag.count}</p>
               </div>
             ),
           )}
