@@ -111,12 +111,12 @@ export default function ProfileForm({ clerkId, user }: Props) {
     try {
       await updateUser(clerkId, values);
       toast.success("Profile updated successfully");
-      router.back();
     } catch (err) {
       console.log(err);
       toast.error("Something went wrong");
     } finally {
       setIsSubmitting(false);
+      router.push(`/profile/${parsedUser.id}`);
     }
   }
 
