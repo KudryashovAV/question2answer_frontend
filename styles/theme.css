@@ -3,9 +3,6 @@
 @tailwind utilities;
 
 @layer utilities {
-  .background-light850_dark100 {
-    @apply bg-light-850 dark:bg-dark-100;
-  }
   .background-light900_dark200 {
     @apply bg-light-900 dark:bg-dark-200;
   }
@@ -15,21 +12,15 @@
   .background-light800_darkgradient {
     @apply dark:dark-gradient bg-light-800;
   }
-  .background-light800_dark400 {
-    @apply bg-light-800 dark:bg-dark-400 !important;
-  }
-  .background-light700_dark400 {
-    @apply bg-light-700 dark:bg-dark-400;
-  }
+  /* .background-light700_dark400 { /* delete VOTEs component do not use*/
+    /* @apply bg-light-700 dark:bg-dark-400; */
+  /* } */
   .background-light700_dark300 {
     @apply bg-light-700 dark:bg-dark-300 !important;
   }
-  .background-light800_dark400 {
-    @apply bg-light-800 dark:bg-dark-400;
-  }
-  .background-light800_dark300 {
-    @apply bg-light-800 dark:bg-dark-300 !important;
-  }
+  /* .background-light800_dark300 { delete Filter component do not use */
+    /* @apply bg-light-800 dark:bg-dark-300 !important; */
+  /* } */
   .text-dark100_light900 {
     @apply text-dark-100 dark:text-light-900 !important;
   }
@@ -51,12 +42,6 @@
   .text-dark800_light400 {
     @apply text-blue-800 dark:text-blue-300 !important;
   }
-  .text-dark50_light50 {
-    @apply text-white dark:text-stone-950 !important;
-  }
-  .text-dark500_light500 {
-    @apply text-dark-500 dark:text-light-500;
-  }
   .text-dark300_light900 {
     @apply text-dark-300 dark:text-light-900 !important;
   }
@@ -71,9 +56,6 @@
   }
   .text-dark400_light900 {
     @apply text-dark-400 dark:text-light-900 !important;
-  }
-  .text-light400_light500 {
-    @apply text-light-400 dark:text-light-500 !important;
   }
   .light-border {
     @apply border-light-800 dark:border-dark-300;
@@ -95,9 +77,6 @@
   }
   .h3-semibold {
     @apply text-[20px] font-semibold leading-[24.8px];
-  }
-  .base-medium {
-    @apply text-[18px] font-medium leading-[25.2px];
   }
   .base-semibold {
     @apply text-[18px] font-semibold leading-[25.2px];
@@ -129,12 +108,6 @@
   .small-medium {
     @apply text-[12px] font-medium leading-[15.6px];
   }
-  .small-semibold {
-    @apply text-[12px] font-semibold leading-[15.6px];
-  }
-  .subtle-medium {
-    @apply text-[10px] font-medium leading-[13px] !important;
-  }
   .subtle-regular {
     @apply text-[10px] font-normal leading-[13px];
   }
@@ -143,9 +116,6 @@
   }
   .invert-colors {
     @apply invert dark:invert-0;
-  }
-  .shadow-light100_dark100 {
-    @apply shadow-light-100 dark:shadow-dark-100;
   }
   .shadow-light100_darknone {
     @apply shadow-light-100 dark:shadow-none;

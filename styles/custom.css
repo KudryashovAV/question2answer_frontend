@@ -7,17 +7,8 @@ body {
 }
 
 @layer utilities {
-  .flex-center {
-    @apply flex items-center justify-center;
-  }
   .flex-between {
     @apply flex items-center justify-between;
-  }
-  .flex-start {
-    @apply flex items-center justify-start;
-  }
-  .card-wrapper {
-    @apply dark:dark-gradient bg-light-800 shadow dark:shadow-none;
   }
   .btn {
     @apply bg-light-800 dark:bg-dark-300 !important;
@@ -37,39 +28,12 @@ body {
   .dark-gradient {
     background: linear-gradient(232deg, rgba(23, 28, 35, 0.41) 0%, rgba(19, 22, 28, 0.7) 100%);
   }
-  .tab {
-    @apply min-h-full text-brand-500 dark:bg-dark-400;
-  }
-  .no-focus {
-    @apply focus-visible:ring-0 focus-visible:ring-transparent !important;
-  }
-}
-.active-theme {
-  filter: invert(53%) sepia(98%) saturate(3332%) hue-rotate(0deg) brightness(104%) contrast(106%) !important;
-}
-.light-gradient {
-  background: linear-gradient(132deg, rgba(247, 249, 255, 0.5) 0%, rgba(229, 237, 255, 0.25) 100%);
 }
 .primary-text-gradient {
   background: linear-gradient(129deg, #ff7000 0%, #e2995f 100%);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-}
-.custom-scrollbar::-webkit-scrollbar {
-  width: 3px;
-  height: 3px;
-  border-radius: 2px;
-}
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: #ffffff;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 50px;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #555;
 }
 /* Markdown Start */
 .markdown a {
