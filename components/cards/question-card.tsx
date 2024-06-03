@@ -49,7 +49,7 @@ export default async function QuestionCard({ question, clerkId }: Props) {
         <hr className="mt-2" />
         <div className="small-medium mt-2 flex justify-between gap-3 text-slate-400 max-md:flex-col">
           <div className="flex items-center gap-1">
-            <Link href={`${user_id}`} className="flex items-center gap-2">
+            <Link href={`/profile/${user_id}`} className="flex items-center gap-2">
               <Image
                 src={user_image || "/assets/images/user_logo.jpeg"}
                 alt={user_name}
