@@ -140,13 +140,10 @@ export const deleteQuestion = async (params: DeleteQuestionParams) => {
   }
 };
 
-export const getTopQuestions = async () => {
+export const getTopQuestions = async (lang: string) => {
   try {
-    // const topQuestions = await Question.find({}).sort({ views: -1, upvotes: -1 }).limit(5);
-    // return topQuestions;
-
     const { questions, total_pages, total_records } = await fetch(
-      `${envConfig.HOST}/api/questions?popular=true`,
+      `${envConfig.HOST}/api/questions?popular=true&location=${lang}`,
       {
         cache: "no-store",
       },

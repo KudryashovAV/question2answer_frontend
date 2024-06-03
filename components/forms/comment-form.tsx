@@ -53,6 +53,7 @@ export default function CommentForm({
         path: pathname,
       });
       toast.success("Comment submitted successfully");
+      setInputData("");
       setShowForm(false);
 
       if (editorRef.current) {
@@ -78,6 +79,7 @@ export default function CommentForm({
             <textarea
               rows={2}
               name="comment"
+              value={inputData}
               id="comment"
               className="text-dark300_light700 placeholder:text-dark300_light700 h-28 w-full resize-none bg-transparent outline-none sm:text-sm sm:leading-6"
               placeholder="Add your comment..."
