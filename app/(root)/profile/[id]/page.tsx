@@ -176,7 +176,7 @@ export default async function Profile({ params, searchParams }: ParamsSearchProp
             </div>
             <div className="mt-10 flex flex-row justify-end space-x-1 hover:text-orange-500 md:flex md:flex-grow">
               {userInfo.questions.length > 1 && (
-                <Link href={`/?user_id=${userId}`}>
+                <Link href={`/?user_id=${userInfo.id}`}>
                   {i18n()[lang]["allQuestions"]}
                   {` (${userInfo.questions.length}) >>`}
                 </Link>
@@ -210,7 +210,7 @@ export default async function Profile({ params, searchParams }: ParamsSearchProp
             </div>
             <div className="mt-10 flex flex-row justify-end space-x-1 hover:text-orange-500 md:flex md:flex-grow">
               {userInfo.answer_questions.length > 1 && (
-                <Link href={`/?user_id=${userId}&answers=true`}>
+                <Link href={`/?user_id=${userInfo.id}&answers=true`}>
                   {i18n()[lang]["allQuestions"]}
                   {` (${userInfo.answer_questions.length}) >>`}
                 </Link>
@@ -244,7 +244,7 @@ export default async function Profile({ params, searchParams }: ParamsSearchProp
             </div>
             <div className="mt-10 flex flex-row justify-end space-x-1 hover:text-orange-500 md:flex md:flex-grow">
               {userInfo.comments_questions.length > 1 && (
-                <Link href={`/?user_id=${userId}&comments=true`}>
+                <Link href={`/?user_id=${userInfo.id}&comments=true`}>
                   {i18n()[lang]["allQuestions"]}
                   {` (${userInfo.comments_questions.length}) >>`}
                 </Link>
