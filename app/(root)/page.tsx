@@ -23,21 +23,20 @@ export const metadata: Metadata = {
 };
 
 export default async function Home({ searchParams }: SearchParamsProps) {
-  // const questions = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-  const userId = auth().userId;
-  const result = await getAllQuestions({
-    searchQuery: searchParams,
-    filter: searchParams.filter,
-    page: Number(searchParams.page) || 1,
-  });
-  const { questions, isNext, total_pages, total_records } = result;
-  console.log("current_user_id", userId);
-
   const getLang = async () => {
     const cookieStore = cookies();
     return cookieStore.get("lang")?.value.toLocaleLowerCase() || "en";
   };
   const lang = await getLang();
+
+  const userId = auth().userId;
+  const result = await getAllQuestions({
+    searchQuery: searchParams,
+    location: lang,
+    page: Number(searchParams.page) || 1,
+  });
+  const { questions, isNext, total_pages, total_records } = result;
+  console.log("current_user_id", userId);
 
   return (
     <>

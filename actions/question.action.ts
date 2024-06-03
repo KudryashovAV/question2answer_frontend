@@ -68,7 +68,7 @@ export const createQuestion = async (payload: any) => {
 
 export const getAllQuestions = async (params: GetAllQuestionsParams) => {
   try {
-    const { searchQuery, filter, page = 1 } = params;
+    const { searchQuery, location, page = 1 } = params;
     const query: FilterQuery<typeof Question> = {};
 
     if (searchQuery) {
@@ -80,7 +80,7 @@ export const getAllQuestions = async (params: GetAllQuestionsParams) => {
     const defaultPage = searchQuery.q != "undefind" ? 1 : page;
 
     const { questions, total_pages, total_records } = await fetch(
-      `${envConfig.HOST}/api/questions?query=${searchQuery.q}&page=${defaultPage}&user_id=${searchQuery.user_id}&answers=${searchQuery.answers}&comments=${searchQuery.comments}`,
+      `${envConfig.HOST}/api/questions?query=${searchQuery.q}&page=${defaultPage}&user_id=${searchQuery.user_id}&answers=${searchQuery.answers}&comments=${searchQuery.comments}&location=${location}`,
       { cache: "no-store" },
     ).then((result) => result.json());
 

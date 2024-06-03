@@ -46,7 +46,7 @@ export interface GetAllQuestionsParams {
   page?: number;
   pageSize?: number;
   searchQuery?: any;
-  filter?: string;
+  location: string;
 }
 export interface CreateQuestionParams {
   title: string;
