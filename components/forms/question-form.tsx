@@ -95,9 +95,13 @@ export default function QuestionForm({ userId, type, questionDetails }: Props) {
       const currentUser = await getUserByClerkId(userId!);
       if (type === "Create") {
         const payload = { ...values, author: currentUser._id, location: lang.toUpperCase() };
-        await createQuestion(payload);
-        toast.success(toastCreateQuestion);
-        router.push("/");
+        const question = await createQuestion(payload);
+        if (question.status !== "error") {
+          toast.success(toastCreateQuestion);
+          router.push(`/question/${question.slug}`);
+        } else {
+          toast.error("Something went wrong");
+        }
       } else if (type === "Edit") {
         await updateQuestion({
           questionId: parsedQuestionDetails._id,

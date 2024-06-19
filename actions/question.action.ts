@@ -59,7 +59,7 @@ export const createQuestion = async (payload: any) => {
       }).then((result) => result.json());
     }
 
-    revalidatePath("/");
+    return question;
   } catch (err) {
     console.log("Failed to create question", err);
     throw err;
