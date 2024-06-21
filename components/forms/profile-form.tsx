@@ -146,10 +146,9 @@ export default function ProfileForm({ clerkId, user }: Props) {
           name="country"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="paragraph-semibold text-dark400_light800">{country}</FormLabel>
               <FormControl>
                 <Input
-                  placeholder={whereAreYouFrom}
+                  placeholder={country}
                   className="paragraph-regular light-border-2 background-light700_dark300 text-dark300_light700"
                   {...field}
                 />
@@ -163,9 +162,9 @@ export default function ProfileForm({ clerkId, user }: Props) {
           name="city"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="paragraph-semibold text-dark400_light800">{city}</FormLabel>
               <FormControl>
                 <Input
+                  placeholder={city}
                   className="paragraph-regular light-border-2 background-light700_dark300 text-dark300_light700"
                   {...field}
                 />
@@ -179,12 +178,9 @@ export default function ProfileForm({ clerkId, user }: Props) {
           name="location"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="paragraph-semibold text-dark400_light800">
-                {prefferedLang}
-              </FormLabel>
               <FormControl>
                 <Input
-                  placeholder={whichLanguage}
+                  placeholder={prefferedLang}
                   className="paragraph-regular light-border-2 background-light700_dark300 text-dark300_light700"
                   {...field}
                 />
@@ -198,7 +194,6 @@ export default function ProfileForm({ clerkId, user }: Props) {
           name="bio"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="paragraph-semibold text-dark400_light800">{bio}</FormLabel>
               <FormControl>
                 <Textarea
                   placeholder={tellAboutYou}
@@ -215,12 +210,9 @@ export default function ProfileForm({ clerkId, user }: Props) {
           name="youtube_link"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="paragraph-semibold text-dark400_light800">
-                {youtube}
-                <LinkIcon className="ml-1 inline-block h-3.5 w-3.5 text-indigo-500" />
-              </FormLabel>
               <FormControl>
                 <Input
+                  placeholder={youtube}
                   className="paragraph-regular light-border-2 background-light700_dark300 text-dark300_light700"
                   {...field}
                 />
@@ -234,12 +226,9 @@ export default function ProfileForm({ clerkId, user }: Props) {
           name="linkedin_link"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="paragraph-semibold text-dark400_light800">
-                {linkedin}
-                <LinkIcon className="ml-1 inline-block h-3.5 w-3.5 text-indigo-500" />
-              </FormLabel>
               <FormControl>
                 <Input
+                  placeholder={linkedin}
                   className="paragraph-regular light-border-2 background-light700_dark300 text-dark300_light700"
                   {...field}
                 />
@@ -253,12 +242,9 @@ export default function ProfileForm({ clerkId, user }: Props) {
           name="facebook_link"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="paragraph-semibold text-dark400_light800">
-                {facebook}
-                <LinkIcon className="ml-1 inline-block h-3.5 w-3.5 text-indigo-500" />
-              </FormLabel>
               <FormControl>
                 <Input
+                  placeholder={facebook}
                   className="paragraph-regular light-border-2 background-light700_dark300 text-dark300_light700"
                   {...field}
                 />
@@ -272,12 +258,9 @@ export default function ProfileForm({ clerkId, user }: Props) {
           name="instagram_link"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="paragraph-semibold text-dark400_light800">
-                {instagram}
-                <LinkIcon className="ml-1 inline-block h-3.5 w-3.5 text-indigo-500" />
-              </FormLabel>
               <FormControl>
                 <Input
+                  placeholder={instagram}
                   className="paragraph-regular light-border-2 background-light700_dark300 text-dark300_light700"
                   {...field}
                 />
@@ -291,12 +274,9 @@ export default function ProfileForm({ clerkId, user }: Props) {
           name="github_link"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="paragraph-semibold text-dark400_light800">
-                {github}
-                <LinkIcon className="ml-1 inline-block h-3.5 w-3.5 text-indigo-500" />
-              </FormLabel>
               <FormControl>
                 <Input
+                  placeholder={github}
                   className="paragraph-regular light-border-2 background-light700_dark300 text-dark300_light700"
                   {...field}
                 />
@@ -310,12 +290,9 @@ export default function ProfileForm({ clerkId, user }: Props) {
           name="x_link"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="paragraph-semibold text-dark400_light800">
-                {twitter}
-                <LinkIcon className="ml-1 inline-block h-3.5 w-3.5 text-indigo-500" />
-              </FormLabel>
               <FormControl>
                 <Input
+                  placeholder={twitter}
                   className="paragraph-regular light-border-2 background-light700_dark300 text-dark300_light700"
                   {...field}
                 />

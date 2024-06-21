@@ -28,10 +28,10 @@ import { i18n } from "@/app/(root)/i118n";
 import { getCookie } from "cookies-next";
 
 const formSchema = z.object({
-  title: z.string().trim().min(1, { message: "Required" }).min(5).max(120),
-  content: z.string().min(20),
+  title: z.string().trim().min(1, { message: "Please ask your question" }).min(5).max(120),
+  content: z.string(),
   location: z.string(),
-  tags: z.array(z.string().trim().min(1).max(15)).min(1, { message: "Required" }).max(3),
+  tags: z.array(z.string().trim().min(1).max(15)),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -58,6 +58,8 @@ export default function QuestionForm({ userId, type, questionDetails }: Props) {
       e.preventDefault();
       const tagInput = e.target as HTMLInputElement;
       const tagValue = tagInput.value.trim().toLocaleLowerCase(); // trim for removing spaces and toLowerCase for consistency
+
+      console.log("tagValue", tagValue);
       if (tagValue.length > 15) {
         form.setError("tags", {
           type: "required",
@@ -121,9 +123,8 @@ export default function QuestionForm({ userId, type, questionDetails }: Props) {
     }
   }
 
-  let questionTitle = i18n()[lang]["questionTitle"];
   let whatYourQuestion = i18n()[lang]["whatYourQuestion"];
-  let tip1 = i18n()[lang]["tip1"];
+  let tinyPlaceholder = i18n()[lang]["tinyPlaceholder"];
   let tip2 = i18n()[lang]["tip2"];
   let tip3 = i18n()[lang]["tip3"];
   let tip4 = i18n()[lang]["tip4"];
@@ -140,9 +141,8 @@ export default function QuestionForm({ userId, type, questionDetails }: Props) {
 
   useEffect(() => {
     setLang(getCookie("lang")?.toLocaleLowerCase() || "en");
-    questionTitle = i18n()[lang]["questionTitle"];
     whatYourQuestion = i18n()[lang]["whatYourQuestion"];
-    tip1 = i18n()[lang]["tip1"];
+    tinyPlaceholder = i18n()[lang]["tinyPlaceholder"];
     tip2 = i18n()[lang]["tip2"];
     tip3 = i18n()[lang]["tip3"];
     tip4 = i18n()[lang]["tip4"];
@@ -166,9 +166,6 @@ export default function QuestionForm({ userId, type, questionDetails }: Props) {
           name="title"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="paragraph-semibold text-dark400_light800">
-                {questionTitle} <span className="text-brand-500">*</span>
-              </FormLabel>
               <FormControl>
                 <Input
                   placeholder={whatYourQuestion}
@@ -176,7 +173,6 @@ export default function QuestionForm({ userId, type, questionDetails }: Props) {
                   {...field}
                 />
               </FormControl>
-              <FormDescription>{tip1}</FormDescription>
               <FormMessage className="text-red-500" />
             </FormItem>
           )}
@@ -186,9 +182,6 @@ export default function QuestionForm({ userId, type, questionDetails }: Props) {
           name="content"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="paragraph-semibold text-dark400_light800">
-                {tip2} <span className="text-brand-500">*</span>
-              </FormLabel>
               <FormControl>
                 <Editor
                   apiKey={envConfig.TINY_API_KEY}
@@ -200,7 +193,7 @@ export default function QuestionForm({ userId, type, questionDetails }: Props) {
                   init={{
                     height: 350,
                     menubar: false,
-                    placeholder: "Explain your problem in detail...",
+                    placeholder: tinyPlaceholder,
                     plugins: [
                       "advlist",
                       "autolink",
@@ -220,7 +213,9 @@ export default function QuestionForm({ userId, type, questionDetails }: Props) {
                     ],
                     toolbar:
                       "undo redo | codesample | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist fullscreen",
-                    content_style: "body { font-family:Inter; font-size:14px }",
+                    content_style:
+                      "body { font-family:__Inter_aaf875,__Inter_Fallback_aaf875; font-size:1rem; }" +
+                      ".mce-content-body[data-mce-placeholder]:not(.mce-visualblocks)::before {color: #e2995f !important; }",
                     skin: theme === "dark" ? "oxide-dark" : "oxide",
                     content_css: theme === "dark" ? "dark" : "light",
                   }}
@@ -236,17 +231,28 @@ export default function QuestionForm({ userId, type, questionDetails }: Props) {
           name="tags"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="paragraph-semibold text-dark400_light800">
-                {tags} <span className="text-brand-500">*</span>
-              </FormLabel>
               <FormControl>
                 <>
-                  <Input
-                    placeholder={addTags}
-                    disabled={type === "Edit"}
-                    className="paragraph-regular light-border-2 background-light700_dark300 text-dark300_light700 border"
-                    onKeyDown={(e) => handleInputKeyDown(e, field)}
-                  />
+                  <div className="flex flex-row">
+                    <div className="background-light700_dark300 text-dark300_light700 light-border-2 inline-flex items-center rounded-l-md border border-r-0 px-3 sm:text-sm">
+                      #
+                    </div>
+                    <div className="w-full">
+                      <Input
+                        placeholder={addTags}
+                        disabled={type === "Edit"}
+                        className="paragraph-regular light-border-2 background-light700_dark300 text-dark300_light700 focus-visible:right-border-2 flex h-10 w-full rounded-none border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50"
+                        onKeyDown={(e) => handleInputKeyDown(e, field)}
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      className="background-light700_dark300 text-dark300_light700 hover:primary-gradient relative -ml-px inline-flex items-center gap-x-1.5 rounded-r-md border px-3 py-2 text-sm font-semibold"
+                    >
+                      Add
+                    </button>
+                  </div>
+
                   {field.value.length > 0 && (
                     <div className="mt-2.5 flex items-center gap-2.5">
                       {field.value.map((tag: string) => (

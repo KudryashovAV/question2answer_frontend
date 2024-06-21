@@ -31,24 +31,36 @@ export default function AllAnswers({ answers, currentUserId }: Props) {
   let ago = i18n()[lang]["ago"];
   let answered = i18n()[lang]["answered"];
   let answersTitle = i18n()[lang]["answers"];
+  let answerTitle = i18n()[lang]["answer"];
+  let noAnswers = i18n()[lang]["noAnswer"];
 
   useEffect(() => {
     setLang(getCookie("lang")?.toLocaleLowerCase() || "en");
     ago = i18n()[lang]["ago"];
     answered = i18n()[lang]["answered"];
     answersTitle = i18n()[lang]["answers"];
+    answerTitle = i18n()[lang]["answer"];
+    noAnswers = i18n()[lang]["noAnswer"];
   }, []);
 
   const capitalizeFirstLetter = (str: string) => {
     return str.charAt(0).toUpperCase() + str.slice(1);
   };
 
+  const pageTitle = () => {
+    if (answers.length === 0) {
+      return noAnswers;
+    } else if (answers.length === 1) {
+      return `${answers.length} ${capitalizeFirstLetter(answerTitle)}`;
+    } else {
+      return `${answers.length} ${capitalizeFirstLetter(answersTitle)}`;
+    }
+  };
+
   return (
     <div className="mt-11">
       <div className="flex items-center justify-between">
-        <h3 className="primary-text-gradient">
-          {answers.length} {capitalizeFirstLetter(answersTitle)}
-        </h3>
+        <h3 className="primary-text-gradient">{pageTitle()}</h3>
         {/* <Filter filters={AnswerFilters} /> */}
       </div>
       <hr className="h-0.5 border-t-0 bg-neutral-100 dark:bg-white/20" />

@@ -23,6 +23,16 @@ export default async function QuestionCard({ question, clerkId }: Props) {
 
   // const showActionButtons = clerkId && clerkId === author.clerkId;
 
+  const answersCountformatter = () => {
+    if (question.answers_count === 0) {
+      return i18n()[lang]["noAnswer"];
+    } else if (question.answers_count === 1) {
+      return `${question.answers_count} ${i18n()[lang]["answer"]}`;
+    } else {
+      return `${question.answers_count} ${i18n()[lang]["answers"]}`;
+    }
+  };
+
   return (
     <div className="card-wrapper rounded-lg p-9 sm:px-11">
       <div className="flex flex-col">
@@ -71,8 +81,7 @@ export default async function QuestionCard({ question, clerkId }: Props) {
             </div>
             <div className="flex items-center gap-1">
               <MessageCircle className="h-3.5 w-3.5 stroke-foreground" />
-              {getFormatNumber(question.answers_count)}{" "}
-              {answers_count > 1 ? i18n()[lang]["answers"] : i18n()[lang]["answer"]}
+              {answersCountformatter()}
             </div>
             <div className="flex items-center gap-1">
               {/* <Eye className="h-3.5 w-3.5 stroke-slate-500" /> */}

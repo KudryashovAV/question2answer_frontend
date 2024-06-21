@@ -17,7 +17,10 @@ import { i18n } from "@/app/(root)/i118n";
 import { getCookie } from "cookies-next";
 
 const formSchema = z.object({
-  answer: z.string().min(1, { message: "Required" }).min(10),
+  answer: z
+    .string()
+    .min(1, { message: "The field is required and cannot be empty" })
+    .min(10, { message: "The answer must contain at least 3 characters" }),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -155,7 +158,9 @@ export default function AnswerForm({ questionId, userId, questionTitleContent }:
                           ],
                           toolbar:
                             "undo redo | codesample | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist fullscreen",
-                          content_style: "body { font-family:Inter; font-size:14px }",
+                          content_style:
+                            "body { font-family:__Inter_aaf875,__Inter_Fallback_aaf875; font-size:1rem; }" +
+                            ".mce-content-body[data-mce-placeholder]:not(.mce-visualblocks)::before {color: #e2995f !important; }",
                           skin: theme === "dark" ? "oxide-dark" : "oxide",
                           content_css: theme === "dark" ? "dark" : "light",
                         }}

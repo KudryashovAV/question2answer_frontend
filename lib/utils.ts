@@ -48,3 +48,46 @@ export function getTimeStamp(date: Date) {
   }
   return timeStamp;
 }
+
+const getTitles = (
+  type: string,
+  lang: string,
+  name: string,
+): { pluralTitle?: string; monoTitle?: string; comboTitle?: string } => {
+  if (type === "question") {
+    return {
+      pluralTitle: i18n()[lang]["questions4"],
+      monoTitle: i18n()[lang]["questions3"],
+      comboTitle: `${i18n()[lang]["askedQuestions1"]} ${name} ${i18n()[lang]["askedQuestions2"]}`,
+    };
+  } else if (type === "answer") {
+    return {
+      pluralTitle: i18n()[lang]["answers"],
+      monoTitle: i18n()[lang]["answer"],
+      comboTitle: `${i18n()[lang]["askedQuestions1"]} ${name} ${i18n()[lang]["askedQuestions2"]}`,
+    };
+  } else if (type === "comment") {
+    return {
+      pluralTitle: i18n()[lang]["comments"],
+      monoTitle: i18n()[lang]["comment1"],
+      comboTitle: `${i18n()[lang]["leftComments"]} ${name} ${i18n()[lang]["leftComments2"]}`,
+    };
+  } else {
+    return {};
+  }
+};
+
+export const userContentTitle = (
+  questionsCount: number,
+  lang: string,
+  name: string,
+  type: string,
+) => {
+  if (questionsCount > 0) {
+    return questionsCount > 1
+      ? `${questionsCount} ${getTitles(type, lang, name).pluralTitle}:`
+      : `${questionsCount} ${getTitles(type, lang, name).monoTitle}:`;
+  } else {
+    return getTitles(type, lang, name).comboTitle;
+  }
+};
