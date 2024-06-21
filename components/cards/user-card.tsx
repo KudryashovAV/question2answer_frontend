@@ -19,7 +19,7 @@ export default async function UserCard({ user, isItCurrentUser }: any) {
           alt={user.name}
           width={100}
           height={100}
-          className="h-[80px] w-[80px] rounded-full"
+          className="h-[95px] w-[100px] rounded-full"
         />
         <div className="mt-4 text-center">
           <h3 className="mb-5 line-clamp-1 text-xl font-bold md:text-sm" title={user.name}>

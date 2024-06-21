@@ -57,7 +57,7 @@ export default async function QuestionDetailPage({ params, searchParams }: Param
       />
     );
 
-  const { title, content, answers, created_at, tags, user_id, user_name, user_picture, comments } =
+  const { title, content, answers, created_at, tags, user_id, user_name, user_image, comments } =
     question;
   const clerkId = auth().userId;
 
@@ -72,9 +72,9 @@ export default async function QuestionDetailPage({ params, searchParams }: Param
     <>
       <div>
         <div className="flex flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
-          <Link href={`profile/${user_id}`} className="flex items-center gap-1">
+          <Link href={`/profile/${user_id}`} className="flex items-center gap-1">
             <Image
-              src={user_picture || "/assets/images/user_logo.jpeg"}
+              src={user_image || "/assets/images/user_logo.jpeg"}
               alt="Author picture"
               width={22}
               height={22}
