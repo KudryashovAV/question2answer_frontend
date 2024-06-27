@@ -17,9 +17,9 @@ export default async function UserCard({ user, isItCurrentUser }: any) {
         <Image
           src={user.picture || "/assets/images/user_logo.jpeg"}
           alt={user.name}
-          width={100}
-          height={100}
-          className="h-[95px] w-[100px] rounded-full"
+          width={120}
+          height={120}
+          className="h-[95px] w-[101px] rounded-full"
         />
         <div className="mt-4 text-center">
           <h3 className="mb-5 line-clamp-1 text-xl font-bold md:text-sm" title={user.name}>

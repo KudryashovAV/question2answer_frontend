@@ -69,13 +69,13 @@ export default function AllAnswers({ answers, currentUserId }: Props) {
           <article key={answer.id} className="light-border border-b py-10">
             <div className="mb-5 flex items-center justify-between">
               <div className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
-                <Link href={`/profile/${answer.user_id}`} className="flex gap-2">
+                <Link href={`/profile/${answer.user_id}`} className="flex items-center gap-1">
                   <Image
                     src={answer.user_picture || "/assets/images/user_logo.jpeg"}
                     alt="Author picture"
-                    width={22}
+                    width={25}
                     height={22}
-                    className="h-6 w-6 rounded-full"
+                    className="h-[25px] w-[26px] rounded-full"
                   />
                   <div className="flex flex-col gap-1 sm:flex-row sm:items-end">
                     <p className="body-semibold text-dark300_light700">{answer.user_name}</p>

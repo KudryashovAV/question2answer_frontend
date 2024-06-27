@@ -64,8 +64,8 @@ export default async function QuestionCard({ question, clerkId }: Props) {
                 src={user_image || "/assets/images/user_logo.jpeg"}
                 alt={user_name}
                 width={25}
-                height={25}
-                className="h-5 w-5 rounded-full"
+                height={22}
+                className="h-[25px] w-[26px] rounded-full"
               />
               <p className="text-[13px] hover:underline">{user_name}</p>
             </Link>

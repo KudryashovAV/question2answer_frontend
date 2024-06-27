@@ -76,9 +76,9 @@ export default async function QuestionDetailPage({ params, searchParams }: Param
             <Image
               src={user_image || "/assets/images/user_logo.jpeg"}
               alt="Author picture"
-              width={22}
+              width={25}
               height={22}
-              className="rounded-full"
+              className="h-[25px] w-[26.5px] rounded-full"
             />
             <p className="paragraph-semibold">{user_name}</p>
           </Link>
