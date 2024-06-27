@@ -44,8 +44,10 @@ interface Props {
 
 export default function QuestionForm({ userId, type, questionDetails }: Props) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [ititleData, setTitleData] = useState("");
+  const [titleData, setTitleData] = useState("");
   const [contentData, setContentData] = useState("");
+  const [tagsData, setTagsData] = useState([] as string[]);
+  const [tagsInputData, setTagsInputData] = useState("");
   const [lang, setLang] = useState("en");
   const editorRef = useRef(null);
   const router = useRouter();
@@ -55,28 +57,36 @@ export default function QuestionForm({ userId, type, questionDetails }: Props) {
   const parsedQuestionDetails = JSON.parse(questionDetails || "{}");
   const questionTags = parsedQuestionDetails?.tags?.map((tag: any) => tag.name);
 
-  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, field: any) => {
-    console.log("AAAA");
+  useEffect(() => {
+    setTagsInputData("");
+  }, [tagsData]);
 
-    if (e.key === "Enter" && field.name === "tags") {
-      e.preventDefault();
-      const tagInput = e.target as HTMLInputElement;
-      const tagValue = tagInput.value.trim().toLocaleLowerCase(); // trim for removing spaces and toLowerCase for consistency
+  function onlyUnique(value: any, index: number, array: any) {
+    return array.indexOf(value) === index;
+  }
 
-      console.log("tagValue", tagValue);
-      if (tagValue.length > 15) {
-        form.setError("tags", {
-          type: "required",
-          message: "Tag length should be less than 15 characters",
-        });
-      }
-      if (!field.value.includes(tagValue as never)) {
-        form.setValue("tags", [...field.value, tagValue]);
-        tagInput.value = "";
-        form.clearErrors("tags");
-      } else {
-        form.trigger();
-      }
+  const handleInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    const tagInput = event.target as HTMLInputElement;
+
+    if (event.key === "Enter" && tagInput.name === "tags") {
+      event.preventDefault();
+      const tags: string[] = tagInput.value.trim().split(" ").filter(onlyUnique);
+      tags.forEach((tag: string) => {
+        let tempTag: string = tag.trim().toLocaleLowerCase();
+
+        tempTag = tempTag.slice(-1) === "," ? tempTag.slice(0, -1) : tempTag;
+        tempTag = tempTag.charAt(0) === "#" ? tempTag : "#" + tempTag;
+
+        setTagsData((prevState) => prevState.concat(tempTag));
+      });
+    }
+  };
+
+  const prepareTags = () => {
+    if (tagsInputData.length === 0) {
+      return tagsData;
+    } else {
+      return setTagsData((prevState) => prevState.concat(tagsInputData).filter(onlyUnique));
     }
   };
 
@@ -97,36 +107,41 @@ export default function QuestionForm({ userId, type, questionDetails }: Props) {
 
   async function onSubmit(event: any) {
     event.preventDefault();
+    prepareTags();
+    setIsSubmitting(true);
+    try {
+      const currentUser = await getUserByClerkId(userId!);
+      if (type === "Create") {
+        const payload = {
+          title: titleData,
+          content: contentData,
+          tags: tagsData.filter(onlyUnique),
+          author_id: currentUser.id,
+          location: lang.toUpperCase(),
+        };
+        const question = await createQuestion(payload);
+        if (question.status !== "error") {
+          router.push(`/question/${question.slug}`);
+        } else {
+          toast.error("Something went wrong");
+        }
+      } else if (type === "Edit") {
+        await updateQuestion({
+          questionId: parsedQuestionDetails._id,
+          title: titleData,
+          content: contentData,
+          location: lang.toUpperCase(),
+          path: pathname,
+        });
 
-    console.log("DDDD");
-    // setIsSubmitting(true);
-    // try {
-    //   const currentUser = await getUserByClerkId(userId!);
-    //   if (type === "Create") {
-    //     const payload = { ...values, author: currentUser._id, location: lang.toUpperCase() };
-    //     const question = await createQuestion(payload);
-    //     if (question.status !== "error") {
-    //       router.push(`/question/${question.slug}`);
-    //     } else {
-    //       toast.error("Something went wrong");
-    //     }
-    //   } else if (type === "Edit") {
-    //     await updateQuestion({
-    //       questionId: parsedQuestionDetails._id,
-    //       title: values.title,
-    //       content: values.content,
-    //       location: lang.toUpperCase(),
-    //       path: pathname,
-    //     });
-
-    //     router.push(`/question/${parsedQuestionDetails._id}`);
-    //   }
-    // } catch (err) {
-    //   console.log(err);
-    //   toast.error("Something went wrong");
-    // } finally {
-    //   setIsSubmitting(false);
-    // }
+        router.push(`/question/${parsedQuestionDetails._id}`);
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error("Something went wrong");
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   let whatYourQuestion = i18n()[lang]["whatYourQuestion"];
@@ -170,7 +185,8 @@ export default function QuestionForm({ userId, type, questionDetails }: Props) {
     <form onSubmit={(e) => onSubmit(e)}>
       <input
         type="text"
-        className="paragraph-regular light-border-2 background-light700_dark300 text-dark300_light700 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand-500 disabled:cursor-not-allowed disabled:opacity-50"
+        name="title"
+        className="paragraph-regular light-border-2 background-light700_dark300 text-dark300_light700 mb-10 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand-500 disabled:cursor-not-allowed disabled:opacity-50"
         onChange={(e) => setTitleData(e.target.value)}
         placeholder={whatYourQuestion}
       />
@@ -203,7 +219,7 @@ export default function QuestionForm({ userId, type, questionDetails }: Props) {
             "table",
           ],
           toolbar:
-            "undo redo | codesample | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist fullscreen",
+            "undo redo | codesample | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist fullscreen | preview",
           content_style:
             "body { font-family:__Inter_aaf875,__Inter_Fallback_aaf875; font-size:1rem; }" +
             ".mce-content-body[data-mce-placeholder]:not(.mce-visualblocks)::before {color: #e2995f !important; }",
@@ -211,9 +227,9 @@ export default function QuestionForm({ userId, type, questionDetails }: Props) {
           content_css: theme === "dark" ? "dark" : "light",
         }}
       />
-      <p className="text-sm text-muted-foreground">{tip3}</p>
+      <p className="mt-2 text-sm text-muted-foreground">{tip3}</p>
 
-      <div className="flex flex-row focus-within:rounded-md focus-within:outline-none focus-within:ring-1 focus-within:ring-brand-500">
+      <div className="mt-10 flex flex-row focus-within:rounded-md focus-within:outline-none focus-within:ring-1 focus-within:ring-brand-500">
         <div className="background-light700_dark300 text-dark300_light700 light-border-2 inline-flex items-center rounded-l-md border border-r-0 px-3 sm:text-sm">
           #
         </div>
@@ -221,9 +237,14 @@ export default function QuestionForm({ userId, type, questionDetails }: Props) {
           <input
             type="text"
             disabled={type === "Edit"}
+            name="tags"
+            value={tagsInputData}
             className="paragraph-regular light-border-2 background-light700_dark300 text-dark300_light700 flex h-10 w-full border border-input bg-background px-3 py-2 text-sm outline-none ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
-            onChange={(e) => setTitleData(e.target.value)}
-            onKeyDown={(e) => handleInputKeyDown(e, e.target.value)}
+            onChange={(event) => {
+              setTitleData(event.target.value);
+              setTagsInputData(event.target.value);
+            }}
+            onKeyDown={(event) => handleInputKeyDown(event)}
             placeholder={addTags}
           />
         </div>
@@ -234,16 +255,27 @@ export default function QuestionForm({ userId, type, questionDetails }: Props) {
           {butonAdd}
         </button>
       </div>
-      <p className="text-sm text-muted-foreground">
+      <p className="mt-2 text-sm text-muted-foreground">
         {tip4}
         <kbd className="font-semibold text-light-500">{tip5}</kbd>
         {tip6}
       </p>
 
+      {tagsData.length > 0 && (
+        <div className="mt-2.5 flex items-center gap-2.5">
+          {tagsData.map((tag: string) => (
+            <TagBadge key={tag} size="sm">
+              {tag}
+              {type === "Create" && <XIcon className="h-3.5 w-3.5" role="button" />}
+            </TagBadge>
+          ))}
+        </div>
+      )}
+
       <Button
         type="submit"
         disabled={isSubmitting}
-        className="primary-gradient px-10 text-light-800"
+        className="primary-gradient mt-10 px-10 text-light-800"
       >
         {isSubmitting ? (
           <>
