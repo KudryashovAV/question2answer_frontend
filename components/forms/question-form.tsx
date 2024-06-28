@@ -2,11 +2,8 @@
 
 import { useState, useEffect } from "react";
 import React from "react";
-import { z } from "zod";
 import { Loader2Icon, XIcon } from "lucide-react";
 import { toast } from "sonner";
-import { Editor } from "@tinymce/tinymce-react";
-import envConfig from "@/config";
 import { Button } from "@/components/ui/button";
 import { usePathname, useRouter } from "next/navigation";
 import { getUserByClerkId } from "@/actions/user.action";
@@ -26,7 +23,9 @@ interface Props {
 const TinyEditor = dynamic(() => import("./tiny-editor"), { ssr: false });
 
 export default function QuestionForm({ userId, type, questionDetails }: Props) {
+  const { theme } = useTheme();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [currentTheme, setCurrentTheme] = useState(theme);
   const [titleData, setTitleData] = useState("");
   const [contentData, setContentData] = useState("");
   const [tagsData, setTagsData] = useState([] as string[]);
@@ -38,7 +37,6 @@ export default function QuestionForm({ userId, type, questionDetails }: Props) {
   const tagsRef = React.useRef<HTMLInputElement>(null);
   const router = useRouter();
   const pathname = usePathname();
-  const { theme } = useTheme();
 
   const parsedQuestionDetails = JSON.parse(questionDetails || "{}");
 
@@ -49,6 +47,12 @@ export default function QuestionForm({ userId, type, questionDetails }: Props) {
   useEffect(() => {
     setTitleError(false);
   }, [titleData]);
+
+  useEffect(() => {
+    if (currentTheme != theme) {
+      window.location.reload();
+    }
+  }, [theme]);
 
   useEffect(() => {
     setTagsData((prevState) => {
