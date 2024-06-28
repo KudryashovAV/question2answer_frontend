@@ -145,7 +145,6 @@ export default function AnswerForm({ questionId, userId, questionTitleContent }:
                             "link",
                             "image",
                             "charmap",
-                            "print",
                             "preview",
                             "anchor",
                             "searchreplace",

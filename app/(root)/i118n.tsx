@@ -3,6 +3,9 @@ export function i18n(): any {
     en: {
       mainQuestiinHeader: "All Questions",
       askQuestion: "Ask a question",
+      titleError:
+        "Question with similar title has already been asked on our platform. Please search it on qustions page.",
+      requiredMessage: "The field is required and cannot be empty",
       searchQuestions: "Search for questions",
       tinyPlaceholder: "Provide a description to your question (optional)",
       asked: "asked",
@@ -186,6 +189,8 @@ export function i18n(): any {
     },
     ru: {
       mainQuestiinHeader: "Все Вопросы",
+      titleError:
+        "Такой вопрос уже был задан на нашей платформе. Пожалуйста, поищите его на странице вопросов.",
       askQuestion: "Задать вопрос",
       searchQuestions: "Поиск по вопросам",
       tinyPlaceholder: "Опишите ваш вопрос (необязательно)",
