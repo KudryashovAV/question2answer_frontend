@@ -257,7 +257,7 @@ export default function QuestionForm({ userId, type, questionDetails }: Props) {
 
       {tagsData.length > 0 && (
         <div className="mt-2.5 flex items-center gap-2.5">
-          {tagsData.map((tag: string) => (
+          {tagsData.filter(onlyUnique).map((tag: string) => (
             <TagBadge key={tag} size="sm">
               {tag}
               {type === "Create" && (
