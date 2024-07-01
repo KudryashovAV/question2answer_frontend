@@ -137,7 +137,7 @@ export default function AnswerForm({ questionId, userId, questionTitleContent }:
                         init={{
                           height: 350,
                           menubar: false,
-                          placeholder: "Explain your answer in detail...",
+                          placeholder: writeYourAnswerHere,
                           plugins: [
                             "advlist",
                             "autolink",

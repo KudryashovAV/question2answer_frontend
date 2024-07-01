@@ -49,7 +49,7 @@ export default async function QuestionCard({ question, clerkId }: Props) {
         </div>
       </div>
       <div className="mt-2 flex flex-wrap gap-3">
-        {question.tags.map((tag: any) => (
+        {question.tags?.map((tag: any) => (
           <Link href={`/tags/${tag.id}`} key={tag.id} className={cn(tagVariants({ size: "sm" }))}>
             {tag.name}
           </Link>

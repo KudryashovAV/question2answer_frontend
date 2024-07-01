@@ -58,13 +58,13 @@ const getTitles = (
     return {
       pluralTitle: i18n()[lang]["questions4"],
       monoTitle: i18n()[lang]["questions3"],
-      comboTitle: `${i18n()[lang]["askedQuestions1"]} ${name} ${i18n()[lang]["askedQuestions2"]}`,
+      comboTitle: `${name} ${i18n()[lang]["askedQuestions2"]}`,
     };
   } else if (type === "answer") {
     return {
       pluralTitle: i18n()[lang]["answers"],
       monoTitle: i18n()[lang]["answer"],
-      comboTitle: `${i18n()[lang]["askedQuestions1"]} ${name} ${i18n()[lang]["askedQuestions2"]}`,
+      comboTitle: `${i18n()[lang]["askedQuestions1"]} ${name} ${i18n()[lang]["givenAnswers1"]}`,
     };
   } else if (type === "comment") {
     return {
