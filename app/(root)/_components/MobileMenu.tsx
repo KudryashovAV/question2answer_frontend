@@ -4,14 +4,13 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { MenuIcon } from "lucide-react";
-import { SignedOut, useUser } from "@clerk/nextjs";
 import Logo from "./Logo";
-import { cn } from "@/lib/utils";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Sheet, SheetClose, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { getCookie } from "cookies-next";
 import { useState, useEffect } from "react";
 import { i18n } from "../i118n";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 type SidebarLink = {
   imgURL: string;
@@ -21,7 +20,15 @@ type SidebarLink = {
 
 export default function MobileMenu() {
   const pathname = usePathname();
-  const { user } = useUser();
+  const [currentUser, setCurrentUser] = useState(null);
+  const { data: session } = useSession();
+
+  useEffect(() => {
+    if (window && getCookie("currentUser") && getCookie("currentUser") !== "undefined") {
+      const currentUser = JSON.parse(getCookie("currentUser"));
+      setCurrentUser(currentUser);
+    }
+  }, []);
 
   const [lang, setLang] = useState("en");
 
@@ -83,8 +90,8 @@ export default function MobileMenu() {
               const isActive =
                 (pathname.includes(item.route) && item.route.length > 1) || pathname === item.route;
               if (item.route === "/profile") {
-                if (user?.username) {
-                  item.route = `/profile/${user.username}`;
+                if (currentUser?.name) {
+                  item.route = `/profile/${currentUser.name}`;
                 } else {
                   return null;
                 }
@@ -112,29 +119,6 @@ export default function MobileMenu() {
               );
             })}
           </div>
-          <SignedOut>
-            <div className="space-y-3">
-              <SheetClose asChild>
-                <Link
-                  href="/sign-in"
-                  className={cn(
-                    buttonVariants(),
-                    "btn-secondary small-medium w-full text-orange-500",
-                  )}
-                >
-                  Login
-                </Link>
-              </SheetClose>
-              <SheetClose asChild>
-                <Link
-                  href="/sign-up"
-                  className={cn(buttonVariants(), "btn-tertiary text-dark400_light900 w-full")}
-                >
-                  Sign up
-                </Link>
-              </SheetClose>
-            </div>
-          </SignedOut>
         </div>
       </SheetContent>
     </Sheet>

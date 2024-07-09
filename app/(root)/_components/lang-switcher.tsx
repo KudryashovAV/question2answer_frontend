@@ -10,7 +10,7 @@ export function LangSwitcher() {
   const router = useRouter();
 
   useEffect(() => {
-    if (window && window != undefined) {
+    if (window) {
       const currentPath = window.location.href;
 
       currentPath.includes("ru.") ? setCookie("lang", "RU") : setCookie("lang", "EN");

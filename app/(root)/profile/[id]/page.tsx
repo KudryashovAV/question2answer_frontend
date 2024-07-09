@@ -2,9 +2,6 @@ import { Metadata, ResolvingMetadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { MapPinIcon } from "lucide-react";
-import { SignedIn } from "@clerk/nextjs";
-
-import { auth } from "@clerk/nextjs/server";
 import { MetaDataProps, ParamsSearchProps } from "@/types/props";
 import { getUserInfo } from "@/actions/user.action";
 import { buttonVariants } from "@/components/ui/button";
@@ -41,7 +38,12 @@ export async function generateMetadata(
 }
 
 export default async function Profile({ params, searchParams }: ParamsSearchProps) {
-  const userId = auth().userId;
+  const getCurrentUser = async () => {
+    const cookieStore = cookies();
+    return JSON.parse(cookieStore.get("currentUser")?.value);
+  };
+
+  const currentUser = await getCurrentUser();
   const { userInfo } = await getUserInfo(params?.id!);
 
   const getLang = async () => {
@@ -49,18 +51,6 @@ export default async function Profile({ params, searchParams }: ParamsSearchProp
     return cookieStore.get("lang")?.value.toLocaleLowerCase() || "en";
   };
   const lang = await getLang();
-
-  const userQuestionsTitle = (questionsCount: number) => {
-    if (questionsCount > 0) {
-      return questionsCount > 1
-        ? `${questionsCount} ${i18n()[lang]["questions4"]}`
-        : `${questionsCount} ${i18n()[lang]["questions3"]}`;
-    } else {
-      return `${i18n()[lang]["askedQuestions1"]} ${userInfo.name} ${
-        i18n()[lang]["askedQuestions2"]
-      }`;
-    }
-  };
 
   return (
     <div>
@@ -127,26 +117,24 @@ export default async function Profile({ params, searchParams }: ParamsSearchProp
                 </div>
               </div>
               <div className="mt-10">
-                <SignedIn>
-                  {userId === userInfo.clerk_id && (
-                    <Link
-                      href="/profile/edit"
-                      className={cn(
-                        buttonVariants({ variant: "outline" }),
-                        "paragraph-medium text-dark300_light700 w-[220px] border-2 transition-all hover:text-orange-500",
-                      )}
-                    >
-                      {i18n()[lang]["editProfile"]}
-                    </Link>
-                  )}
-                </SignedIn>
+                {currentUser.id === userInfo.id && (
+                  <Link
+                    href="/profile/edit"
+                    className={cn(
+                      buttonVariants({ variant: "outline" }),
+                      "paragraph-medium text-dark300_light700 w-[220px] border-2 transition-all hover:text-orange-500",
+                    )}
+                  >
+                    {i18n()[lang]["editProfile"]}
+                  </Link>
+                )}
               </div>
             </div>
           </div>
 
           <ContentCard
             questions={userInfo.questions}
-            clerkId={userId}
+            currentUserId={currentUser.id}
             lang={lang}
             name={userInfo.name}
             type="question"
@@ -155,7 +143,7 @@ export default async function Profile({ params, searchParams }: ParamsSearchProp
 
           <ContentCard
             questions={userInfo.answer_questions}
-            clerkId={userId}
+            currentUserId={currentUser.id}
             lang={lang}
             name={userInfo.name}
             type="answer"
@@ -164,7 +152,7 @@ export default async function Profile({ params, searchParams }: ParamsSearchProp
 
           <ContentCard
             questions={userInfo.comments_questions}
-            clerkId={userId}
+            currentUserId={currentUser.id}
             lang={lang}
             name={userInfo.name}
             type="comment"

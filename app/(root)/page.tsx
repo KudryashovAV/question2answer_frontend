@@ -9,12 +9,12 @@ import NoResult from "@/components/no-result";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { getAllQuestions } from "@/actions/question.action";
-import { auth } from "@clerk/nextjs/server";
 import { SearchParamsProps } from "@/types/props";
 import Pagination from "@/components/pagination";
-import { Key } from "react";
+import { Key, useEffect, useState } from "react";
 import { cookies } from "next/headers";
 import { i18n } from "./i118n";
+import { getCookie } from "cookies-next";
 
 export const metadata: Metadata = {
   title: "Wanswers | Home",
@@ -27,16 +27,21 @@ export default async function Home({ searchParams }: SearchParamsProps) {
     const cookieStore = cookies();
     return cookieStore.get("lang")?.value.toLocaleLowerCase() || "en";
   };
-  const lang = await getLang();
 
-  const userId = auth().userId;
+  const getCurrentUser = async () => {
+    const cookieStore = cookies();
+    return JSON.parse(cookieStore.get("currentUser")?.value)
+  };
+  const lang = await getLang();
+  const currentUser = await getCurrentUser();
+
   const result = await getAllQuestions({
     searchQuery: searchParams,
     location: lang,
     page: Number(searchParams.page) || 1,
   });
   const { questions, isNext, total_pages, total_records } = result;
-  console.log("current_user_id", userId);
+  console.log("current_user_id", currentUser.id);
 
   return (
     <>
@@ -60,7 +65,7 @@ export default async function Home({ searchParams }: SearchParamsProps) {
       <div className="mt-10 flex flex-col gap-5">
         {questions.length > 0 ? (
           questions.map((question: { id: Key | null | undefined }) => (
-            <QuestionCard key={question.id} question={question} clerkId={userId!} />
+            <QuestionCard key={question.id} question={question} currentUserId={currentUser.id} />
           ))
         ) : (
           <NoResult

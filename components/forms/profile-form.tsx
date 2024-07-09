@@ -1,55 +1,40 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { LinkIcon } from "lucide-react";
 import { toast } from "sonner";
 import { updateUser } from "@/actions/user.action";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { i18n } from "@/app/(root)/i118n";
 import { getCookie } from "cookies-next";
 
-const formSchema = z.object({
-  name: z.string().min(1, { message: "Required" }).min(3).max(50),
-  country: z.string().max(50),
-  city: z.string().max(50),
-  location: z.string().max(50),
-  clerkId: z.string().max(150),
-  bio: z.string().max(150),
-  youtube_link: z.string().max(50),
-  linkedin_link: z.string().max(50),
-  facebook_link: z.string().max(50),
-  instagram_link: z.string().max(50),
-  github_link: z.string().max(50),
-  x_link: z.string().max(50),
-});
-
-type FormValues = z.infer<typeof formSchema>;
-
 interface Props {
-  clerkId: string;
   user: string;
 }
 
-export default function ProfileForm({ clerkId, user }: Props) {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const router = useRouter();
+export default function ProfileForm({ user }: Props) {
   const parsedUser = JSON.parse(user);
-
+  console.log("parsedUser", parsedUser);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [nameData, setNameData] = useState<string | null>(parsedUser.name);
+  const [countryData, setCountryData] = useState<string | null>(parsedUser.country);
+  const [cityData, setCityData] = useState<string | null>(parsedUser.city);
+  const [locationData, setLocationData] = useState<string | null>(parsedUser.location);
+  const [bioData, setBioData] = useState<string | null>(parsedUser.bio);
+  const [youtubeLinkData, setYoutubeLinkData] = useState<string | null>(parsedUser.youtube_link);
+  const [linkedinLinkData, setLinkedinLinkData] = useState<string | null>(parsedUser.linkedin_link);
+  const [facebookLinkData, setFacebookLinkData] = useState<string | null>(parsedUser.facebook_link);
+  const [instagramLinkData, setInstagramLinkData] = useState<string | null>(
+    parsedUser.instagram_link,
+  );
+  const [githubLinkData, setGithubLinkData] = useState<string | null>(parsedUser.github_link);
+  const [xLinkData, setXLinkData] = useState<string | null>(parsedUser.x_link);
   const [lang, setLang] = useState("en");
+
+  const router = useRouter();
+
+  const inputClass =
+    "my-10 paragraph-regular light-border-2 background-light700_dark300 text-dark300_light700 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand-500 disabled:cursor-not-allowed disabled:opacity-50";
 
   let name = i18n()[lang]["name"];
   let country = i18n()[lang]["country"];
@@ -88,28 +73,27 @@ export default function ProfileForm({ clerkId, user }: Props) {
     whichLanguage = i18n()[lang]["whichLanguage"];
   }, [lang]);
 
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: parsedUser.name || "",
-      country: parsedUser.country || "",
-      city: parsedUser.city || "",
-      location: parsedUser.location || "",
-      bio: parsedUser.bio || "",
-      clerkId: clerkId,
-      youtube_link: parsedUser.youtube_link || "",
-      linkedin_link: parsedUser.linkedin_link || "",
-      facebook_link: parsedUser.facebook_link || "",
-      instagram_link: parsedUser.instagram_link || "",
-      github_link: parsedUser.github_link || "",
-      x_link: parsedUser.x_link || "",
-    },
-  });
+  async function onSubmit(event: any) {
+    event.preventDefault();
 
-  async function onSubmit(values: FormValues) {
     setIsSubmitting(true);
     try {
-      await updateUser(clerkId, values);
+      const payload = {
+        id: parsedUser.id,
+        name: nameData,
+        country: countryData,
+        city: cityData,
+        location: locationData,
+        bio: bioData,
+        youtube_link: youtubeLinkData,
+        linkedin_link: linkedinLinkData,
+        facebook_link: facebookLinkData,
+        instagram_link: instagramLinkData,
+        github_link: githubLinkData,
+        x_link: xLinkData,
+      };
+
+      await updateUser(parsedUser.id, payload);
       toast.success("Profile updated successfully");
     } catch (err) {
       console.log(err);
@@ -121,195 +105,125 @@ export default function ProfileForm({ clerkId, user }: Props) {
   }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
-          control={form.control}
+    <form onSubmit={(e) => onSubmit(e)}>
+      <div>
+        <span className="paragraph-semibold text-dark400_light800">
+          {name} <span className="text-brand-500">*</span>
+        </span>
+        <input
+          className="paragraph-regular light-border-2 background-light700_dark300 text-dark300_light700 mb-10 mt-3 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand-500 disabled:cursor-not-allowed disabled:opacity-50"
+          defaultValue={nameData}
           name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="paragraph-semibold text-dark400_light800">
-                {name} <span className="text-brand-500">*</span>
-              </FormLabel>
-              <FormControl>
-                <Input
-                  className="paragraph-regular light-border-2 background-light700_dark300 text-dark300_light700"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage className="text-red-500" />
-            </FormItem>
-          )}
+          onChange={(e) => setNameData(e.target.value)}
+          type="text"
         />
-        <FormField
-          control={form.control}
-          name="country"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input
-                  placeholder={country}
-                  className="paragraph-regular light-border-2 background-light700_dark300 text-dark300_light700"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage className="text-red-500" />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="city"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input
-                  placeholder={city}
-                  className="paragraph-regular light-border-2 background-light700_dark300 text-dark300_light700"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage className="text-red-500" />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="location"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input
-                  placeholder={prefferedLang}
-                  className="paragraph-regular light-border-2 background-light700_dark300 text-dark300_light700"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage className="text-red-500" />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="bio"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Textarea
-                  placeholder={tellAboutYou}
-                  className="paragraph-regular light-border-2 background-light700_dark300 text-dark300_light700"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage className="text-red-500" />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="youtube_link"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input
-                  placeholder={youtube}
-                  className="paragraph-regular light-border-2 background-light700_dark300 text-dark300_light700"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage className="text-red-500" />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="linkedin_link"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input
-                  placeholder={linkedin}
-                  className="paragraph-regular light-border-2 background-light700_dark300 text-dark300_light700"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage className="text-red-500" />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="facebook_link"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input
-                  placeholder={facebook}
-                  className="paragraph-regular light-border-2 background-light700_dark300 text-dark300_light700"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage className="text-red-500" />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="instagram_link"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input
-                  placeholder={instagram}
-                  className="paragraph-regular light-border-2 background-light700_dark300 text-dark300_light700"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage className="text-red-500" />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="github_link"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input
-                  placeholder={github}
-                  className="paragraph-regular light-border-2 background-light700_dark300 text-dark300_light700"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage className="text-red-500" />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="x_link"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input
-                  placeholder={twitter}
-                  className="paragraph-regular light-border-2 background-light700_dark300 text-dark300_light700"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage className="text-red-500" />
-            </FormItem>
-          )}
-        />
+      </div>
 
-        <Button
-          type="submit"
-          disabled={isSubmitting}
-          className="primary-gradient px-10 text-light-800"
-        >
-          {isSubmitting ? saving : save}
-        </Button>
-      </form>
-    </Form>
+      <input
+        className={inputClass}
+        defaultValue={parsedUser.email}
+        name="email"
+        disabled={true}
+        type="text"
+      />
+
+      <input
+        className={inputClass}
+        defaultValue={countryData}
+        name="country"
+        onChange={(e) => setCountryData(e.target.value)}
+        placeholder={country}
+        type="text"
+      />
+
+      <input
+        className={inputClass}
+        defaultValue={cityData}
+        name="city"
+        onChange={(e) => setCityData(e.target.value)}
+        placeholder={city}
+        type="text"
+      />
+
+      <input
+        className={inputClass}
+        defaultValue={locationData}
+        name="location"
+        onChange={(e) => setLocationData(e.target.value)}
+        placeholder={prefferedLang}
+        type="text"
+      />
+
+      <textarea
+        className="paragraph-regular light-border-2 background-light700_dark300 text-dark300_light700 my-10 flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand-500 disabled:cursor-not-allowed disabled:opacity-50"
+        name="bio"
+        defaultValue={bioData}
+        onChange={(e) => setBioData(e.target.value)}
+        placeholder={tellAboutYou}
+        rows={4}
+      />
+
+      <input
+        className={inputClass}
+        defaultValue={youtubeLinkData}
+        name="youtube_link"
+        onChange={(e) => setYoutubeLinkData(e.target.value)}
+        placeholder={youtube}
+        type="text"
+      />
+
+      <input
+        className={inputClass}
+        defaultValue={linkedinLinkData}
+        name="linkedin_link"
+        onChange={(e) => setLinkedinLinkData(e.target.value)}
+        placeholder={linkedin}
+        type="text"
+      />
+
+      <input
+        className={inputClass}
+        defaultValue={facebookLinkData}
+        name="facebook_link"
+        onChange={(e) => setFacebookLinkData(e.target.value)}
+        placeholder={facebook}
+        type="text"
+      />
+
+      <input
+        className={inputClass}
+        defaultValue={instagramLinkData}
+        name="instagram_link"
+        onChange={(e) => setInstagramLinkData(e.target.value)}
+        placeholder={instagram}
+        type="text"
+      />
+
+      <input
+        className={inputClass}
+        defaultValue={githubLinkData}
+        name="github_link"
+        onChange={(e) => setGithubLinkData(e.target.value)}
+        placeholder={github}
+        type="text"
+      />
+
+      <input
+        className={inputClass}
+        defaultValue={xLinkData}
+        name="x_link"
+        onChange={(e) => setXLinkData(e.target.value)}
+        placeholder={twitter}
+        type="text"
+      />
+
+      <Button
+        type="submit"
+        disabled={isSubmitting}
+        className="primary-gradient px-10 text-light-800"
+      >
+        {isSubmitting ? saving : save}
+      </Button>
+    </form>
   );
 }

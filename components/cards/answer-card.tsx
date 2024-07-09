@@ -4,7 +4,6 @@ import { Eye, MessageCircle, ThumbsUp, Trash } from "lucide-react";
 import { tagVariants } from "../tags-badge";
 import getTimeStamp from "@/utils/getTimeStamp";
 import getFormatNumber from "@/utils/getFormatNumber";
-import { SignedIn } from "@clerk/nextjs";
 import EditDeleteAction from "../edit-delete-action";
 
 interface Props {
@@ -26,7 +25,7 @@ export default function AnswerCard({ answer, clerkId }: Props) {
           <Link href={`/question/${question._id}`}>
             <h3 className="h3-semibold text-dark200_light900 line-clamp-1">{question.title}</h3>
           </Link>
-          <SignedIn>{showActionButtons && <EditDeleteAction type="Answer" itemId={id} />}</SignedIn>
+          {/*<SignedIn>{showActionButtons && <EditDeleteAction type="Answer" itemId={id} />}</SignedIn>*/}
         </div>
       </div>
       <div>

@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import { auth } from "@clerk/nextjs/server";
 import QuestionForm from "@/components/forms/question-form";
 import { cookies } from "next/headers";
 import { i18n } from "../i118n";
@@ -11,7 +10,12 @@ export const metadata: Metadata = {
 };
 
 export default async function AskQuestionPage() {
-  const userId = auth().userId;
+  const getCurrentUser = async () => {
+    const cookieStore = cookies();
+    return JSON.parse(cookieStore.get("currentUser")?.value);
+  };
+
+  const currentUser = await getCurrentUser();
 
   const getLang = async () => {
     const cookieStore = cookies();
@@ -23,7 +27,7 @@ export default async function AskQuestionPage() {
     <div>
       <h1 className="h1-bold text-dark100_light900">{i18n()[lang]["askQuestion"]}</h1>
       <div className="mt-9">
-        <QuestionForm type="Create" userId={userId!} />
+        <QuestionForm type="Create" userId={currentUser.id} />
       </div>
     </div>
   );

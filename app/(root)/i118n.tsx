@@ -3,6 +3,10 @@ export function i18n(): any {
     en: {
       mainQuestiinHeader: "All Questions",
       askQuestion: "Ask a question",
+      password: "Password",
+      email: "Email address",
+      welcomeTitle: "Sign in to your account",
+      welcomeVariants: "Or continue with",
       titleError:
         "Question with similar title has already been asked on our platform. Please search it on qustions page.",
       requiredMessage: "The field is required and cannot be empty",
@@ -41,7 +45,7 @@ export function i18n(): any {
       tags: "Tags",
       topQuestions: "Top Questions",
       topTags: "Popular Tags",
-      login: "Login",
+      login: "Sign in",
       signup: "Sign up",
       aboutUsPageTitle: "About us",
       aboutUsParagraph1:
@@ -194,6 +198,10 @@ export function i18n(): any {
       askQuestion: "Задать вопрос",
       searchQuestions: "Поиск по вопросам",
       tinyPlaceholder: "Опишите ваш вопрос (необязательно)",
+      password: "Пароль",
+      email: "Электронная почта",
+      welcomeTitle: "Войдите в свой аккаунт",
+      welcomeVariants: "Или продолжите с",
       asked: "задан",
       ago: "назад",
       week: "неделю",

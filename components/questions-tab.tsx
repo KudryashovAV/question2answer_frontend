@@ -14,7 +14,7 @@ export default async function QuestionsTab({ userId, searchParams }: Props) {
     <>
       {/* <div className="space-y-5">
         {userQuestions.map((question) => (
-          <QuestionCard question={question} key={question._id} clerkId={question.author.clerkId} />
+          <QuestionCard question={question} key={question._id} currentUserId={question.author.clerkId} />
         ))}
       </div>
       <Pagination pageNumber={Number(searchParams.page) || 1} isNext={isNext} /> */}

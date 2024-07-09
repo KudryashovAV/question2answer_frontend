@@ -3,14 +3,13 @@ import Link from "next/link";
 import { SearchIcon } from "lucide-react";
 import Filter from "../../../components/filter";
 import { UserFilters } from "@/constants/filters";
-import { getAllUsers, getUserByClerkId } from "@/actions/user.action";
+import { getAllUsers, fetchUserById } from "@/actions/user.action";
 import LocalSearch from "@/components/local-search";
 import UserCard from "@/components/cards/user-card";
 import { SearchParamsProps } from "@/types/props";
 import Pagination from "@/components/pagination";
 import { cookies } from "next/headers";
 import { i18n } from "../i118n";
-import { auth } from "@clerk/nextjs/server";
 
 export const metadata: Metadata = {
   title: "Wanswers| Community",
@@ -25,8 +24,12 @@ export default async function CommunityPage({ searchParams }: SearchParamsProps)
     page: Number(searchParams.page) || 1,
   });
 
-  const userId = auth().userId;
-  const currentUser = await getUserByClerkId(userId!);
+  const getCurrentUser = async () => {
+    const cookieStore = cookies();
+    return JSON.parse(cookieStore.get("currentUser")?.value);
+  };
+
+  const currentUser = await getCurrentUser();
 
   const { users, isNext, total_pages, total_records } = result;
 

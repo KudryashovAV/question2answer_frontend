@@ -1,6 +1,5 @@
 import { Metadata } from "next";
 import { SearchIcon } from "lucide-react";
-import { auth } from "@clerk/nextjs/server";
 import { SearchParamsProps } from "@/types/props";
 import { QuestionFilters } from "@/constants/filters";
 import { savedQuestionNoResult } from "@/constants/no-result";
@@ -18,16 +17,14 @@ export const metadata: Metadata = {
 };
 
 export default async function CollectionPage({ searchParams }: SearchParamsProps) {
-  const userId = auth().userId;
-  const result = await getSavedQuestions({
-    clerkId: userId!,
-    searchQuery: searchParams.q,
-    filter: searchParams.filter,
-    page: Number(searchParams.page) || 1,
-  });
-  const { savedQuestions, isNext } = result;
+  // const result = await getSavedQuestions({
+  //   clerkId: userId!,
+  //   searchQuery: searchParams.q,
+  //   filter: searchParams.filter,
+  //   page: Number(searchParams.page) || 1,
+  // });
+  // const { savedQuestions, isNext } = result;
 
-  console.log("currentUserClerkId", userId);
 
   return (
     <>
@@ -45,7 +42,7 @@ export default async function CollectionPage({ searchParams }: SearchParamsProps
       <div className="mt-10 flex flex-col gap-5">
         {savedQuestions.length > 0 ? (
           savedQuestions.map((question: any) => (
-            <QuestionCard key={question._id} question={question} clerkId={userId} />
+            <QuestionCard key={question._id} question={question} currentUserId={userId} />
           ))
         ) : (
           <NoResult

@@ -3,7 +3,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { SignedOut } from "@clerk/nextjs";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { UserCircle, UserPlus } from "lucide-react";
@@ -17,9 +16,17 @@ type SidebarLink = {
   label: string;
 };
 
-export default function LeftSidebar({ loggedInUserId }: { loggedInUserId: string | null }) {
+export default function LeftSidebar() {
   const pathname = usePathname();
   const [lang, setLang] = useState("en");
+  const [currentUserId, setCurrentUserId] = useState(null);
+
+  useEffect(() => {
+    if (window && getCookie("currentUser") && getCookie("currentUser") !== "undefined") {
+      const currentUser = JSON.parse(getCookie("currentUser"));
+      setCurrentUserId(currentUser.id);
+    }
+  }, []);
 
   let questionsLabel = i18n()[lang]["questions"];
   let usersLabel = i18n()[lang]["users"];
@@ -65,7 +72,7 @@ export default function LeftSidebar({ loggedInUserId }: { loggedInUserId: string
   ];
 
   const isActive = (route: string) => {
-    if (pathname === `/profile/${loggedInUserId}` && route.includes("profile")) {
+    if (pathname === `/profile/${currentUserId}` && route.includes("profile")) {
       return true;
     } else if (pathname.includes(route) && route.length > 1) {
       return true;
@@ -82,8 +89,8 @@ export default function LeftSidebar({ loggedInUserId }: { loggedInUserId: string
         <div className="flex flex-col gap-1">
           {sidebarLinks.map((item) => {
             if (item.route === "/profile") {
-              if (loggedInUserId) {
-                item.route = `/profile/${loggedInUserId}`;
+              if (currentUserId) {
+                item.route = `/profile/${currentUserId}`;
               } else {
                 return null;
               }
@@ -112,24 +119,24 @@ export default function LeftSidebar({ loggedInUserId }: { loggedInUserId: string
             );
           })}
         </div>
-        <SignedOut>
-          <div className="flex flex-col gap-3">
-            <Link
-              href="/sign-in"
-              className={cn(buttonVariants(), "btn-secondary small-medium w-full text-orange-500")}
-            >
-              <UserCircle className="h-5 w-5 lg:hidden" />
-              <span className="max-lg:hidden">{i18n()[lang]["login"]}</span>
-            </Link>
-            <Link
-              href="/sign-up"
-              className={cn(buttonVariants(), "btn-tertiary text-dark400_light900 w-full")}
-            >
-              <UserPlus className="h-5 w-5 lg:hidden" />
-              <span className="max-lg:hidden">{i18n()[lang]["signup"]}</span>
-            </Link>
-          </div>
-        </SignedOut>
+        {/*<SignedOut>*/}
+        {/*  <div className="flex flex-col gap-3">*/}
+        {/*    <Link*/}
+        {/*      href="/sign-in"*/}
+        {/*      className={cn(buttonVariants(), "btn-secondary small-medium w-full text-orange-500")}*/}
+        {/*    >*/}
+        {/*      <UserCircle className="h-5 w-5 lg:hidden" />*/}
+        {/*      <span className="max-lg:hidden">{i18n()[lang]["login"]}</span>*/}
+        {/*    </Link>*/}
+        {/*    <Link*/}
+        {/*      href="/sign-up"*/}
+        {/*      className={cn(buttonVariants(), "btn-tertiary text-dark400_light900 w-full")}*/}
+        {/*    >*/}
+        {/*      <UserPlus className="h-5 w-5 lg:hidden" />*/}
+        {/*      <span className="max-lg:hidden">{i18n()[lang]["signup"]}</span>*/}
+        {/*    </Link>*/}
+        {/*  </div>*/}
+        {/*</SignedOut>*/}
       </div>
     </aside>
   );

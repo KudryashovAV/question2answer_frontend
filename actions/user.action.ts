@@ -1,8 +1,8 @@
 "use server";
 
-import { FilterQuery } from "mongoose";
+import { FilterQuery, Schema } from "mongoose";
 import { revalidatePath } from "next/cache";
-import User, { IUser } from "@/db/models/user.model";
+import User from "@/db/models/user.model";
 import Question from "@/db/models/question.model";
 import Answer from "@/db/models/answer.model";
 import Tag from "@/db/models/tag.model";
@@ -17,6 +17,18 @@ import connectToDb from "@/db";
 import envConfig from "@/config";
 import md5 from "md5";
 import { MAX_PAGE_RESULT } from "@/utils/constants";
+
+interface IUser {
+  name: string;
+  email: string;
+  password?: string;
+  bio?: string;
+  picture: string;
+  location?: string;
+  portfolio?: string;
+  reputation?: number;
+  savedQuestions?: Schema.Types.ObjectId[];
+}
 
 export const createUser = async (payload: IUser) => {
   try {
@@ -37,7 +49,6 @@ export const createUser = async (payload: IUser) => {
         "Access-Control-Allow-Origin": "*",
       },
     }).then((result) => result.json());
-
     if (user.status != "success") {
       throw "Record was not created!";
     }
@@ -68,9 +79,9 @@ export const getAllUsers = async (params: GetAllUsersParams) => {
   }
 };
 
-export const getUserByClerkId = async (clerkId: string) => {
+export const fetchUserById = async (id: string) => {
   try {
-    const user = await fetch(`${envConfig.HOST}/api/users/${clerkId}`, { cache: "no-store" }).then(
+    const user = await fetch(`${envConfig.HOST}/api/users/${id}`, { cache: "no-store" }).then(
       (result) => result.json(),
     );
 
@@ -81,7 +92,7 @@ export const getUserByClerkId = async (clerkId: string) => {
   }
 };
 
-export const updateUser = async (clerkId: string, payload: any) => {
+export const updateUser = async (userID: string, payload: any) => {
   try {
     const nowDate = new Date();
     const date =
@@ -91,7 +102,7 @@ export const updateUser = async (clerkId: string, payload: any) => {
       "/" +
       ("0" + nowDate.getDate()).slice(-2);
 
-    const user = await fetch(`${envConfig.HOST}/api/users/{clerkId}`, {
+    const user = await fetch(`${envConfig.HOST}/api/users/${userID}`, {
       cache: "no-store",
       method: "PATCH",
       body: JSON.stringify(payload),

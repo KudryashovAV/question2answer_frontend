@@ -2,11 +2,8 @@ import { Metadata, ResolvingMetadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Clock } from "lucide-react";
-import { auth } from "@clerk/nextjs/server";
 import { MetaDataSlugProps, ParamsSearchSlugProps } from "@/types/props";
 import { getQuestionById } from "@/actions/question.action";
-import { getUserByClerkId } from "@/actions/user.action";
-import getFormatNumber from "@/utils/getFormatNumber";
 import getTimeStamp from "@/utils/getTimeStamp";
 import AllAnswers from "@/components/all-answers";
 import AnswerForm from "@/components/forms/answer-form";
@@ -44,8 +41,14 @@ export default async function QuestionDetailPage({ params, searchParams }: Param
     return cookieStore.get("lang")?.value.toLocaleLowerCase() || "en";
   };
   const lang = await getLang();
-
   const question = await getQuestionById(params.slug);
+
+  const getCurrentUser = async () => {
+    const cookieStore = cookies();
+    return JSON.parse(cookieStore.get("currentUser")?.value);
+  };
+
+  const currentUser = await getCurrentUser();
 
   if (Object.keys(question).length == 0)
     return (
@@ -59,14 +62,9 @@ export default async function QuestionDetailPage({ params, searchParams }: Param
 
   const { title, content, answers, created_at, tags, user_id, user_name, user_image, comments } =
     question;
-  const clerkId = auth().userId;
 
-  const currentUser = await getUserByClerkId(clerkId!);
-  // warning: mongodb objectId can not be passed as props from server component to client component
   const currentUserId = currentUser?.id;
   const questionId = question?.id;
-
-  console.log("currentUserClerkId", clerkId);
 
   return (
     <>

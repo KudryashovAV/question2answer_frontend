@@ -5,14 +5,14 @@ import { userContentTitle } from "@/lib/utils";
 
 interface Props {
   questions: any[];
-  clerkId: string | null;
+  currentUserId: string | null;
   lang: string;
   name: string;
   type: string;
   link: string;
 }
 
-const ContentCard = ({ questions, clerkId, lang, name, type, link }: Props) => {
+const ContentCard = ({ questions, currentUserId, lang, name, type, link }: Props) => {
   return (
     <section
       aria-labelledby="related-heading"
@@ -27,7 +27,7 @@ const ContentCard = ({ questions, clerkId, lang, name, type, link }: Props) => {
           questions
             .slice(0, 2)
             .map((question: any) => (
-              <QuestionCard key={question.id} question={question} clerkId={clerkId!} />
+              <QuestionCard key={question.id} question={question} currentUserId={currentUserId!} />
             ))}
       </div>
       {questions.length > 1 && (

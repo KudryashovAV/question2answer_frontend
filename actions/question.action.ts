@@ -12,7 +12,6 @@ import {
   QuestionVoteParams,
 } from "@/types/action";
 import md5 from "md5";
-import { auth } from "@clerk/nextjs/server";
 
 export const createQuestion = async (payload: any) => {
   const { tags, ...rest } = payload;
@@ -25,12 +24,11 @@ export const createQuestion = async (payload: any) => {
       "/" +
       ("0" + nowDate.getDate()).slice(-2);
     const csrfToken = md5(date);
-    const userId = auth().userId;
 
     const question = await fetch(`${envConfig.HOST}/api/questions`, {
       cache: "no-store",
       method: "POST",
-      body: JSON.stringify({ user_id: userId, ...rest }),
+      body: JSON.stringify(rest),
       headers: {
         "X-CSRF-Token": csrfToken,
         "Access-Control-Allow-Origin": "*",

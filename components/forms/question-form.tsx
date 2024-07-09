@@ -6,7 +6,7 @@ import { Loader2Icon, XIcon } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { usePathname, useRouter } from "next/navigation";
-import { getUserByClerkId } from "@/actions/user.action";
+import { fetchUserById } from "@/actions/user.action";
 import { createQuestion, updateQuestion } from "@/actions/question.action";
 import { TagBadge } from "../tags-badge";
 import { useTheme } from "next-themes";
@@ -165,7 +165,7 @@ export default function QuestionForm({ userId, type, questionDetails }: Props) {
     const tags = tagsInputData.length > 0 ? tagsData.concat(prepareTags(tagsInputData)) : tagsData;
 
     try {
-      const currentUser = await getUserByClerkId(userId!);
+      const currentUser = await fetchUserById(userId!);
       if (type === "Create") {
         const payload = {
           title: titleData,

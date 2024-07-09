@@ -10,10 +10,10 @@ import { i18n } from "@/app/(root)/i118n";
 
 interface Props {
   question: any;
-  clerkId?: string | null;
+  currentUserId?: string | null;
 }
 
-export default async function QuestionCard({ question, clerkId }: Props) {
+export default async function QuestionCard({ question, currentUserId }: Props) {
   const getLang = async () => {
     const cookieStore = cookies();
     return cookieStore.get("lang")?.value.toLocaleLowerCase() || "en";
@@ -21,7 +21,7 @@ export default async function QuestionCard({ question, clerkId }: Props) {
   const lang = await getLang();
   const { user_id, slug, user_name, user_image, title, created_at, answers_count } = question;
 
-  // const showActionButtons = clerkId && clerkId === author.clerkId;
+  // const showActionButtons = currentUserId && currentUserId === author.currentUserId;
 
   const answersCountformatter = () => {
     if (question.answers_count === 0) {
