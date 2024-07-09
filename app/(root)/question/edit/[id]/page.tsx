@@ -12,7 +12,10 @@ export const metadata: Metadata = {
 export default async function EditQuestionPage({ params }: { params: { id: string } }) {
   const getCurrentUser = async () => {
     const cookieStore = cookies();
-    return JSON.parse(cookieStore.get("currentUser")?.value);
+    if (cookieStore.get("currentUser")) {
+      return JSON.parse(cookieStore.get("currentUser")?.value as string);
+    }
+    return null;
   };
 
   const currentUser = await getCurrentUser();
@@ -24,7 +27,7 @@ export default async function EditQuestionPage({ params }: { params: { id: strin
       <div className="mt-9">
         <QuestionForm
           type="Edit"
-          userId={currentUser.id}
+          userId={currentUser?.id}
           questionDetails={JSON.stringify(question)}
         />
       </div>

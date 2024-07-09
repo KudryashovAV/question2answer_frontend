@@ -30,7 +30,10 @@ export default async function Home({ searchParams }: SearchParamsProps) {
 
   const getCurrentUser = async () => {
     const cookieStore = cookies();
-    return JSON.parse(cookieStore.get("currentUser")?.value)
+    if (cookieStore.get("currentUser")) {
+      return JSON.parse(cookieStore.get("currentUser")?.value as string);
+    }
+    return null;
   };
   const lang = await getLang();
   const currentUser = await getCurrentUser();
@@ -41,7 +44,6 @@ export default async function Home({ searchParams }: SearchParamsProps) {
     page: Number(searchParams.page) || 1,
   });
   const { questions, isNext, total_pages, total_records } = result;
-  console.log("current_user_id", currentUser.id);
 
   return (
     <>
@@ -65,7 +67,7 @@ export default async function Home({ searchParams }: SearchParamsProps) {
       <div className="mt-10 flex flex-col gap-5">
         {questions.length > 0 ? (
           questions.map((question: { id: Key | null | undefined }) => (
-            <QuestionCard key={question.id} question={question} currentUserId={currentUser.id} />
+            <QuestionCard key={question.id} question={question} currentUserId={currentUser?.id} />
           ))
         ) : (
           <NoResult

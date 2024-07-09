@@ -18,17 +18,12 @@ type SidebarLink = {
   label: string;
 };
 
-export default function MobileMenu() {
-  const pathname = usePathname();
-  const [currentUser, setCurrentUser] = useState(null);
-  const { data: session } = useSession();
+interface Props {
+  currentUser: any;
+}
 
-  useEffect(() => {
-    if (window && getCookie("currentUser") && getCookie("currentUser") !== "undefined") {
-      const currentUser = JSON.parse(getCookie("currentUser"));
-      setCurrentUser(currentUser);
-    }
-  }, []);
+export default function MobileMenu({ currentUser }: Props) {
+  const pathname = usePathname();
 
   const [lang, setLang] = useState("en");
 
@@ -90,8 +85,8 @@ export default function MobileMenu() {
               const isActive =
                 (pathname.includes(item.route) && item.route.length > 1) || pathname === item.route;
               if (item.route === "/profile") {
-                if (currentUser?.name) {
-                  item.route = `/profile/${currentUser.name}`;
+                if (currentUser?.id) {
+                  item.route = `/profile/${currentUser.id}`;
                 } else {
                   return null;
                 }

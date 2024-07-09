@@ -14,7 +14,7 @@ interface Props {
 
 export default function ProfileForm({ user }: Props) {
   const parsedUser = JSON.parse(user);
-  console.log("parsedUser", parsedUser);
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [nameData, setNameData] = useState<string | null>(parsedUser.name);
   const [countryData, setCountryData] = useState<string | null>(parsedUser.country);

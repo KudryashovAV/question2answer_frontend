@@ -26,7 +26,10 @@ export default async function CommunityPage({ searchParams }: SearchParamsProps)
 
   const getCurrentUser = async () => {
     const cookieStore = cookies();
-    return JSON.parse(cookieStore.get("currentUser")?.value);
+    if (cookieStore.get("currentUser")) {
+      return JSON.parse(cookieStore.get("currentUser")?.value as string);
+    }
+    return null;
   };
 
   const currentUser = await getCurrentUser();

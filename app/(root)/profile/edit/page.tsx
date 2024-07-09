@@ -12,11 +12,14 @@ export const metadata: Metadata = {
 export default async function EditProfilePage() {
   const getCurrentUser = async () => {
     const cookieStore = cookies();
-    return JSON.parse(cookieStore.get("currentUser")?.value);
+    if (cookieStore.get("currentUser")) {
+      return JSON.parse(cookieStore.get("currentUser")?.value as string);
+    }
+    return null;
   };
 
   const currentUser = await getCurrentUser();
-  const fetchedCurrentUser = await fetchUserById(currentUser.id);
+  const fetchedCurrentUser = await fetchUserById(currentUser?.id);
 
   const getLang = async () => {
     const cookieStore = cookies();

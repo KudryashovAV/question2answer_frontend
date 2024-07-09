@@ -23,7 +23,7 @@ export default function LeftSidebar() {
 
   useEffect(() => {
     if (window && getCookie("currentUser") && getCookie("currentUser") !== "undefined") {
-      const currentUser = JSON.parse(getCookie("currentUser"));
+      const currentUser = JSON.parse(getCookie("currentUser") as string);
       setCurrentUserId(currentUser.id);
     }
   }, []);

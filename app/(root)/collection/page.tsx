@@ -25,7 +25,6 @@ export default async function CollectionPage({ searchParams }: SearchParamsProps
   // });
   // const { savedQuestions, isNext } = result;
 
-
   return (
     <>
       {/* <h1 className="h1-bold">Saved Questions</h1>

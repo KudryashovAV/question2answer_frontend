@@ -19,11 +19,11 @@ import md5 from "md5";
 import { MAX_PAGE_RESULT } from "@/utils/constants";
 
 interface IUser {
-  name: string;
+  name?: string;
   email: string;
   password?: string;
   bio?: string;
-  picture: string;
+  picture?: string;
   location?: string;
   portfolio?: string;
   reputation?: number;
@@ -84,6 +84,19 @@ export const fetchUserById = async (id: string) => {
     const user = await fetch(`${envConfig.HOST}/api/users/${id}`, { cache: "no-store" }).then(
       (result) => result.json(),
     );
+
+    return user;
+  } catch (err) {
+    console.log("Failed to get user by id", err);
+    throw err;
+  }
+};
+
+export const fetchUserByEmail = async (email: string) => {
+  try {
+    const user = await fetch(`${envConfig.HOST}/api/users/1?email=${email}`, {
+      cache: "no-store",
+    }).then((result) => result.json());
 
     return user;
   } catch (err) {

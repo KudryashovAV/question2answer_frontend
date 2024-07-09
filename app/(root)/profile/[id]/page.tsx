@@ -40,7 +40,10 @@ export async function generateMetadata(
 export default async function Profile({ params, searchParams }: ParamsSearchProps) {
   const getCurrentUser = async () => {
     const cookieStore = cookies();
-    return JSON.parse(cookieStore.get("currentUser")?.value);
+    if (cookieStore.get("currentUser")) {
+      return JSON.parse(cookieStore.get("currentUser")?.value as string);
+    }
+    return null;
   };
 
   const currentUser = await getCurrentUser();
@@ -117,7 +120,7 @@ export default async function Profile({ params, searchParams }: ParamsSearchProp
                 </div>
               </div>
               <div className="mt-10">
-                {currentUser.id === userInfo.id && (
+                {currentUser?.id === userInfo.id && (
                   <Link
                     href="/profile/edit"
                     className={cn(

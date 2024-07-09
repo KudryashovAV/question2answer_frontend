@@ -12,7 +12,10 @@ export const metadata: Metadata = {
 export default async function AskQuestionPage() {
   const getCurrentUser = async () => {
     const cookieStore = cookies();
-    return JSON.parse(cookieStore.get("currentUser")?.value);
+    if (cookieStore.get("currentUser")) {
+      return JSON.parse(cookieStore.get("currentUser")?.value as string);
+    }
+    return null;
   };
 
   const currentUser = await getCurrentUser();
@@ -27,7 +30,7 @@ export default async function AskQuestionPage() {
     <div>
       <h1 className="h1-bold text-dark100_light900">{i18n()[lang]["askQuestion"]}</h1>
       <div className="mt-9">
-        <QuestionForm type="Create" userId={currentUser.id} />
+        <QuestionForm type="Create" userId={currentUser?.id} />
       </div>
     </div>
   );
