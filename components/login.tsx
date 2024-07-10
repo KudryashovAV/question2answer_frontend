@@ -9,7 +9,12 @@ import { getCookie } from "cookies-next";
 import { signIn } from "next-auth/react";
 import { toast } from "sonner";
 
-const Login = ({ open, openHandler }) => {
+interface Props {
+  open: boolean;
+  openHandler: (value: ((prevState: boolean) => boolean) | boolean) => void;
+}
+
+const Login = ({ open, openHandler }: Props) => {
   const [lang, setLang] = useState<string>("en");
   const [isItLogin, setIsItLogin] = useState<boolean>(true);
   const [passwordComparingError, setPasswordComparingError] = useState<boolean>(false);

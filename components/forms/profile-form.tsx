@@ -112,7 +112,7 @@ export default function ProfileForm({ user }: Props) {
         </span>
         <input
           className="paragraph-regular light-border-2 background-light700_dark300 text-dark300_light700 mb-10 mt-3 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand-500 disabled:cursor-not-allowed disabled:opacity-50"
-          defaultValue={nameData}
+          defaultValue={nameData as string}
           name="name"
           onChange={(e) => setNameData(e.target.value)}
           type="text"
@@ -121,7 +121,7 @@ export default function ProfileForm({ user }: Props) {
 
       <input
         className={inputClass}
-        defaultValue={parsedUser.email}
+        defaultValue={parsedUser.email as string}
         name="email"
         disabled={true}
         type="text"
@@ -129,7 +129,7 @@ export default function ProfileForm({ user }: Props) {
 
       <input
         className={inputClass}
-        defaultValue={countryData}
+        defaultValue={countryData as string}
         name="country"
         onChange={(e) => setCountryData(e.target.value)}
         placeholder={country}
@@ -138,7 +138,7 @@ export default function ProfileForm({ user }: Props) {
 
       <input
         className={inputClass}
-        defaultValue={cityData}
+        defaultValue={cityData as string}
         name="city"
         onChange={(e) => setCityData(e.target.value)}
         placeholder={city}
@@ -147,7 +147,7 @@ export default function ProfileForm({ user }: Props) {
 
       <input
         className={inputClass}
-        defaultValue={locationData}
+        defaultValue={locationData as string}
         name="location"
         onChange={(e) => setLocationData(e.target.value)}
         placeholder={prefferedLang}
@@ -157,7 +157,7 @@ export default function ProfileForm({ user }: Props) {
       <textarea
         className="paragraph-regular light-border-2 background-light700_dark300 text-dark300_light700 my-10 flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand-500 disabled:cursor-not-allowed disabled:opacity-50"
         name="bio"
-        defaultValue={bioData}
+        defaultValue={bioData as string}
         onChange={(e) => setBioData(e.target.value)}
         placeholder={tellAboutYou}
         rows={4}
@@ -165,7 +165,7 @@ export default function ProfileForm({ user }: Props) {
 
       <input
         className={inputClass}
-        defaultValue={youtubeLinkData}
+        defaultValue={youtubeLinkData as string}
         name="youtube_link"
         onChange={(e) => setYoutubeLinkData(e.target.value)}
         placeholder={youtube}
@@ -174,7 +174,7 @@ export default function ProfileForm({ user }: Props) {
 
       <input
         className={inputClass}
-        defaultValue={linkedinLinkData}
+        defaultValue={linkedinLinkData as string}
         name="linkedin_link"
         onChange={(e) => setLinkedinLinkData(e.target.value)}
         placeholder={linkedin}
@@ -183,7 +183,7 @@ export default function ProfileForm({ user }: Props) {
 
       <input
         className={inputClass}
-        defaultValue={facebookLinkData}
+        defaultValue={facebookLinkData as string}
         name="facebook_link"
         onChange={(e) => setFacebookLinkData(e.target.value)}
         placeholder={facebook}
@@ -192,7 +192,7 @@ export default function ProfileForm({ user }: Props) {
 
       <input
         className={inputClass}
-        defaultValue={instagramLinkData}
+        defaultValue={instagramLinkData as string}
         name="instagram_link"
         onChange={(e) => setInstagramLinkData(e.target.value)}
         placeholder={instagram}
@@ -201,7 +201,7 @@ export default function ProfileForm({ user }: Props) {
 
       <input
         className={inputClass}
-        defaultValue={githubLinkData}
+        defaultValue={githubLinkData as string}
         name="github_link"
         onChange={(e) => setGithubLinkData(e.target.value)}
         placeholder={github}
@@ -210,7 +210,7 @@ export default function ProfileForm({ user }: Props) {
 
       <input
         className={inputClass}
-        defaultValue={xLinkData}
+        defaultValue={xLinkData as string}
         name="x_link"
         onChange={(e) => setXLinkData(e.target.value)}
         placeholder={twitter}

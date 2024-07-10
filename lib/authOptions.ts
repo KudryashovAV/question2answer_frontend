@@ -25,13 +25,14 @@ export const authOptions: NextAuthOptions = {
         password: {},
       },
       async authorize(credentials, req) {
-        const user = await fetchUserByEmail(credentials?.email);
+        const user = await fetchUserByEmail(credentials?.email as string);
 
-        console.log("credentials?.password", credentials?.password);
+        console.log("credentials?.password", credentials?.password as string);
 
-        const passwordCorrect = await compare(credentials?.password, user?.password);
-
-        console.log("AAAAA", user);
+        const passwordCorrect = await compare(
+          credentials?.password as string,
+          user?.password as string,
+        );
 
         if (passwordCorrect) {
           return user;

@@ -8,6 +8,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
 import { createUser } from "@/actions/user.action";
 import { cookies } from "next/headers";
+import { ResponseCookie } from "next/dist/compiled/@edge-runtime/cookies";
 
 export default async function MainLayout({ children }: { children: React.ReactNode }) {
   const session: any = await getServerSession(authOptions as any);
@@ -33,7 +34,7 @@ export default async function MainLayout({ children }: { children: React.ReactNo
           email: user.email,
           id: user.id,
           picture: user.picture,
-        }),
+        }) as Partial<ResponseCookie>,
       );
     };
 

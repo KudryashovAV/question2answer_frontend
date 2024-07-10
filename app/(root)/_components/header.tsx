@@ -43,7 +43,7 @@ export default function Header({ currentUser }: Props) {
         )}
         <ThemeToggle />
         <LangSwitcher />
-        <MobileMenu currentUser={currentUser}/>
+        <MobileMenu currentUser={currentUser} />
         <Login open={open} openHandler={setOpen} />
       </div>
     </header>
